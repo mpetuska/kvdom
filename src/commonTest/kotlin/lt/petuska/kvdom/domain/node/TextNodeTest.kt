@@ -2,10 +2,8 @@ package lt.petuska.kvdom.domain.node
 
 import lt.petuska.kvdom.domain.node.stub.NodeStub
 import lt.petuska.kvdom.domain.node.stub.TextNodeStub
-import lt.petuska.kvdom.jsexternal.DElement
-import lt.petuska.kvdom.jsexternal.DNode
 import lt.petuska.kvdom.jsexternal.Document
-import lt.petuska.kvdom.jsexternal.stub.DElementMock
+import lt.petuska.kvdom.jsexternal.IDNode
 import lt.petuska.kvdom.jsexternal.stub.DNodeMock
 import lt.petuska.kvdom.jsexternal.stub.DocumentMock
 import kotlin.test.Test
@@ -18,7 +16,7 @@ class TextNodeTest {
         val newDNode = object : DNodeMock {}
         val new = object : NodeStub() {
             var renderCalls = 0
-            override fun render(doc: Document): DNode {
+            override fun render(doc: Document): IDNode {
                 renderCalls++
                 return newDNode
             }
@@ -28,7 +26,7 @@ class TextNodeTest {
 
         val oldDNode = object : DNodeMock {
             var replaceWithCalls = 0
-            override fun replaceWith(vararg nodes: DNode) {
+            override fun replaceWith(node: IDNode) {
                 replaceWithCalls++
             }
         }
@@ -43,7 +41,7 @@ class TextNodeTest {
         val newDNode = object : DNodeMock {}
         val new = object : TextNodeStub("new") {
             var renderCalls = 0
-            override fun render(doc: Document): DNode {
+            override fun render(doc: Document): IDNode {
                 renderCalls++
                 return newDNode
             }
@@ -53,7 +51,7 @@ class TextNodeTest {
 
         val oldDNode = object : DNodeMock {
             var replaceWithCalls = 0
-            override fun replaceWith(vararg nodes: DNode) {
+            override fun replaceWith(node: IDNode) {
                 replaceWithCalls++
             }
         }
@@ -75,10 +73,10 @@ class TextNodeTest {
     @Test
     fun render() {
         val textNode = TextNodeStub()
-        val expected = object : DElementMock {}
+        val expected = object : DNodeMock {}
         val stubDocument = object : DocumentMock {
             var createTextNodeCalls = 0
-            override fun createTextNode(text: String): DElement {
+            override fun createTextNode(text: String): IDNode {
                 createTextNodeCalls++
                 return expected
             }

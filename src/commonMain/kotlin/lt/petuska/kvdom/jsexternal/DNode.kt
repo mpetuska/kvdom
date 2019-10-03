@@ -1,11 +1,14 @@
 package lt.petuska.kvdom.jsexternal
 
-external interface DNode {
-    fun appendChild(node: DNode): DNode
+expect interface IDNode {
     fun remove()
-    fun replaceWith(vararg nodes: DNode)
+    fun replaceWith(node: IDNode)
+
+    val childNodes: Array<IDNode>
+
     fun setAttribute(qualifiedName: String, value: String)
     fun removeAttribute(key: String)
-
-    val childNodes: Array<DNode>
+    fun appendChild(node: IDNode)
 }
+
+expect open class DNode : IDNode

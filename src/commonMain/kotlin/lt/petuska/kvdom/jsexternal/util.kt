@@ -1,3 +1,3 @@
 package lt.petuska.kvdom.jsexternal
 
-external interface DElement : DNode
+expect fun <T> T?.exists(): T?

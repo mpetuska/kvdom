@@ -4,10 +4,8 @@ import lt.petuska.kvdom.domain.Patch
 import lt.petuska.kvdom.domain.node.stub.ElementNodeStub
 import lt.petuska.kvdom.domain.node.stub.NodeStub
 import lt.petuska.kvdom.domain.node.stub.TextNodeStub
-import lt.petuska.kvdom.jsexternal.DElement
-import lt.petuska.kvdom.jsexternal.DNode
 import lt.petuska.kvdom.jsexternal.Document
-import lt.petuska.kvdom.jsexternal.stub.DElementMock
+import lt.petuska.kvdom.jsexternal.IDNode
 import lt.petuska.kvdom.jsexternal.stub.DNodeMock
 import lt.petuska.kvdom.jsexternal.stub.DocumentMock
 import kotlin.test.Test
@@ -28,7 +26,7 @@ class ElementNodeTest {
     @Test
     fun render() {
         val elementNode = ElementNodeStub()
-        val expected = object : DElementMock {
+        val expected = object : DNodeMock {
             var setAttributeCalls = mutableMapOf<String, List<String>>()
             override fun setAttribute(qualifiedName: String, value: String) {
                 val calls = setAttributeCalls[qualifiedName] ?: listOf()
@@ -36,14 +34,13 @@ class ElementNodeTest {
             }
 
             var appendChildCalls = 0
-            override fun appendChild(node: DNode): DElementMock {
+            override fun appendChild(node: IDNode) {
                 appendChildCalls++
-                return this
             }
         }
         val stubDocument = object : DocumentMock {
             var createElementCount = 0
-            override fun createElement(tag: String): DElement {
+            override fun createElement(tag: String): IDNode {
                 createElementCount++
                 return expected
             }
@@ -92,7 +89,7 @@ class ElementNodeTest {
         val newDNode = object : DNodeMock {}
         val new = object : NodeStub() {
             var renderCalls = 0
-            override fun render(doc: Document): DNode {
+            override fun render(doc: Document): IDNode {
                 renderCalls++
                 return newDNode
             }
@@ -102,7 +99,7 @@ class ElementNodeTest {
 
         val oldDNode = object : DNodeMock {
             var replaceWithCalls = 0
-            override fun replaceWith(vararg nodes: DNode) {
+            override fun replaceWith(node: IDNode) {
                 replaceWithCalls++
             }
         }
@@ -114,10 +111,10 @@ class ElementNodeTest {
     @Test
     fun diffExisting_DifferentTag() {
         val old = ElementNode("div")
-        val newDNode = object : DElementMock {}
+        val newDNode = object : DNodeMock {}
         val new = object : ElementNodeStub("h1") {
             var renderCalls = 0
-            override fun render(doc: Document): DElement {
+            override fun render(doc: Document): IDNode {
                 renderCalls++
                 return newDNode
             }
@@ -127,7 +124,7 @@ class ElementNodeTest {
 
         val oldDNode = object : DNodeMock {
             var replaceWithCalls = 0
-            override fun replaceWith(vararg nodes: DNode) {
+            override fun replaceWith(node: IDNode) {
                 replaceWithCalls++
             }
         }
@@ -181,12 +178,6 @@ class ElementNodeTest {
                 return { dNode -> dNode }
             }
         }
-        val children = listOf(
-            c1,
-            c2,
-            TextNode("removedText"),
-            ElementNode("img")
-        )
         val old = ElementNode(tag = "div", children = listOf(c1, c2))
         val new = ElementNode(
             tag = "div",
@@ -194,13 +185,13 @@ class ElementNodeTest {
                 c1,
                 c2,
                 object : TextNodeStub("removedText") {
-                    override fun render(doc: Document): DNode {
+                    override fun render(doc: Document): IDNode {
                         return object : DNodeMock {}
                     }
                 },
                 object : ElementNodeStub("img") {
-                    override fun render(doc: Document): DElement {
-                        return object : DElementMock {}
+                    override fun render(doc: Document): IDNode {
+                        return object : DNodeMock {}
                     }
                 }
             )
@@ -209,9 +200,9 @@ class ElementNodeTest {
         val patch = old.diffChildren(new)
         val dNode = object : DNodeMock {
             var newChildrenCount = 0
-            override fun appendChild(node: DNode): DNodeMock {
+            override fun appendChild(node: IDNode) {
                 newChildrenCount++
-                return super.appendChild(node)
+                super.appendChild(node)
             }
         }
         assertEquals(dNode, patch(dNode))

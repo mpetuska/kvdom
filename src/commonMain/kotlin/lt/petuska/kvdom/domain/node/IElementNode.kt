@@ -1,9 +1,9 @@
 package lt.petuska.kvdom.domain.node
 
 import lt.petuska.kvdom.domain.Patch
-import lt.petuska.kvdom.jsexternal.DElement
-import lt.petuska.kvdom.jsexternal.DNode
 import lt.petuska.kvdom.jsexternal.Document
+import lt.petuska.kvdom.jsexternal.IDNode
+import lt.petuska.kvdom.util.safeSlice
 
 
 interface IElementNode : INode {
@@ -24,19 +24,19 @@ interface IElementNode : INode {
         toString()
     }
 
-    override fun render(doc: Document): DElement = doc.createElement(tag).also { dElement ->
+    override fun render(doc: Document): IDNode = doc.createElement(tag).also { dNode: IDNode ->
         attributes.forEach {
-            dElement.setAttribute(it.key, it.value)
+            dNode.setAttribute(it.key, it.value)
         }
         children.forEach {
-            dElement.appendChild(it.render())
+            dNode.appendChild(it.render())
         }
     }
 
     override fun diffExisting(new: INode): Patch = when {
         new is IElementNode && tag == new.tag -> diffAttributes(new).let { attributesPatch ->
             diffChildren(new).let { childrenPatch ->
-                { dNode: DNode ->
+                { dNode: IDNode ->
                     attributesPatch(dNode)?.let {
                         childrenPatch(it)
                     }
@@ -53,7 +53,7 @@ interface IElementNode : INode {
     fun diffAttributes(new: IElementNode): Patch {
         val patches = mutableListOf<Patch>()
         new.attributes.forEach { (key, value) ->
-            patches.add { dNode: DNode ->
+            patches.add { dNode: IDNode ->
                 dNode.apply {
                     setAttribute(key, value)
                 }
@@ -62,7 +62,7 @@ interface IElementNode : INode {
 
         attributes.keys.forEach { key ->
             if (!new.attributes.containsKey(key)) {
-                patches.add { dNode: DNode ->
+                patches.add { dNode: IDNode ->
                     dNode.apply {
                         removeAttribute(key)
                     }
@@ -70,7 +70,7 @@ interface IElementNode : INode {
             }
         }
 
-        return { dNode: DNode ->
+        return { dNode: IDNode ->
             dNode.apply {
                 patches.forEach {
                     it(this)
@@ -83,22 +83,24 @@ interface IElementNode : INode {
         val patches = List(children.size) {
             children[it].diff(new.children.getOrNull(it))
         }
+
         val extraPatches = mutableListOf<Patch>()
-        for (newChild in new.children.slice(children.size until new.children.size)) {
-            extraPatches.add { dNode: DNode ->
+        for (newChild in new.children.safeSlice(children.size until new.children.size)) {
+            extraPatches.add { dNode ->
                 dNode.apply {
                     appendChild(newChild.render())
                 }
             }
         }
 
-        return { dNode: DNode ->
-            for ((patch, dChild) in patches.zip(dNode.childNodes)) {
-                patch(dChild)
-            }
-            dNode.apply {
-                extraPatches.forEach {
-                    it(this)
+        return { parentDNode ->
+            parentDNode.apply {
+                for ((patch, dChild) in patches.zip(childNodes)) {
+                    patch(dChild)
+                }
+
+                extraPatches.forEach { patch ->
+                    patch(this)
                 }
             }
         }
