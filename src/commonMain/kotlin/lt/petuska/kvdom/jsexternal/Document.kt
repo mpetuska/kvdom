@@ -1,9 +1,9 @@
 package lt.petuska.kvdom.jsexternal
 
-expect interface Document {
-    fun getElementById(elementID: String): DElement?
-    fun createElement(tag: String): DElement
-    fun createTextNode(text: String): DElement
+external interface Document {
+    fun getElementById(elementID: String): IDNode?
+    fun createElement(tag: String): IDNode
+    fun createTextNode(text: String): IDNode
 }
 
 expect val document: Document

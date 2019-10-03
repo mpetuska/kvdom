@@ -1,7 +1,7 @@
 package lt.petuska.kvdom.dom
 
-import lt.petuska.kvdom.jsexternal.DElement
+import lt.petuska.kvdom.jsexternal.IDNode
 
-fun DElement.mount(node: DElement) = node.also {
+fun IDNode.mount(node: IDNode) = node.also {
     replaceWith(node)
 }
