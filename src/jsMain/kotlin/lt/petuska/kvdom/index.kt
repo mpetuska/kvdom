@@ -1,9 +1,7 @@
 package lt.petuska.kvdom
 
 import lt.petuska.kvdom.dom.createElement
-import lt.petuska.kvdom.dom.diff
 import lt.petuska.kvdom.dom.mount
-import lt.petuska.kvdom.dom.render
 import lt.petuska.kvdom.domain.node.TextNode
 import lt.petuska.kvdom.jsexternal.DNode
 import lt.petuska.kvdom.jsexternal.document
