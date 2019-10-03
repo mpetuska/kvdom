@@ -1,6 +1,9 @@
-package lt.petuska.kvdom.jsexternal
+package lt.petuska.kvdom.jsexternal.stub
 
-interface StubDElement : DElement {
+import lt.petuska.kvdom.jsexternal.DElement
+import lt.petuska.kvdom.jsexternal.DNode
+
+interface DElementMock : DElement {
     override fun appendChild(node: DNode) = this
 
     override fun remove() {}
