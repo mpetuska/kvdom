@@ -1,8 +1,8 @@
-import org.jetbrains.kotlin.gradle.tasks.AbstractKotlinNativeCompile
 import org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink
 
 plugins {
     kotlin("multiplatform") version "1.3.50"
+    idea
 }
 
 group = "lt.petuska"
@@ -14,14 +14,20 @@ repositories {
     mavenLocal()
 }
 
+idea {
+    module {
+        isDownloadSources = true
+        isDownloadJavadoc = true
+    }
+}
+
 val webDir = file("$projectDir/src/jsMain/web")
 kotlin {
     metadata {
         sourceSets {
             val commonMain by getting {
                 dependencies {
-                    implementation(kotlin("stdlib-common"))
-                    implementation("lt.petuska:kvdom:1.0.0-SNAPSHOT")
+                    implementation("lt.petuska:kvdom-core:1.0.0-SNAPSHOT")
                 }
             }
         }
@@ -108,44 +114,43 @@ tasks {
         dependsOn(wasmBundle)
     }
 
-    val wasmJsInterop by creating(Exec::class) {
-        workingDir = projectDir
-
-        val isWindows = System.getProperty("os.name").startsWith("Windows")
-        val packageName = "kotlinx.interop.wasm.dom"
-        val jsinteropKlibFile = "$projectDir/klib/$packageName.klib"
-        val ext = if (isWindows) ".bat" else ""
-        val konanDataDir = project.properties["kotlin.native.home"] ?: System.getenv("KONAN_DATA_DIR")
-        ?: "${System.getProperty("user.home")}/.konan"
-
-        if (file(konanDataDir).exists()) {
-            val jsinteropCommand = file(konanDataDir).resolve("bin").resolve("jsinterop$ext")
-
-            inputs.property("jsinteropCommand", jsinteropCommand)
-            inputs.property("jsinteropPackageName", packageName)
-            outputs.file(jsinteropKlibFile)
-
-            commandLine(
-                jsinteropCommand,
-                "-pkg", packageName,
-                "-o", jsinteropKlibFile,
-                "-target", "wasm32"
-            )
-        } else {
-            doFirst {
-                // Abort build execution if the distribution path isn't specified.
-                throw GradleException(
-                    """
-                    |
-                    |Kotlin/Native distribution path must be specified to build the JavaScript interop.
-                    |Use 'kotlin.native.home' project property to specify it.
-                """.trimMargin()
-                )
-            }
-        }
-    }
-
-    withType<AbstractKotlinNativeCompile> {
-        dependsOn(wasmJsInterop)
-    }
+//    val wasmJsInterop by creating(Exec::class) {
+//        workingDir = projectDir
+//
+//        val isWindows = System.getProperty("os.name").startsWith("Windows")
+//        val packageName = "kotlinx.interop.wasm.dom"
+//        val jsinteropKlibFile = "$projectDir/klib/$packageName.klib"
+//        val ext = if (isWindows) ".bat" else ""
+//        val konanDataDir = project.properties["kotlin.native.home"] ?: System.getenv("KONAN_DATA_DIR")
+//
+//        if (file(konanDataDir).exists()) {
+//            val jsinteropCommand = file(konanDataDir).resolve("bin").resolve("jsinterop$ext")
+//
+//            inputs.property("jsinteropCommand", jsinteropCommand)
+//            inputs.property("jsinteropPackageName", packageName)
+//            outputs.file(jsinteropKlibFile)
+//
+//            commandLine(
+//                jsinteropCommand,
+//                "-pkg", packageName,
+//                "-o", jsinteropKlibFile,
+//                "-target", "wasm32"
+//            )
+//        } else {
+//            doFirst {
+//                // Abort build execution if the distribution path isn't specified.
+//                throw GradleException(
+//                    """
+//                    |
+//                    |Kotlin/Native distribution path must be specified to build the JavaScript interop.
+//                    |Use 'kotlin.native.home' project property to specify it.
+//                """.trimMargin()
+//                )
+//            }
+//        }
+//    }
+//
+//    withType<AbstractKotlinNativeCompile> {
+//        dependsOn(wasmJsInterop)
+//    }
 }

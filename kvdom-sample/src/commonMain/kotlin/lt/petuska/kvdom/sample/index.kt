@@ -1,11 +1,12 @@
 package lt.petuska.kvdom.sample
 
+import lt.petuska.kvdom.definitions.dom.Element
+import lt.petuska.kvdom.definitions.dom.document
+import lt.petuska.kvdom.definitions.vdom.VElement
 import lt.petuska.kvdom.dom.createElement
 import lt.petuska.kvdom.dom.mount
 import lt.petuska.kvdom.domain.node.ElementNode
 import lt.petuska.kvdom.domain.node.TextNode
-import lt.petuska.kvdom.jsexternal.IDNode
-import lt.petuska.kvdom.jsexternal.document
 import kotlin.random.Random
 
 val gifs = listOf(
@@ -20,19 +21,27 @@ expect val platform: String
 
 fun main() {
     onLoaded {
+        println("Starting")
         var count = 0
         var vApp = createVApp(count)
-        var dRoot: IDNode? = document.getElementById("root")!!.mount(vApp.render())
+        var dRoot = mountRoot(vApp)
 
-        setInterval(1000) {
+        setInterval(2000) {
             count = random.nextInt(0, 8)
             val vNewApp = createVApp(count)
             val patch = vApp.diff(vNewApp)
 
             vApp = vNewApp
-            dRoot = dRoot?.let(patch)
+            dRoot = dRoot ?: mountRoot(vApp)
+            dRoot = (dRoot?.let(patch) as? Element?)
         }
     }
+}
+
+fun mountRoot(element: VElement) = run {
+    val root = document.getElementById("root")
+    println("Mounting on root: $root")
+    root?.mount(element.render())
 }
 
 
@@ -44,18 +53,19 @@ fun createVApp(count: Int) = createElement(
     ),
     children = listOf(
         createElement("h3", children = listOf(TextNode("Platform: $platform"))),
-        createElement("div", children = listOf(
-            TextNode("Static"),
-            createElement(
-                tag = "div",
-                attributes = mapOf("id" to "static"),
-                children = listOf(
-                    createImage(),
-                    createImage()
-                )
-            ),
-            ElementNode("br"),
-            ElementNode("br"),
+        createElement(
+            "div", children = listOf(
+                TextNode("Static"),
+                createElement(
+                    tag = "div",
+                    attributes = mapOf("id" to "static"),
+                    children = listOf(
+                        createImage(),
+                        createImage()
+                    )
+                ),
+                ElementNode("br"),
+                ElementNode("br"),
             TextNode("Dynamic"),
             createElement(
                 tag = "div",
@@ -73,16 +83,19 @@ fun createVApp(count: Int) = createElement(
                     }
                 )
             )
-        ))
+            )
+        )
     )
 )
 
-fun createImage() = createElement(
-    tag = "img",
-    attributes = mapOf(
-        "src" to gifs[random.nextInt(gifs.size)],
-        "width" to "352px",
-        "height" to "270px"
-    ),
-    children = listOf(TextNode("Hello"))
-)
+fun createImage() = random.nextInt(gifs.size).let {
+    createElement(
+        tag = "img",
+        attributes = mapOf(
+            "gifIndex" to "$it",
+            "src" to gifs[it],
+            "width" to "352px",
+            "height" to "270px"
+        )
+    )
+}
