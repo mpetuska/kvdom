@@ -1,15 +1,18 @@
+import com.jfrog.bintray.gradle.BintrayExtension
 import org.jetbrains.dokka.gradle.DokkaTask
+import java.util.Date
 
 plugins {
     kotlin("multiplatform") version "1.3.50"
     id("org.jetbrains.dokka") version "0.9.18"
     id("maven-publish")
+    id("com.jfrog.bintray") version "1.8.4" apply false
     idea
 }
 
 allprojects {
     group = "lt.petuska"
-    version = "1.0.0-SNAPSHOT"
+    version = "1.0.0"
 
     apply(plugin = "org.jetbrains.kotlin.multiplatform")
     apply(plugin = "org.jetbrains.dokka")
@@ -40,6 +43,31 @@ allprojects {
                 platforms = mutableListOf("common", "js", "wasm")
             }
         }
+    }
+}
+
+subprojects {
+    apply(plugin = "com.jfrog.bintray")
+    kotlin {
+        js {
+            browser()
+        }
+        wasm32()
+    }
+    configure<BintrayExtension> {
+        user = System.getenv("BINTRAY_USER")
+        key = System.getenv("BINTRAY_KEY")
+        publish = false
+        setPublications(*project.publishing.publications.map { it.name }.toTypedArray())
+        pkg(delegateClosureOf<BintrayExtension.PackageConfig> {
+            repo = rootProject.name
+            name = project.name
+            userOrg = "mpetuska"
+            vcsUrl = "https://gitlab.com/lt.petuska/kvdom"
+            setLicenses("GPL-3.0")
+            setLabels("kotlin", "vdom", "mpp", "js", "wasm")
+            publicDownloadNumbers = true
+        })
     }
 }
 
