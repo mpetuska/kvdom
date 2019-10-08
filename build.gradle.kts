@@ -1,10 +1,8 @@
 import com.jfrog.bintray.gradle.BintrayExtension
-import org.jetbrains.dokka.gradle.DokkaTask
-import java.util.Date
 
 plugins {
     kotlin("multiplatform") version "1.3.50"
-    id("org.jetbrains.dokka") version "0.9.18"
+    id("org.jetbrains.dokka") version "0.10.0"
     id("maven-publish")
     id("com.jfrog.bintray") version "1.8.4" apply false
     idea
@@ -28,21 +26,6 @@ allprojects {
 
     repositories {
         jcenter()
-    }
-
-    tasks {
-        withType<DokkaTask> {
-            outputFormat = "html"
-            outputDirectory = "${this@allprojects.buildDir}/dokka"
-
-            kotlinTasks {
-                listOf()
-            }
-            sourceRoot {
-                path = "${kotlin.sourceSets.commonMain.get().kotlin.srcDirs.first()}"
-                platforms = mutableListOf("common", "js", "wasm")
-            }
-        }
     }
 }
 

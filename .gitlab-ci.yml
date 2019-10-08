@@ -40,7 +40,7 @@ test:
       - .gradle
 
 upload:
-  stage: release
+  stage: deploy
   script: gradle bintrayUpload
   only:
     - master
