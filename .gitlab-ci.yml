@@ -52,7 +52,7 @@ upload:
       - .gradle
 
 publish:
-  stage: release
+  stage: deploy
   script: gradle bintrayPublish
   only:
     - master
