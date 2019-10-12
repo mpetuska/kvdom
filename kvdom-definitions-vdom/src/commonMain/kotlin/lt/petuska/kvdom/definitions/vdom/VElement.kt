@@ -1,7 +1,7 @@
 package lt.petuska.kvdom.definitions.vdom
 
-import lt.petuska.kvdom.definitions.dom.Document
-import lt.petuska.kvdom.definitions.dom.Element
+import lt.petuska.kvdom.definitions.dom.node.Document
+import lt.petuska.kvdom.definitions.dom.node.Element
 
 
 interface VElement : VNode {

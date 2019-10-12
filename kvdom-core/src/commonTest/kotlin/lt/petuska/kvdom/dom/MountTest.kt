@@ -1,7 +1,7 @@
 package lt.petuska.kvdom.dom
 
 import lt.petuska.kvdom.definitions.dom.ElementMock
-import lt.petuska.kvdom.definitions.dom.Node
+import lt.petuska.kvdom.definitions.dom.node.Node
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

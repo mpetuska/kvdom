@@ -1,4 +1,4 @@
-package lt.petuska.kvdom.definitions.dom
+package lt.petuska.kvdom.definitions.dom.node
 
 import kotlinx.wasm.jsinterop.Arena
 import kotlinx.wasm.jsinterop.Object

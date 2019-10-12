@@ -1,9 +1,11 @@
-package lt.petuska.kvdom.definitions.dom
+package lt.petuska.kvdom.definitions.dom.node
 
 import kotlinx.wasm.jsinterop.Arena
 import kotlinx.wasm.jsinterop.ArenaManager
 import kotlinx.wasm.jsinterop.JsArray
 import kotlinx.wasm.jsinterop.Object
+import lt.petuska.kvdom.definitions.dom.event.EventTarget
+import lt.petuska.kvdom.definitions.dom.event.EventTargetImpl
 
 
 actual interface Node : EventTarget, ChildNode {
@@ -39,10 +41,13 @@ actual open class NodeImpl(arena: Arena, index: Object) : EventTargetImpl(arena,
             getProperty("childNodes").run {
                 JsArray(this).let {
                     Array(it.size) { i ->
-                        val node = NodeImpl(it[i].arena, it[i].index)
+                        val node = lt.petuska.kvdom.definitions.dom.node.NodeImpl(it[i].arena, it[i].index)
                         when (NodeType.valueOf(node.nodeType)) {
-                            NodeType.ELEMENT_NODE -> ElementImpl(node.arena, node.index)
-                            NodeType.TEXT_NODE -> TextImpl(node.arena, node.index)
+                            NodeType.ELEMENT_NODE -> lt.petuska.kvdom.definitions.dom.node.ElementImpl(
+                                node.arena,
+                                node.index
+                            )
+                            NodeType.TEXT_NODE -> lt.petuska.kvdom.definitions.dom.node.TextImpl(node.arena, node.index)
                             else -> node
                         }
                     }

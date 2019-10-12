@@ -1,6 +1,12 @@
 package lt.petuska.kvdom.domain.node
 
-import lt.petuska.kvdom.definitions.dom.*
+import lt.petuska.kvdom.definitions.dom.ElementMock
+import lt.petuska.kvdom.definitions.dom.NodeMock
+import lt.petuska.kvdom.definitions.dom.TextMock
+import lt.petuska.kvdom.definitions.dom.node.Document
+import lt.petuska.kvdom.definitions.dom.node.Element
+import lt.petuska.kvdom.definitions.dom.node.Node
+import lt.petuska.kvdom.definitions.dom.node.Text
 import lt.petuska.kvdom.domain.node.stub.BaseNodeStub
 import lt.petuska.kvdom.domain.node.stub.ElementNodeStub
 import lt.petuska.kvdom.domain.node.stub.TextNodeStub

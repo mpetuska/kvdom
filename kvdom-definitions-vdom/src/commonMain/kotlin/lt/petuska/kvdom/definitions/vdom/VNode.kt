@@ -1,7 +1,7 @@
 package lt.petuska.kvdom.definitions.vdom
 
-import lt.petuska.kvdom.definitions.dom.Document
-import lt.petuska.kvdom.definitions.dom.Node
+import lt.petuska.kvdom.definitions.dom.node.Document
+import lt.petuska.kvdom.definitions.dom.node.Node
 
 typealias Patch = (node: Node) -> Node?
 

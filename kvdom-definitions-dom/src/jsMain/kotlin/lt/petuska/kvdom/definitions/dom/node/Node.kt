@@ -1,4 +1,7 @@
-package lt.petuska.kvdom.definitions.dom
+package lt.petuska.kvdom.definitions.dom.node
+
+import lt.petuska.kvdom.definitions.dom.event.EventTarget
+import lt.petuska.kvdom.definitions.dom.event.EventTargetImpl
 
 
 /**
@@ -20,7 +23,7 @@ actual external interface Node : EventTarget, ChildNode {
     actual val nodeType: Int
 }
 
-actual open external class NodeImpl : Node {
+actual open external class NodeImpl : EventTargetImpl, Node {
     override fun appendChild(node: Node)
     override val childNodes: Array<Node>
     override val nodeType: Int

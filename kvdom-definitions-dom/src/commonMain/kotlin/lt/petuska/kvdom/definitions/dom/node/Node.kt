@@ -1,4 +1,6 @@
-package lt.petuska.kvdom.definitions.dom
+package lt.petuska.kvdom.definitions.dom.node
+
+import lt.petuska.kvdom.definitions.dom.event.EventTarget
 
 
 expect open class NodeImpl : Node

@@ -27,7 +27,7 @@ kotlin {
         sourceSets {
             val commonMain by getting {
                 dependencies {
-                    implementation("lt.petuska:kvdom-core:1.0.0-SNAPSHOT")
+                    implementation("lt.petuska:kvdom-core:0.0.1-SNAPSHOT")
                 }
             }
         }

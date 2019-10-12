@@ -1,6 +1,6 @@
 package lt.petuska.kvdom.domain.node
 
-import lt.petuska.kvdom.definitions.dom.Node
+import lt.petuska.kvdom.definitions.dom.node.Node
 import lt.petuska.kvdom.definitions.vdom.Patch
 import lt.petuska.kvdom.definitions.vdom.VNode
 

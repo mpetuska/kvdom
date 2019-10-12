@@ -1,7 +1,7 @@
 package lt.petuska.kvdom.sample
 
-import lt.petuska.kvdom.definitions.dom.Element
 import lt.petuska.kvdom.definitions.dom.document
+import lt.petuska.kvdom.definitions.dom.event.EventListener
 import lt.petuska.kvdom.definitions.vdom.VElement
 import lt.petuska.kvdom.dom.createElement
 import lt.petuska.kvdom.dom.mount
@@ -22,19 +22,35 @@ expect val platform: String
 fun main() {
     onLoaded {
         println("Starting")
-        var count = 0
-        var vApp = createVApp(count)
-        var dRoot = mountRoot(vApp)
-
-        setInterval(2000) {
-            count = random.nextInt(0, 8)
-            val vNewApp = createVApp(count)
-            val patch = vApp.diff(vNewApp)
-
-            vApp = vNewApp
-            dRoot = dRoot ?: mountRoot(vApp)
-            dRoot = (dRoot?.let(patch) as? Element?)
+        val btn = document.createElement("button")
+        val sampleEventListener: EventListener = {
+            println("Clicked!")
         }
+        btn.appendChild(document.createTextNode("Button 1"))
+        btn.addEventListener("click", sampleEventListener)
+        val btn2 = document.createElement("button")
+        btn2.appendChild(document.createTextNode("Btn 2"))
+        btn2.addEventListener("click") {
+            println("Removing Event Listener from btn 1")
+            btn.removeEventListener("click", sampleEventListener)
+        }
+
+        val dr = document.getElementById("root")
+        dr!!.appendChild(btn)
+        dr.appendChild(btn2)
+//        var count = 0
+//        var vApp = createVApp(count)
+//        var dRoot = mountRoot(vApp)
+//
+//        setInterval(2000) {
+//            count = random.nextInt(0, 8)
+//            val vNewApp = createVApp(count)
+//            val patch = vApp.diff(vNewApp)
+//
+//            vApp = vNewApp
+//            dRoot = dRoot ?: mountRoot(vApp)
+//            dRoot = (dRoot?.let(patch) as? Element?)
+//        }
     }
 }
 
@@ -66,23 +82,23 @@ fun createVApp(count: Int) = createElement(
                 ),
                 ElementNode("br"),
                 ElementNode("br"),
-            TextNode("Dynamic"),
-            createElement(
-                tag = "div",
-                children = listOf(
-                    TextNode("The current count is: "),
-                    TextNode("$count")
+                TextNode("Dynamic"),
+                createElement(
+                    tag = "div",
+                    children = listOf(
+                        TextNode("The current count is: "),
+                        TextNode("$count")
+                    )
+                ),
+                createElement(
+                    tag = "div",
+                    attributes = mapOf("id" to "dynamic"),
+                    children = listOf(
+                        *Array(count) {
+                            createImage()
+                        }
+                    )
                 )
-            ),
-            createElement(
-                tag = "div",
-                attributes = mapOf("id" to "dynamic"),
-                children = listOf(
-                    *Array(count) {
-                        createImage()
-                    }
-                )
-            )
             )
         )
     )

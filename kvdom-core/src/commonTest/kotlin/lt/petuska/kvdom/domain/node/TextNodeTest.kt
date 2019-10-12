@@ -1,6 +1,11 @@
 package lt.petuska.kvdom.domain.node
 
-import lt.petuska.kvdom.definitions.dom.*
+import lt.petuska.kvdom.definitions.dom.DocumentMock
+import lt.petuska.kvdom.definitions.dom.NodeMock
+import lt.petuska.kvdom.definitions.dom.TextMock
+import lt.petuska.kvdom.definitions.dom.node.Document
+import lt.petuska.kvdom.definitions.dom.node.Node
+import lt.petuska.kvdom.definitions.dom.node.Text
 import lt.petuska.kvdom.domain.node.stub.TextNodeStub
 import kotlin.test.Test
 import kotlin.test.assertEquals

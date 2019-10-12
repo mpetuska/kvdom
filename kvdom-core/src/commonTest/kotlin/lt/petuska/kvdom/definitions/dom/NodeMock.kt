@@ -1,6 +1,8 @@
 package lt.petuska.kvdom.definitions.dom
 
-interface NodeMock : Node {
+import lt.petuska.kvdom.definitions.dom.node.Node
+
+interface NodeMock : EventTargetMock, Node {
     override fun appendChild(node: Node) {}
 
     override val childNodes: Array<Node> get() = arrayOf()
