@@ -2,6 +2,7 @@ package lt.petuska.kvdom.sample
 
 import lt.petuska.kvdom.definitions.dom.document
 import lt.petuska.kvdom.definitions.dom.event.EventListener
+import lt.petuska.kvdom.definitions.dom.node.Element
 import lt.petuska.kvdom.definitions.vdom.VElement
 import lt.petuska.kvdom.dom.createElement
 import lt.petuska.kvdom.dom.mount
@@ -31,7 +32,10 @@ fun main() {
         val btn2 = document.createElement("button")
         btn2.appendChild(document.createTextNode("Btn 2"))
         btn2.addEventListener("click") {
+            it.preventDefault()
+            println("Target: ${it.target as Element}")
             println("Removing Event Listener from btn 1")
+            println("Type: ${it.type}")
             btn.removeEventListener("click", sampleEventListener)
         }
 

@@ -1,8 +1,9 @@
 package lt.petuska.kvdom.definitions.dom.event
 
 import kotlinx.wasm.jsinterop.Arena
-import kotlinx.wasm.jsinterop.JsValue
+import kotlinx.wasm.jsinterop.ArenaManager
 import kotlinx.wasm.jsinterop.Object
+import lt.petuska.kvdom.definitions.dom.util.JsObject
 
 /**
  * https://developer.mozilla.org/en-US/docs/Web/API/Event
@@ -23,13 +24,22 @@ actual interface Event {
     actual fun preventDefault()
 }
 
-actual open class EventImpl(arena: Arena, index: Object) : JsValue(arena, index), Event {
+actual open class EventImpl(arena: Arena, index: Object) : JsObject(arena, index), Event {
     override val target: EventTarget
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-    override val type: String
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        get() = run {
+            ArenaManager.currentArena = arena
+            val jsTarget = getProperty("target")
+            EventTargetImpl(jsTarget.arena, jsTarget.index)
+        }
+    override val type: String get() = getStringProperty("type")
 
     override fun preventDefault() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        js_Event_preventDefault(arena, index)
     }
 }
+
+@SymbolName("kvdom_Event_preventDefault")
+private external fun js_Event_preventDefault(
+    arena: Arena,
+    index: Object
+)

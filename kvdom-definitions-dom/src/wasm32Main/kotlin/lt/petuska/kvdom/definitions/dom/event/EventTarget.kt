@@ -3,6 +3,7 @@ package lt.petuska.kvdom.definitions.dom.event
 import kotlinx.cinterop.StableRef
 import kotlinx.cinterop.toLong
 import kotlinx.wasm.jsinterop.*
+import lt.petuska.kvdom.definitions.dom.util.JsObject
 import kotlin.collections.set
 
 
@@ -27,7 +28,7 @@ actual interface EventTarget {
     )
 }
 
-actual open class EventTargetImpl(arena: Arena, index: Object) : JsValue(arena, index), EventTarget {
+actual open class EventTargetImpl(arena: Arena, index: Object) : JsObject(arena, index), EventTarget {
     private val eventListeners = mutableMapOf<Int, StableRef<KtFunction<*>>>()
     override fun addEventListener(type: EventType, listener: EventListener) {
         val listenerHash = listener.hashCode()
