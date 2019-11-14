@@ -98,26 +98,23 @@ open class ElementNode(
     private fun VElement.diffEventListeners(new: VElement): Patch {
         val patches = mutableListOf<Patch>()
 
-        eventListeners.forEach { (key, value) ->
-            if (!new.eventListeners.containsKey(key)) {
-                patches.add { node: Node ->
-                    (node as Element).apply {
-                        println("Removing listener: $value")
-                        removeEventListener(key, value)
-                    }
-                }
-            }
-        }
         new.eventListeners.forEach { (key, value) ->
             if (eventListeners[key]?.hashCode() != value.hashCode()) {
                 patches.add { node: Node ->
                     (node as Element).apply {
                         eventListeners[key]?.let {
-                            println("Removing listener: $it")
                             removeEventListener(key, it)
                         }
-                        println("Adding listener: $value")
                         addEventListener(key, value)
+                    }
+                }
+            }
+        }
+        eventListeners.forEach { (key, value) ->
+            if (!new.eventListeners.containsKey(key)) {
+                patches.add { node: Node ->
+                    (node as Element).apply {
+                        removeEventListener(key, value)
                     }
                 }
             }

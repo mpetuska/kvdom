@@ -11,7 +11,10 @@ import kotlin.collections.set
  * https://developer.mozilla.org/en-US/docs/Web/API/EventTarget
  */
 actual open class EventTarget(arena: Arena, index: Object) : JsValue(arena, index) {
-    private val eventListeners = mutableMapOf<Int, Int>()
+    private companion object {
+        // <EventListenerHashCode, Pointer>
+        private val eventListeners = mutableMapOf<Int, Int>()
+    }
 
     /**
      * https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
