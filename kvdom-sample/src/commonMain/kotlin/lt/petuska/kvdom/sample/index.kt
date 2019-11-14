@@ -26,20 +26,46 @@ fun main() {
             "button",
             children = mutableListOf(
                 countText
+            ),
+            attributes = mutableMapOf("disabled" to "true")
+        )
+        val removeListenerButton = ElementNode(
+            "button",
+            children = mutableListOf(
+                TextNode("Disable counter")
+            ),
+            attributes = mutableMapOf("disabled" to "true")
+        )
+        val addListenerButton = ElementNode(
+            "button",
+            children = mutableListOf(
+                TextNode("Enable counter")
             )
         )
         val vApp = ElementNode(
             "div",
             children = mutableListOf(
                 ElementNode("h1", children = mutableListOf(TextNode("Platform: $platform"))),
-                vBtn
+                vBtn,
+                addListenerButton,
+                removeListenerButton
             )
         )
         val dRoot = mountRoot(vApp)!!
-        vBtn.eventListeners["click"] = { event ->
-            clickCount++
+        addListenerButton.eventListeners["click"] = {
+            vBtn.eventListeners["click"] = {
+                clickCount++
+                countText.text = "Clicked $clickCount times"
+            }
+            addListenerButton.attributes["disabled"] = "true"
+            removeListenerButton.attributes.remove("disabled")
+            vBtn.attributes.remove("disabled")
+        }
+        removeListenerButton.eventListeners["click"] = {
             vBtn.eventListeners.remove("click")
-            countText.text = "Clicked $clickCount times"
+            vBtn.attributes["disabled"] = "true"
+            removeListenerButton.attributes["disabled"] = "true"
+            addListenerButton.attributes.remove("disabled")
         }
 
         setInterval(100) {
