@@ -5,20 +5,11 @@ import kotlinx.wasm.jsinterop.*
 /**
  * https://developer.mozilla.org/en-US/docs/Web/API/Element
  */
-actual interface Element : Node, ChildNode {
+actual open class Element(arena: Arena, index: Object) : Node(arena, index) {
     /**
      * https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute
      */
-    actual fun setAttribute(name: String, value: String)
-
-    /**
-     * https://developer.mozilla.org/en-US/docs/Web/API/Element/removeAttribute
-     */
-    actual fun removeAttribute(attrName: String)
-}
-
-actual class ElementImpl(arena: Arena, index: Object) : NodeImpl(arena, index), Element {
-    override fun setAttribute(name: String, value: String) {
+    actual fun setAttribute(name: String, value: String) {
         js_Element_setAttribute(
             arena, index,
             stringPointer(name), stringLengthBytes(name),
@@ -26,7 +17,10 @@ actual class ElementImpl(arena: Arena, index: Object) : NodeImpl(arena, index), 
         )
     }
 
-    override fun removeAttribute(attrName: String) {
+    /**
+     * https://developer.mozilla.org/en-US/docs/Web/API/Element/removeAttribute
+     */
+    actual fun removeAttribute(attrName: String) {
         js_Element_removeAttribute(
             arena, index,
             stringPointer(attrName), stringLengthBytes(attrName)

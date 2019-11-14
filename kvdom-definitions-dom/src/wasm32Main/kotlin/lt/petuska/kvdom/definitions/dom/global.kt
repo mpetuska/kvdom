@@ -6,7 +6,7 @@ import kotlinx.wasm.jsinterop.allocateArena
 import lt.petuska.kvdom.definitions.dom.node.Document
 
 actual val document: Document = allocateArena().run {
-    lt.petuska.kvdom.definitions.dom.node.DocumentImpl(this, jsGetDocument(this))
+    Document(this, jsGetDocument(this))
 }
 
 @SymbolName("kvdom_Global_getDocument")

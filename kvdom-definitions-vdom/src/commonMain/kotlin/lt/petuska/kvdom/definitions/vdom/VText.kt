@@ -4,6 +4,7 @@ import lt.petuska.kvdom.definitions.dom.node.Document
 import lt.petuska.kvdom.definitions.dom.node.Text
 
 interface VText : VNode {
-    val text: String
+    var text: String
     override fun render(document: Document): Text
+    override fun copy(): VText
 }

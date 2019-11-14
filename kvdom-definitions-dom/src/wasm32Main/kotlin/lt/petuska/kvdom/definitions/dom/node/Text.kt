@@ -6,6 +6,4 @@ import kotlinx.wasm.jsinterop.Object
 /**
  * https://developer.mozilla.org/en-US/docs/Web/API/Text
  */
-actual interface Text : Node, ChildNode
-
-actual class TextImpl(arena: Arena, index: Object) : NodeImpl(arena, index), Text
+actual class Text(arena: Arena, index: Object) : Node(arena, index)

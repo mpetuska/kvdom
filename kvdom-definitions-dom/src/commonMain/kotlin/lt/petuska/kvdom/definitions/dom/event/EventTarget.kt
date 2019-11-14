@@ -1,12 +1,10 @@
 package lt.petuska.kvdom.definitions.dom.event
 
 
-expect open class EventTargetImpl : EventTarget
-
 /**
  * https://developer.mozilla.org/en-US/docs/Web/API/EventTarget
  */
-expect interface EventTarget {
+expect open class EventTarget {
     /**
      * https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
      */

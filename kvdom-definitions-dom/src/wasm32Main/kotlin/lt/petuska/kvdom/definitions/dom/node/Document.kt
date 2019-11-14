@@ -5,25 +5,11 @@ import kotlinx.wasm.jsinterop.*
 /**
  * https://developer.mozilla.org/en-US/docs/Web/API/Document
  */
-actual interface Document : Node {
+actual class Document(arena: Arena, index: Object) : Node(arena, index) {
     /**
      * https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementById
      */
-    actual fun getElementById(id: String): Element?
-
-    /**
-     * https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement
-     */
-    actual fun createElement(tagName: String): Element
-
-    /**
-     * https://developer.mozilla.org/en-US/docs/Web/API/Document/createTextNode
-     */
-    actual fun createTextNode(data: String): Text
-}
-
-actual class DocumentImpl(arena: Arena, index: Object) : NodeImpl(arena, index), Document {
-    override fun getElementById(id: String): Element? {
+    actual fun getElementById(id: String): Element? {
         return allocateArena().let { newArena ->
             js_Document_getElementById(
                 arena, index,
@@ -36,13 +22,16 @@ actual class DocumentImpl(arena: Arena, index: Object) : NodeImpl(arena, index),
                         freeArena(newArena)
                     }
                 } else {
-                    ElementImpl(newArena, it)
+                    Element(newArena, it)
                 }
             }
         }
     }
 
-    override fun createElement(tagName: String): Element {
+    /**
+     * https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement
+     */
+    actual fun createElement(tagName: String): Element {
         return allocateArena().let { newArena ->
             js_Document_createElement(
                 arena, index,
@@ -50,12 +39,15 @@ actual class DocumentImpl(arena: Arena, index: Object) : NodeImpl(arena, index),
                 stringLengthBytes(tagName),
                 newArena
             ).let {
-                ElementImpl(newArena, it)
+                Element(newArena, it)
             }
         }
     }
 
-    override fun createTextNode(data: String): Text {
+    /**
+     * https://developer.mozilla.org/en-US/docs/Web/API/Document/createTextNode
+     */
+    actual fun createTextNode(data: String): Text {
         return allocateArena().let { newArena ->
             js_Document_createTextNode(
                 arena, index,
@@ -63,11 +55,10 @@ actual class DocumentImpl(arena: Arena, index: Object) : NodeImpl(arena, index),
                 stringLengthBytes(data),
                 newArena
             ).let {
-                TextImpl(newArena, it)
+                Text(newArena, it)
             }
         }
     }
-
 }
 
 @SymbolName("kvdom_Document_getElementById")

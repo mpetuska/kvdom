@@ -3,12 +3,10 @@ package lt.petuska.kvdom.definitions.dom.node
 import lt.petuska.kvdom.definitions.dom.event.EventTarget
 
 
-expect open class NodeImpl : Node
-
 /**
  * https://developer.mozilla.org/en-US/docs/Web/API/Node
  */
-expect interface Node : EventTarget, ChildNode {
+expect open class Node : EventTarget, ChildNode {
     /**
      * https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild
      */

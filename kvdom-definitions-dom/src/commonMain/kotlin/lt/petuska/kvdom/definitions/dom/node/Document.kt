@@ -1,12 +1,10 @@
 package lt.petuska.kvdom.definitions.dom.node
 
 
-expect class DocumentImpl : Document
-
 /**
  * https://developer.mozilla.org/en-US/docs/Web/API/Document
  */
-expect interface Document : Node {
+expect class Document : Node {
     /**
      * https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementById
      */

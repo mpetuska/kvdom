@@ -1,12 +1,10 @@
 package lt.petuska.kvdom.definitions.dom.node
 
 
-expect class ElementImpl : Element
-
 /**
  * https://developer.mozilla.org/en-US/docs/Web/API/Element
  */
-expect interface Element : Node, ChildNode {
+expect open class Element : Node {
     /**
      * https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute
      */

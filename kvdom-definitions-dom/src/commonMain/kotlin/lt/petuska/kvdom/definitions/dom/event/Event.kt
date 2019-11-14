@@ -6,7 +6,7 @@ typealias EventType = String
 /**
  * https://developer.mozilla.org/en-US/docs/Web/API/Event
  */
-expect interface Event {
+expect open class Event {
     /**
      * https://developer.mozilla.org/en-US/docs/Web/API/Event/target
      */
@@ -14,12 +14,10 @@ expect interface Event {
     /**
      * https://developer.mozilla.org/en-US/docs/Web/API/Event/type
      */
-    val type: String
+    val type: EventType
 
     /**
      * https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault
      */
     fun preventDefault()
 }
-
-expect open class EventImpl : Event

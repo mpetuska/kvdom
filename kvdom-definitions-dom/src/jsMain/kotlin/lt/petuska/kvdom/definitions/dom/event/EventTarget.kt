@@ -4,7 +4,7 @@ package lt.petuska.kvdom.definitions.dom.event
 /**
  * https://developer.mozilla.org/en-US/docs/Web/API/EventTarget
  */
-actual external interface EventTarget {
+actual open external class EventTarget {
     /**
      * https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
      */
@@ -20,10 +20,4 @@ actual external interface EventTarget {
         type: EventType,
         listener: EventListener
     )
-}
-
-actual open external class EventTargetImpl : EventTarget {
-    override fun addEventListener(type: EventType, listener: EventListener)
-
-    override fun removeEventListener(type: EventType, listener: EventListener)
 }

@@ -1,53 +1,42 @@
 package lt.petuska.kvdom.definitions.dom.event
 
-import kotlinx.cinterop.StableRef
-import kotlinx.cinterop.toLong
+import kotlinx.cinterop.CPointed
+import kotlinx.cinterop.asStableRef
+import kotlinx.cinterop.toCPointer
 import kotlinx.wasm.jsinterop.*
-import lt.petuska.kvdom.definitions.dom.util.JsObject
 import kotlin.collections.set
 
 
 /**
  * https://developer.mozilla.org/en-US/docs/Web/API/EventTarget
  */
-actual interface EventTarget {
+actual open class EventTarget(arena: Arena, index: Object) : JsValue(arena, index) {
+    private val eventListeners = mutableMapOf<Int, Int>()
+
     /**
      * https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
      */
-    actual fun addEventListener(
-        type: EventType,
-        listener: EventListener
-    )
+    actual fun addEventListener(type: EventType, listener: EventListener) {
+        val listenerHash = listener.hashCode()
+        val wListenerPtr = wrapFunction {
+            val event = Event(it[0].arena, it[0].index)
+            listener(event)
+        }
+        eventListeners[listenerHash] = wListenerPtr
+        js_EventTarget_addEventListener(arena, index, stringPointer(type), stringLengthBytes(type), wListenerPtr)
+    }
 
     /**
      * https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener
      */
-    actual fun removeEventListener(
-        type: EventType,
-        listener: EventListener
-    )
-}
-
-actual open class EventTargetImpl(arena: Arena, index: Object) : JsObject(arena, index), EventTarget {
-    private val eventListeners = mutableMapOf<Int, StableRef<KtFunction<*>>>()
-    override fun addEventListener(type: EventType, listener: EventListener) {
-        val listenerHash = listener.hashCode()
-        val ref = StableRef.create<KtFunction<Unit>> {
-            val event = EventImpl(it[0].arena, it[0].index)
-            listener(event)
-        }
-        eventListeners[listenerHash] = ref
-        val wListenerPtr = ref.asCPointer().toLong().toInt()
-        js_EventTarget_addEventListener(arena, index, stringPointer(type), stringLengthBytes(type), wListenerPtr)
-    }
-
-    override fun removeEventListener(type: EventType, listener: EventListener) {
+    actual fun removeEventListener(type: EventType, listener: EventListener) {
         val listenerHash = listener.hashCode()
         eventListeners[listenerHash]?.let {
-            val wListenerPtr = it.asCPointer().toLong().toInt()
-            js_EventTarget_removeEventListener(arena, index, stringPointer(type), stringLengthBytes(type), wListenerPtr)
-            it.dispose()
-            eventListeners.remove(listenerHash)
+            it.toLong().toCPointer<CPointed>()?.asStableRef<KtFunction<*>>()?.let { ref ->
+                js_EventTarget_removeEventListener(arena, index, stringPointer(type), stringLengthBytes(type), it)
+                eventListeners.remove(listenerHash)
+                ref.dispose()
+            }
         } ?: println("No event listener found to be removed")
     }
 }

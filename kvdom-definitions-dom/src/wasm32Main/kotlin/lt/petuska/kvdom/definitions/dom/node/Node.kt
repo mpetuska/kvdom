@@ -4,56 +4,49 @@ import kotlinx.wasm.jsinterop.Arena
 import kotlinx.wasm.jsinterop.JsArray
 import kotlinx.wasm.jsinterop.Object
 import lt.petuska.kvdom.definitions.dom.event.EventTarget
-import lt.petuska.kvdom.definitions.dom.event.EventTargetImpl
+import lt.petuska.kvdom.definitions.dom.util.getIntProperty
+import lt.petuska.kvdom.definitions.dom.util.getObjProperty
 
 
-actual interface Node : EventTarget, ChildNode {
-    /**
-     * https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild
-     */
-    actual fun appendChild(node: Node)
-
-    /**
-     * https://developer.mozilla.org/en-US/docs/Web/API/Node/childNodes
-     */
-    actual val childNodes: Array<Node>
-    /**
-     * https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
-     */
-    actual val nodeType: Int
-}
-
-actual open class NodeImpl(arena: Arena, index: Object) : EventTargetImpl(arena, index), Node {
+actual open class Node(arena: Arena, index: Object) : EventTarget(arena, index), ChildNode {
     override fun remove() = exRemove()
     override fun replaceWith(vararg nodes: Node) = exReplaceWith(*nodes)
 
-    override fun appendChild(node: Node) {
+    /**
+     * https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild
+     */
+    actual fun appendChild(node: Node) {
         dElement_appendChild(
             arena, index,
             node.arena, node.index
         )
     }
 
-    override val childNodes: Array<Node>
+    /**
+     * https://developer.mozilla.org/en-US/docs/Web/API/Node/childNodes
+     */
+    actual val childNodes: Array<Node>
         get() = run {
             getObjProperty("childNodes").run {
                 JsArray(this).let {
                     Array(it.size) { i ->
-                        val node = NodeImpl(it[i].arena, it[i].index)
+                        val node = Node(it[i].arena, it[i].index)
                         when (NodeType.valueOf(node.nodeType)) {
-                            NodeType.ELEMENT_NODE -> ElementImpl(
+                            NodeType.ELEMENT_NODE -> Element(
                                 node.arena,
                                 node.index
                             )
-                            NodeType.TEXT_NODE -> TextImpl(node.arena, node.index)
+                            NodeType.TEXT_NODE -> Text(node.arena, node.index)
                             else -> node
                         }
                     }
                 }
             }
         }
-
-    override val nodeType: Int
+    /**
+     * https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
+     */
+    actual val nodeType: Int
         get() = run {
             getIntProperty("nodeType")
         }

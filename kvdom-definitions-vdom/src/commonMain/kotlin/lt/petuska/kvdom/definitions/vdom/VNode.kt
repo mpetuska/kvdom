@@ -9,5 +9,6 @@ interface VNode {
     fun toHtml(): String
     fun render(document: Document = lt.petuska.kvdom.definitions.dom.document): Node
     fun diff(new: VNode?): Patch
+    fun copy(): VNode
 }
 
