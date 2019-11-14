@@ -3,7 +3,6 @@ package lt.petuska.kvdom.sample
 import lt.petuska.kvdom.definitions.dom.document
 import lt.petuska.kvdom.definitions.dom.node.Node
 import lt.petuska.kvdom.definitions.vdom.VElement
-import lt.petuska.kvdom.dom.mount
 import lt.petuska.kvdom.domain.node.ElementNode
 import lt.petuska.kvdom.domain.node.TextNode
 
