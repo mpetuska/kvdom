@@ -53,6 +53,8 @@ upload:
 
 publish:
   stage: deploy
+  dependencies:
+    - upload
   script: gradle bintrayPublish
   only:
     - master
