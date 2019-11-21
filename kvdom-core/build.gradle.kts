@@ -3,7 +3,7 @@ kotlin {
         sourceSets {
             val commonMain by getting {
                 dependencies {
-                    api(project(":kvdom-definitions-vdom"))
+                    api(project(":kvdom-dom"))
                 }
             }
             val commonTest by getting {

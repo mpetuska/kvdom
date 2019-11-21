@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink
 
 plugins {
-    kotlin("multiplatform") version "1.3.50"
+    kotlin("multiplatform") version "1.3.60"
     idea
 }
 
@@ -27,7 +27,7 @@ kotlin {
         sourceSets {
             val commonMain by getting {
                 dependencies {
-                    implementation("lt.petuska:kvdom-core:1.0.0-SNAPSHOT")
+                    implementation("lt.petuska:kvdom-core:0.0.1-SNAPSHOT")
                 }
             }
         }
