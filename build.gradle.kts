@@ -1,7 +1,7 @@
 import com.jfrog.bintray.gradle.BintrayExtension
 
 plugins {
-    kotlin("multiplatform") version "1.3.50"
+    kotlin("multiplatform") version "1.3.60"
     id("org.jetbrains.dokka") version "0.10.0"
     id("maven-publish")
     id("com.jfrog.bintray") version "1.8.4" apply false
@@ -10,7 +10,7 @@ plugins {
 
 allprojects {
     group = "lt.petuska"
-    version = "0.0.1-SNAPSHOT"
+    version = "1.0.0"
 
     apply(plugin = "org.jetbrains.kotlin.multiplatform")
     apply(plugin = "org.jetbrains.dokka")
