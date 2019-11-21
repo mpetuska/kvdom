@@ -1,16 +1,17 @@
 package lt.petuska.kvdom.sample
 
-import lt.petuska.kvdom.definitions.dom.document
-import lt.petuska.kvdom.definitions.dom.node.Node
-import lt.petuska.kvdom.definitions.vdom.VElement
-import lt.petuska.kvdom.domain.node.ElementNode
-import lt.petuska.kvdom.domain.node.TextNode
+import lt.petuska.kvdom.dom.document
+import lt.petuska.kvdom.dom.mount
+import lt.petuska.kvdom.dom.node.Node
+import lt.petuska.kvdom.domain.node.VElement
+import lt.petuska.kvdom.domain.node.VNode
+import lt.petuska.kvdom.domain.node.VText
 
 expect val platform: String
 
 
-lateinit var old: VElement
-fun render(node: Node, vNode: ElementNode) {
+lateinit var old: VNode
+fun render(node: Node, vNode: VNode) {
     val patch = old.diff(vNode)
     old = vNode.copy()
     patch(node)
@@ -20,31 +21,31 @@ fun main() {
     onLoaded {
         println("Starting")
         var clickCount = 0
-        val countText = TextNode("Clicked $clickCount times")
-        val vBtn = ElementNode(
+        val countText = VText("Clicked $clickCount times")
+        val vBtn = VElement(
             "button",
             children = mutableListOf(
                 countText
             ),
             attributes = mutableMapOf("disabled" to "true")
         )
-        val removeListenerButton = ElementNode(
+        val removeListenerButton = VElement(
             "button",
             children = mutableListOf(
-                TextNode("Disable counter")
+                VText("Disable counter")
             ),
             attributes = mutableMapOf("disabled" to "true")
         )
-        val addListenerButton = ElementNode(
+        val addListenerButton = VElement(
             "button",
             children = mutableListOf(
-                TextNode("Enable counter")
+                VText("Enable counter")
             )
         )
-        val vApp = ElementNode(
+        val vApp = VElement(
             "div",
             children = mutableListOf(
-                ElementNode("h1", children = mutableListOf(TextNode("Platform: $platform"))),
+                VElement("h1", children = mutableListOf(VText("Platform: $platform"))),
                 vBtn,
                 addListenerButton,
                 removeListenerButton
@@ -77,5 +78,5 @@ fun mountRoot(element: VElement) = run {
     val root = document.getElementById("root")
     println("Mounting on root: $root")
     old = element.copy()
-    root?.mount(element.render())
+    root.mount(element.render())
 }

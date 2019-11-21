@@ -14,12 +14,6 @@ variables:
 before_script:
   - export GRADLE_USER_HOME=`pwd`/.gradle
 
-stages:
-  - build
-  - test
-  - deploy
-  - publish
-
 build:
   stage: build
   script: gradle --build-cache assemble --stacktrace
@@ -45,9 +39,9 @@ test:
       - build
       - .gradle
 
-upload:bintray:
+deploy:bintray:
   stage: deploy
-  script: gradle bintrayUpload
+  script: gradle bintrayUpload -Ppublish=true
   only:
     - master
   cache:
@@ -56,9 +50,3 @@ upload:bintray:
     paths:
       - build
       - .gradle
-
-publish:bintray:
-  stage: publish
-  script: gradle bintrayPublish
-  only:
-    - master

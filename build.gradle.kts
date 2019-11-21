@@ -10,7 +10,7 @@ plugins {
 
 allprojects {
     group = "lt.petuska"
-    version = "1.0.2-SNAPSHOT"
+    version = "1.0.1"
 
     apply(plugin = "org.jetbrains.kotlin.multiplatform")
     apply(plugin = "org.jetbrains.dokka")
@@ -40,14 +40,14 @@ subprojects {
     configure<BintrayExtension> {
         user = System.getenv("BINTRAY_USER")
         key = System.getenv("BINTRAY_KEY")
-        publish = false
+        publish = project.property("publish") == "true"
         setPublications(*project.publishing.publications.map { it.name }.toTypedArray())
         pkg(delegateClosureOf<BintrayExtension.PackageConfig> {
             repo = rootProject.name
             name = project.name
             userOrg = "mpetuska"
             vcsUrl = "https://gitlab.com/lt.petuska/kvdom"
-            setLicenses("GPL-3.0")
+            setLicenses("Apache-2.0")
             setLabels("kotlin", "vdom", "mpp", "js", "wasm")
             publicDownloadNumbers = true
         })
