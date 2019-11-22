@@ -92,7 +92,7 @@ kotlin {
 
 tasks {
     val wrapper by getting(Wrapper::class) {
-        gradleVersion = "5.6.2"
+        gradleVersion = "6.0.1"
     }
     val jsProcessResources by getting(Copy::class) {
         from("$webDir/index.html") {
