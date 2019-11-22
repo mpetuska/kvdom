@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.plugin.getKotlinPluginVersion
+
 plugins {
     kotlin("multiplatform") version "1.3.60"
     id("org.jetbrains.dokka") version "0.10.0"
@@ -36,13 +38,16 @@ subprojects {
     publishing {
         publications.withType<MavenPublication> {
             pom {
+                val repoHost = "gitlab.com"
+                val repoPath = "lt.petuska/kvdom"
+                val repo = "$repoHost/$repoPath"
                 name.set(this@subprojects.name)
-                description.set("Kotlin MPP Virtual DOM available forcommon, js and wasm targets")
-                url.set("https://gitlab.com/lt.petuska/kvdom")
+                description.set("Kotlin MPP Virtual DOM available for common, js and wasm targets. Compatible with Kotlin v${getKotlinPluginVersion()}")
+                url.set("https://$repo")
                 licenses {
                     license {
                         name.set("MIT License")
-                        url.set("https://gitlab.com/lt.petuska/kvdom")
+                        url.set("https://$repo")
                         distribution.set("repo")
                     }
                     license {
@@ -58,9 +63,9 @@ subprojects {
                     }
                 }
                 scm {
-                    url.set("https://gitlab.com/lt.petuska/kvdom")
-                    connection.set("scm:git:https://gitlab.com/lt.petuska/kvdom.git")
-                    developerConnection.set("scm:git:git@gitlab.com:lt.petuska/kvdom.git")
+                    url.set("https://$repo")
+                    connection.set("scm:git:https://$repo.git")
+                    developerConnection.set("scm:git:git@$repoHost:$repoPath.git")
                 }
             }
         }
