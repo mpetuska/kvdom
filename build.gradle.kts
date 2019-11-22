@@ -9,7 +9,7 @@ plugins {
 
 allprojects {
     group = "lt.petuska"
-    version = "1.0.1"
+    version = "1.0.2-SNAPSHOT"
 
     apply(plugin = "org.jetbrains.kotlin.multiplatform")
     apply(plugin = "org.jetbrains.dokka")

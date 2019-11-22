@@ -7,7 +7,9 @@ plugins {
 }
 
 group = "lt.petuska"
-version = "1.0.1"
+version = file("$projectDir/..//build.gradle.kts").readLines().find {
+    it.matches(Regex("\\s*version\\s*=\\s*\"\\d+\\.\\d+\\.\\d+(-SNAPSHOT)?\""))
+}!!.replace(Regex("^\\s*version\\s*=\\s*\""), "").replace(Regex("\"\\s*$"), "")
 
 repositories {
     maven {
