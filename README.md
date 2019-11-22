@@ -53,4 +53,4 @@ kotlin {
 ```
 
 ## Usage
-For basic setup, please refer to [kvdom-sample](`kvdom-sample/src/commonMain/kotlin/lt/petuska/kvdom/sample/index.kt`)
+For basic setup, please refer to [kvdom-sample](kvdom-sample/src/commonMain/kotlin/lt/petuska/kvdom/sample/index.kt)
