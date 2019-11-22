@@ -1,10 +1,10 @@
 package lt.petuska.kvdom.sample
 
+import lt.petuska.kvdom.core.dom.mount
+import lt.petuska.kvdom.core.node.VElement
+import lt.petuska.kvdom.core.node.VText
 import lt.petuska.kvdom.dom.document
-import lt.petuska.kvdom.dom.mount
 import lt.petuska.kvdom.dom.node.Element
-import lt.petuska.kvdom.domain.node.VElement
-import lt.petuska.kvdom.domain.node.VText
 
 expect val platform: String
 

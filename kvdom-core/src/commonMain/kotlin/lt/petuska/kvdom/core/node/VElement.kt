@@ -1,11 +1,11 @@
-package lt.petuska.kvdom.domain.node
+package lt.petuska.kvdom.core.node
 
+import lt.petuska.kvdom.core.util.safeSlice
 import lt.petuska.kvdom.dom.event.EventListener
 import lt.petuska.kvdom.dom.event.EventType
 import lt.petuska.kvdom.dom.node.Document
 import lt.petuska.kvdom.dom.node.Element
 import lt.petuska.kvdom.dom.node.Node
-import lt.petuska.kvdom.util.safeSlice
 
 open class VElement(
     var tag: String,

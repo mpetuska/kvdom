@@ -1,4 +1,4 @@
-package lt.petuska.kvdom.domain.node
+package lt.petuska.kvdom.core.node
 
 import lt.petuska.kvdom.dom.node.Document
 import lt.petuska.kvdom.dom.node.Node
