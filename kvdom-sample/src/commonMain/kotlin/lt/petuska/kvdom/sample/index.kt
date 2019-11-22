@@ -14,6 +14,7 @@ fun main() {
 
     // Build your VDOM tree
     val root = VElement("div").apply {
+        children.add(VElement("h2", children = mutableListOf(VText("Platform: $platform"))))
         val countText = VText("Clicked $clickCount times")
         val clickButton = VElement(
             "button",
