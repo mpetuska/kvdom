@@ -51,7 +51,7 @@ fun main() {
                 removeListenerButton
             )
         )
-        val dRoot = mountRoot(vApp)!!
+        val dRoot = mountRoot(vApp)
         addListenerButton.eventListeners["click"] = {
             vBtn.eventListeners["click"] = {
                 clickCount++
@@ -78,5 +78,5 @@ fun mountRoot(element: VElement) = run {
     val root = document.getElementById("root")
     println("Mounting on root: $root")
     old = element.copy()
-    root.mount(element.render())
+    root!!.mount(element.render())
 }

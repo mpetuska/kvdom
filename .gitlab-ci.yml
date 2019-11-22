@@ -41,7 +41,7 @@ test:
 
 deploy:bintray:
   stage: deploy
-  script: gradle bintrayUpload -Ppublish=true
+  script: gradle publish
   only:
     - master
   cache:
