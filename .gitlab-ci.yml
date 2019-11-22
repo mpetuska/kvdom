@@ -27,11 +27,6 @@ build:
 test:
   stage: test
   script: gradle check
-  artifacts:
-    paths:
-      - build/reports/tests/allTests
-    reports:
-      junit: builds/reports/tests/allTests/index.html
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: pull
