@@ -7,14 +7,12 @@ plugins {
 }
 
 group = "lt.petuska"
-version = file("$projectDir/..//build.gradle.kts").readLines().find {
+
+version = null ?: file("$projectDir/..//build.gradle.kts").readLines().find {
     it.matches(Regex("\\s*version\\s*=\\s*\"\\d+\\.\\d+\\.\\d+(-SNAPSHOT)?\""))
 }!!.replace(Regex("^\\s*version\\s*=\\s*\""), "").replace(Regex("\"\\s*$"), "")
 
 repositories {
-    maven {
-        url = uri("https://dl.bintray.com/mpetuska/kvdom")
-    }
     jcenter()
     mavenCentral()
     mavenLocal()
