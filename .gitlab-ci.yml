@@ -18,7 +18,7 @@ build:
   stage: build
   script: gradle --build-cache assemble --stacktrace
   cache:
-    key: "$CI_COMMIT_REF_NAME"
+    key: "$CI_PIPELINE_ID"
     policy: push
     paths:
       - build
@@ -28,7 +28,7 @@ test:
   stage: test
   script: gradle check
   cache:
-    key: "$CI_COMMIT_REF_NAME"
+    key: "$CI_PIPELINE_ID"
     policy: pull
     paths:
       - build
@@ -40,7 +40,7 @@ deploy:bintray:
   only:
     - master
   cache:
-    key: "$CI_COMMIT_REF_NAME"
+    key: "$CI_PIPELINE_ID"
     policy: pull
     paths:
       - build
