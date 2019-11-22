@@ -6,12 +6,6 @@ kotlin {
                     api(project(":kvdom-dom"))
                 }
             }
-            val commonTest by getting {
-                dependencies {
-                    implementation(kotlin("test-common"))
-                    implementation(kotlin("test-annotations-common"))
-                }
-            }
         }
     }
     wasm32()
@@ -25,12 +19,5 @@ kotlin {
             }
         }
         browser {}
-        sourceSets {
-            val jsTest by getting {
-                dependencies {
-                    implementation(kotlin("test-js"))
-                }
-            }
-        }
     }
 }
