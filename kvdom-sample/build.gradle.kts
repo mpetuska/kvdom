@@ -6,6 +6,9 @@ plugins {
     idea
 }
 
+group = "lt.petuska"
+version = "1.0.2-SNAPSHOT"
+
 repositories {
     maven {
         url = uri("https://dl.bintray.com/mpetuska/kvdom")
@@ -68,7 +71,7 @@ kotlin {
         sourceSets {
             val commonMain by getting {
                 dependencies {
-                    api("lt.petuska:kvdom-core:1.0.1")
+                    api("lt.petuska:kvdom-core:${project.version}")
                 }
             }
             val wasm32Main by getting {

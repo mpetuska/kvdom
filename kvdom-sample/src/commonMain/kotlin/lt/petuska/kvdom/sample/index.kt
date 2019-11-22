@@ -75,8 +75,8 @@ fun main() {
 }
 
 fun mountRoot(element: VElement) = run {
-    val root = document.getElementById("root")
+    val root = document.getElementById("root")!!
     println("Mounting on root: $root")
     old = element.copy()
-    root!!.mount(element.render())
+    root.mount(element.render())
 }
