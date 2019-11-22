@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.plugin.getKotlinPluginVersion
+import org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile
 import org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink
 
 plugins {
@@ -55,6 +56,7 @@ kotlin {
                 )
             }
             webpackTask {
+                destinationDirectory = file("$buildDir/bundle/js")
                 doLast {
                     copy {
                         from(webDir) {
@@ -76,7 +78,7 @@ kotlin {
             }
             val wasm32Main by getting {
                 dependencies {
-                    implementation(fileTree("$projectDir/klib") {
+                    implementation(fileTree("$buildDir/klib") {
                         include("*.klib")
                     })
                 }
@@ -115,7 +117,7 @@ tasks {
 
         val isWindows = System.getProperty("os.name").startsWith("Windows")
         val packageName = "kotlinx.interop.wasm.dom"
-        val jsinteropKlibFile = "$projectDir/klib/$packageName.klib"
+        val jsinteropKlibFile = "$buildDir/klib/$packageName.klib"
         val ext = if (isWindows) ".bat" else ""
         val konanDataDir =
             "${System.getProperty("user.home")}/.konan/kotlin-native-${if (isWindows) "windows" else "linux"}-${getKotlinPluginVersion()}"
@@ -146,5 +148,8 @@ tasks {
                 )
             }
         }
+    }
+    withType<KotlinNativeCompile> {
+        dependsOn(wasmJsInterop)
     }
 }
