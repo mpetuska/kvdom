@@ -27,6 +27,7 @@ idea {
 }
 
 val webDir = file("$projectDir/src/jsMain/web")
+val wasmJsinteropEnabled = project.property("kotlin.wasm.jsinterop.enabled") == "true"
 kotlin {
     wasm32 {
         binaries {
@@ -78,9 +79,11 @@ kotlin {
             }
             val wasm32Main by getting {
                 dependencies {
-                    implementation(fileTree("$buildDir/klib") {
-                        include("*.klib")
-                    })
+                    if (wasmJsinteropEnabled) {
+                        implementation(fileTree("$buildDir/klib") {
+                            include("*.klib")
+                        })
+                    }
                 }
             }
             val jsMain by getting {
@@ -114,6 +117,7 @@ tasks {
 
     val wasmJsInterop by creating(Exec::class) {
         workingDir = projectDir
+        enabled = wasmJsinteropEnabled
 
         val isWindows = System.getProperty("os.name").startsWith("Windows")
         val packageName = "kotlinx.interop.wasm.dom"

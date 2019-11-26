@@ -6,6 +6,11 @@ package lt.petuska.kvdom.dom.node
  */
 expect class Document : Node {
     /**
+     * https://developer.mozilla.org/en-US/docs/Web/API/Document/defaultView
+     */
+    val defaultView: Window?
+
+    /**
      * https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementById
      */
     fun getElementById(id: String): Element?
