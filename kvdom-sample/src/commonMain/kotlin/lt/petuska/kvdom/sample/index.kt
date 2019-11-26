@@ -5,6 +5,8 @@ import lt.petuska.kvdom.core.node.VElement
 import lt.petuska.kvdom.core.node.VText
 import lt.petuska.kvdom.dom.document
 import lt.petuska.kvdom.dom.node.Element
+import lt.petuska.kvdom.dom.node.setInterval
+import lt.petuska.kvdom.dom.window
 
 expect val platform: String
 
@@ -64,7 +66,7 @@ fun main() {
     var domRoot = document.getElementById("root")!!.mount(root.render())
 
     // Start render timer
-    setInterval(100) {
+    window.setInterval(100) {
         val patch = snapshot.diff(root)
         snapshot = root.copy()
         patch(domRoot)!!.also { domRoot = it as Element }
