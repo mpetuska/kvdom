@@ -59,6 +59,18 @@ actual class Document(arena: Arena, index: Object) : Node(arena, index) {
             }
         }
     }
+
+    /**
+     * https://developer.mozilla.org/en-US/docs/Web/API/Document/defaultView
+     */
+    actual val defaultView: Window?
+        get() = js_Document_defaultView(arena, index).let {
+            if (it < 0) {
+                null
+            } else {
+                Window(arena, js_Document_defaultView(arena, index))
+            }
+        }
 }
 
 @SymbolName("kvdom_Document_getElementById")
@@ -86,4 +98,10 @@ private external fun js_Document_createTextNode(
     textPtr: Pointer,
     textLen: Int,
     resultArena: Arena
+): Object
+
+@SymbolName("kvdom_Document_defaultView")
+private external fun js_Document_defaultView(
+    arena: Arena,
+    index: Object
 ): Object
