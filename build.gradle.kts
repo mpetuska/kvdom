@@ -9,7 +9,7 @@ plugins {
 
 allprojects {
     group = "lt.petuska"
-    version = "1.0.1"
+    version = "0.0.1"
 
     apply(plugin = "org.jetbrains.kotlin.multiplatform")
     apply(plugin = "org.jetbrains.dokka")
@@ -83,6 +83,6 @@ subprojects {
 
 tasks {
     val wrapper by getting(Wrapper::class) {
-        gradleVersion = "5.6.2"
+        gradleVersion = "6.0.1"
     }
 }

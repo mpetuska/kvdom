@@ -1,10 +1,11 @@
-package lt.petuska.kvdom.domain.node
+package lt.petuska.kvdom.core.node
 
 import lt.petuska.kvdom.dom.node.Document
 import lt.petuska.kvdom.dom.node.Text
 
 data class VText(var text: String) : VNode() {
-    override fun copy(): VText = VText(text)
+    override fun copy(): VText =
+        VText(text)
 
     override fun toHtml(): String = text
     override fun render(document: Document): Text = document.createTextNode(text)

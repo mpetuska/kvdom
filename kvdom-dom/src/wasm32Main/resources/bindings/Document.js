@@ -16,5 +16,9 @@ konan.libraries.push({
         let text = toUTF16String(textPtr, textLen);
         let result = kotlinObject(arena, obj).createTextNode(text);
         return toArena(resultArena, result);
+    },
+    kvdom_Document_defaultView: function (arena, obj) {
+        let defaultView = kotlinObject(arena, obj).defaultView;
+        return defaultView == null ? -1 : toArena(arena, defaultView)
     }
 });

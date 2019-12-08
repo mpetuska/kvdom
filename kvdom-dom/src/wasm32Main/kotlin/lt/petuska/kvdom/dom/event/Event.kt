@@ -1,9 +1,9 @@
 package lt.petuska.kvdom.dom.event
 
 import kotlinx.wasm.jsinterop.Arena
-import kotlinx.wasm.jsinterop.ArenaManager
 import kotlinx.wasm.jsinterop.JsValue
 import kotlinx.wasm.jsinterop.Object
+import lt.petuska.kvdom.dom.util.getObjProperty
 import lt.petuska.kvdom.dom.util.getStringProperty
 
 /**
@@ -14,10 +14,8 @@ actual open class Event(arena: Arena, index: Object) : JsValue(arena, index) {
      * https://developer.mozilla.org/en-US/docs/Web/API/Event/target
      */
     actual val target: EventTarget
-        get() = run {
-            ArenaManager.currentArena = arena
-            val jsTarget = getProperty("target")
-            EventTarget(jsTarget.arena, jsTarget.index)
+        get() = getObjProperty("target").let {
+            EventTarget(it.arena, it.index)
         }
     /**
      * https://developer.mozilla.org/en-US/docs/Web/API/Event/type

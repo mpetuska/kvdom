@@ -1,11 +1,11 @@
-package lt.petuska.kvdom.domain.node
+package lt.petuska.kvdom.core.node
 
+import lt.petuska.kvdom.core.util.safeSlice
 import lt.petuska.kvdom.dom.event.EventListener
 import lt.petuska.kvdom.dom.event.EventType
 import lt.petuska.kvdom.dom.node.Document
 import lt.petuska.kvdom.dom.node.Element
 import lt.petuska.kvdom.dom.node.Node
-import lt.petuska.kvdom.util.safeSlice
 
 open class VElement(
     var tag: String,
@@ -63,7 +63,7 @@ open class VElement(
         else -> new.render().replacePatch
     }
 
-    private fun VElement.diffAttributes(new: VElement): Patch {
+    private fun diffAttributes(new: VElement): Patch {
         val patches = mutableListOf<Patch>()
         new.attributes.forEach { (key, value) ->
             patches.add { node: Node ->
@@ -92,7 +92,7 @@ open class VElement(
         }
     }
 
-    private fun VElement.diffEventListeners(new: VElement): Patch {
+    private fun diffEventListeners(new: VElement): Patch {
         val patches = mutableListOf<Patch>()
 
         new.eventListeners.forEach { (key, value) ->
@@ -126,7 +126,7 @@ open class VElement(
         }
     }
 
-    private fun VElement.diffChildren(new: VElement): Patch {
+    private fun diffChildren(new: VElement): Patch {
         val childPatches = List(children.size) {
             val oldChild = children[it]
             val newChild = new.children.getOrNull(it)

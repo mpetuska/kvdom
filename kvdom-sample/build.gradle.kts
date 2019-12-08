@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.plugin.getKotlinPluginVersion
+import org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile
 import org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink
 
 plugins {
@@ -7,12 +8,12 @@ plugins {
 }
 
 group = "lt.petuska"
-version = "1.0.1"
+
+version = null ?: file("$projectDir/..//build.gradle.kts").readLines().find {
+    it.matches(Regex("\\s*version\\s*=\\s*\"\\d+\\.\\d+\\.\\d+(-SNAPSHOT)?\""))
+}!!.replace(Regex("^\\s*version\\s*=\\s*\""), "").replace(Regex("\"\\s*$"), "")
 
 repositories {
-    maven {
-        url = uri("https://dl.bintray.com/mpetuska/kvdom")
-    }
     jcenter()
     mavenCentral()
     mavenLocal()
@@ -26,6 +27,7 @@ idea {
 }
 
 val webDir = file("$projectDir/src/jsMain/web")
+val wasmJsinteropEnabled = project.property("kotlin.wasm.jsinterop.enabled") == "true"
 kotlin {
     wasm32 {
         binaries {
@@ -55,6 +57,7 @@ kotlin {
                 )
             }
             webpackTask {
+                destinationDirectory = file("$buildDir/bundle/js")
                 doLast {
                     copy {
                         from(webDir) {
@@ -76,9 +79,11 @@ kotlin {
             }
             val wasm32Main by getting {
                 dependencies {
-                    implementation(fileTree("$projectDir/klib") {
-                        include("*.klib")
-                    })
+                    if (wasmJsinteropEnabled) {
+                        implementation(fileTree("$buildDir/klib") {
+                            include("*.klib")
+                        })
+                    }
                 }
             }
             val jsMain by getting {
@@ -90,7 +95,7 @@ kotlin {
 
 tasks {
     val wrapper by getting(Wrapper::class) {
-        gradleVersion = "5.6.2"
+        gradleVersion = "6.0.1"
     }
     val jsProcessResources by getting(Copy::class) {
         from("$webDir/index.html") {
@@ -112,10 +117,11 @@ tasks {
 
     val wasmJsInterop by creating(Exec::class) {
         workingDir = projectDir
+        enabled = wasmJsinteropEnabled
 
         val isWindows = System.getProperty("os.name").startsWith("Windows")
         val packageName = "kotlinx.interop.wasm.dom"
-        val jsinteropKlibFile = "$projectDir/klib/$packageName.klib"
+        val jsinteropKlibFile = "$buildDir/klib/$packageName.klib"
         val ext = if (isWindows) ".bat" else ""
         val konanDataDir =
             "${System.getProperty("user.home")}/.konan/kotlin-native-${if (isWindows) "windows" else "linux"}-${getKotlinPluginVersion()}"
@@ -146,5 +152,8 @@ tasks {
                 )
             }
         }
+    }
+    withType<KotlinNativeCompile> {
+        dependsOn(wasmJsInterop)
     }
 }
