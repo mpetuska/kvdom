@@ -1,3 +1,4 @@
+import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.plugin.getKotlinPluginVersion
 
 plugins {
@@ -26,22 +27,41 @@ allprojects {
     repositories {
         jcenter()
     }
-}
 
-subprojects {
     kotlin {
         js {
-            browser()
+            compilations.all {
+                kotlinOptions {
+                    moduleKind = "umd"
+                    sourceMap = true
+                    metaInfo = true
+                    sourceMapEmbedSources = "always"
+                }
+            }
+            browser {}
         }
         wasm32()
+        sourceSets {
+            val commonMain by getting {
+                dependencies {
+                    api(kotlin("stdlib-common"))
+                }
+            }
+            val jsMain by getting {
+                dependencies {
+                    api(kotlin("stdlib-js"))
+                }
+            }
+        }
     }
+
     publishing {
         publications.withType<MavenPublication> {
             pom {
                 val repoHost = "gitlab.com"
                 val repoPath = "lt.petuska/kvdom"
                 val repo = "$repoHost/$repoPath"
-                name.set(this@subprojects.name)
+                name.set(project.name)
                 description.set("Kotlin MPP Virtual DOM available for common, js and wasm targets. Compatible with Kotlin v${getKotlinPluginVersion()}")
                 url.set("https://$repo")
                 licenses {
@@ -68,14 +88,65 @@ subprojects {
                     developerConnection.set("scm:git:git@$repoHost:$repoPath.git")
                 }
             }
+
+            tasks.create("${name}PostPublish", Exec::class) {
+                val publish by tasks.getting
+                group = publish.group!!
+                publish.dependsOn(this)
+                dependsOn("publishAllPublicationsToBintrayRepository")
+
+                executable = "curl"
+                setArgs(
+                    listOf(
+                        "-u", "${System.getenv("BINTRAY_USER")}:${System.getenv("BINTRAY_KEY")}",
+                        "-X", "DELETE",
+                        "https://api.bintray.com/packages/${System.getenv("BINTRAY_USER")}/${rootProject.name}/${project.name}/versions/$artifactId"
+                    )
+                )
+            }
         }
 
         repositories {
-            maven("https://api.bintray.com/maven/${System.getenv("BINTRAY_USER")}/${rootProject.name}/${this@subprojects.name}/;publish=0;override=1") {
+            maven {
+                name = "bintray"
+                url = uri(
+                    "https://api.bintray.com/maven/${System.getenv("BINTRAY_USER")}/${rootProject.name}/${project.name}/" +
+                            ";publish=${if ("true".equals(project.properties["publish"] as? String?, true)) 1 else 0}" +
+                            ";override=${if ("true".equals(project.properties["override"] as? String?, true)) 1 else 0}"
+                )
                 credentials {
                     username = System.getenv("BINTRAY_USER")
                     password = System.getenv("BINTRAY_KEY")
                 }
+            }
+        }
+    }
+
+    tasks {
+        val dokka by getting(DokkaTask::class) {
+            val urlBase =
+                "https://gitlab.com/lt.petuska/kvdom/tree/v${version}"
+            multiplatform {
+                val global by creating {
+                    sourceLink {
+                        url = "$urlBase/$path"
+                        lineSuffix = "#L"
+                    }
+                }
+                val common by creating {}
+                val js by creating {}
+                val wasm32 by creating {}
+            }
+        }
+    }
+}
+
+kotlin {
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                api(project(":kvdom-dom"))
+                api(project(":kvdom-core"))
             }
         }
     }

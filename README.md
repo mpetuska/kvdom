@@ -28,7 +28,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("lt.petuska:kvdom-core:<VERSION>")
+                implementation("lt.petuska.kvdom:kvdom-core:<VERSION>")
             }
         }
     }
@@ -40,12 +40,12 @@ kotlin {
     sourceSets {
         val jsMain by getting {
             dependencies {
-                implementation("lt.petuska:kvdom-core-js:<VERSION>")
+                implementation("lt.petuska.kvdom:kvdom-core-js:<VERSION>")
             }
         }
         val wasm32Main by getting {
             dependencies {
-                implementation("lt.petuska:kvdom-core-wasm32:<VERSION>")
+                implementation("lt.petuska.kvdom:kvdom-core-wasm32:<VERSION>")
             }
         }
     }
