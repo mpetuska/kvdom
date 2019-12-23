@@ -1,10 +1,8 @@
 package lt.petuska.kvdom.sample
 
-import lt.petuska.kvdom.core.dom.mount
 import lt.petuska.kvdom.core.node.VElement
 import lt.petuska.kvdom.core.node.VText
 import lt.petuska.kvdom.dom.document
-import lt.petuska.kvdom.dom.node.Element
 import lt.petuska.kvdom.dom.node.setInterval
 import lt.petuska.kvdom.dom.window
 
@@ -38,37 +36,50 @@ fun main() {
             ),
             attributes = mutableMapOf("disabled" to "true")
         )
+        val clicksContainer = VElement("div")
 
         enableButton.eventListeners["click"] = {
             clickButton.eventListeners["click"] = {
                 clickCount++
                 countText.text = "Clicked $clickCount times"
+                println("Clicked!")
+                clicksContainer.children.add(VText("#$clickCount "))
+            }
+            clickButton.eventListeners["contextmenu"] = {
+                it.preventDefault()
+                if (clickCount > 0) {
+                    clickCount--
+                    countText.text = "Clicked $clickCount times"
+                    clicksContainer.children.removeAt(clickCount)
+                    println("Unclicked!")
+                }
             }
             enableButton.attributes["disabled"] = "true"
             disableButton.attributes.remove("disabled")
             clickButton.attributes.remove("disabled")
+            println("Enabled!")
         }
         disableButton.eventListeners["click"] = {
             clickButton.eventListeners.remove("click")
+            clickButton.eventListeners.remove("contextmenu")
             clickButton.attributes["disabled"] = "true"
             disableButton.attributes["disabled"] = "true"
             enableButton.attributes.remove("disabled")
+            println("Disabled!")
         }
         children.add(clickButton)
         children.add(enableButton)
         children.add(disableButton)
+
+        children.add(VElement("br"))
+        children.add(clicksContainer)
     }
 
-    // Capture your VDOM snapshot for future diffs
-    var snapshot = root.copy()
-
     // Mount your rendered root VElement
-    var domRoot = document.getElementById("root")!!.mount(root.render())
+    val dRoot = document.getElementById("root")!!
 
     // Start render timer
     window.setInterval(100) {
-        val patch = snapshot.diff(root)
-        snapshot = root.copy()
-        patch(domRoot)!!.also { domRoot = it as Element }
+        root.patch(dRoot)
     }
 }

@@ -74,7 +74,7 @@ kotlin {
         sourceSets {
             val commonMain by getting {
                 dependencies {
-                    api("lt.petuska:kvdom-core:${project.version}")
+                    api("lt.petuska:kvdom:${project.version}")
                 }
             }
             val wasm32Main by getting {

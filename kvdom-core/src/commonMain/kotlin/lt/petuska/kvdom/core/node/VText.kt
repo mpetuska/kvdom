@@ -1,18 +1,27 @@
 package lt.petuska.kvdom.core.node
 
-import lt.petuska.kvdom.dom.node.Document
+import lt.petuska.kvdom.core.util.UUID
+import lt.petuska.kvdom.dom.document
+import lt.petuska.kvdom.dom.node.Node
 import lt.petuska.kvdom.dom.node.Text
 
-data class VText(var text: String) : VNode() {
+open class VText internal constructor(uuid: Long = UUID.next(), node: Node? = null, var text: String) :
+    VNode(uuid, node) {
+    constructor(text: String) : this(UUID.next(), null, text)
+
     override fun copy(): VText =
-        VText(text)
+        VText(uuid, `$node`, text)
 
     override fun toHtml(): String = text
-    override fun render(document: Document): Text = document.createTextNode(text)
+    override fun render(): Text = document.createTextNode(text)
 
-    fun diff(new: VText): Patch = if (new.text == this.text) {
-        passivePatch
+    override fun diff(): () -> Node? = if (text == (snapshot as VText).text) {
+        { `$node` }
     } else {
-        new.render().replacePatch
+        {
+            render().also {
+                `$node`?.replaceWith(it)
+            }
+        }
     }
 }

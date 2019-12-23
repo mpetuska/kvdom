@@ -1,24 +1,35 @@
 package lt.petuska.kvdom.core.node
 
-import lt.petuska.kvdom.core.util.safeSlice
+import lt.petuska.kvdom.core.util.UUID
+import lt.petuska.kvdom.dom.document
 import lt.petuska.kvdom.dom.event.EventListener
 import lt.petuska.kvdom.dom.event.EventType
-import lt.petuska.kvdom.dom.node.Document
 import lt.petuska.kvdom.dom.node.Element
 import lt.petuska.kvdom.dom.node.Node
 
-open class VElement(
+open class VElement internal constructor(
+    uuid: Long = UUID.next(),
+    node: Node? = null,
     var tag: String,
     val attributes: MutableMap<String, String> = mutableMapOf(),
     val eventListeners: MutableMap<EventType, EventListener> = mutableMapOf(),
     val children: MutableList<VNode> = mutableListOf()
-) : VNode() {
+) : VNode(uuid, node) {
+    constructor(
+        tag: String,
+        attributes: MutableMap<String, String> = mutableMapOf(),
+        eventListeners: MutableMap<EventType, EventListener> = mutableMapOf(),
+        children: MutableList<VNode> = mutableListOf()
+    ) : this(UUID.next(), null, tag, attributes, eventListeners, children)
+
     override fun copy(): VElement = run {
         VElement(
+            uuid,
+            `$node`,
             tag,
-            attributes.toMutableMap(),
-            eventListeners.toMutableMap(),
-            children.map(VNode::copy).toMutableList()
+            HashMap(attributes),
+            HashMap(eventListeners),
+            ArrayList(children.map(VNode::copy))
         )
     }
 
@@ -35,123 +46,122 @@ open class VElement(
         toString()
     }
 
-    override fun render(document: Document): Element = document.createElement(tag).also { node: Node ->
-        (node as Element).apply {
-            attributes.forEach {
-                node.setAttribute(it.key, it.value)
-            }
-            eventListeners.forEach { (key, value) ->
-                node.addEventListener(key, value)
-            }
-        }
-        children.forEach {
-            node.appendChild(it.render())
-        }
-    }
-
-    fun diff(new: VElement): Patch = when (tag) {
-        new.tag -> run {
-            val attrPatch = diffAttributes(new)
-            val eventListenerPatch = diffEventListeners(new)
-            val childPatch = diffChildren(new)
-            val patch = { node: Node ->
-                attrPatch(node)?.let(eventListenerPatch)?.let(childPatch)
-            }
-            patch
-        }
-
-        else -> new.render().replacePatch
-    }
-
-    private fun diffAttributes(new: VElement): Patch {
-        val patches = mutableListOf<Patch>()
-        new.attributes.forEach { (key, value) ->
-            patches.add { node: Node ->
-                (node as Element).apply {
-                    setAttribute(key, value)
-                }
-            }
-        }
-
-        attributes.keys.forEach { key ->
-            if (!new.attributes.containsKey(key)) {
-                patches.add { node: Node ->
-                    (node as Element).apply {
-                        removeAttribute(key)
-                    }
-                }
-            }
-        }
-
-        return { node: Node ->
-            node.apply {
-                patches.forEach {
-                    it(this)
-                }
-            }
-        }
-    }
-
-    private fun diffEventListeners(new: VElement): Patch {
-        val patches = mutableListOf<Patch>()
-
-        new.eventListeners.forEach { (key, value) ->
-            if (eventListeners[key]?.hashCode() != value.hashCode()) {
-                patches.add { node: Node ->
-                    (node as Element).apply {
-                        eventListeners[key]?.let {
-                            removeEventListener(key, it)
-                        }
-                        addEventListener(key, value)
-                    }
-                }
-            }
+    override fun render(): Element = document.createElement(tag).also { node: Element ->
+        attributes.forEach {
+            node.setAttribute(it.key, it.value)
         }
         eventListeners.forEach { (key, value) ->
-            if (!new.eventListeners.containsKey(key)) {
-                patches.add { node: Node ->
-                    (node as Element).apply {
+            node.addEventListener(key, value)
+        }
+    }
+
+    override fun diff(): () -> Node? = when ((snapshot as VElement).tag) {
+        tag -> run {
+            val dElement = `$node` as Element
+            val snap = snapshot as VElement
+
+            val attrPatch = diffAttributes(dElement, snap)
+            val eventListenerPatch = diffEventListeners(dElement, snap)
+            val childPatch = diffChildren(dElement, snap)
+
+            return {
+                attrPatch()
+                eventListenerPatch()
+                childPatch()
+                dElement
+            }
+        }
+
+        else -> {
+            {
+                render().also {
+                    `$node`?.replaceWith(it)
+                    children.forEach { child ->
+                        child.patch(it)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun diffAttributes(dElement: Element, snap: VElement): () -> Unit {
+        val patches = mutableListOf<() -> Unit>()
+
+        attributes.forEach { (key, value) ->
+            patches.add {
+                dElement.setAttribute(key, value)
+            }
+        }
+
+        snap.attributes.keys.forEach { key ->
+            if (!attributes.containsKey(key)) {
+                patches.add {
+                    dElement.removeAttribute(key)
+                }
+            }
+        }
+
+        return {
+            patches.forEach {
+                it()
+            }
+        }
+    }
+
+    private fun diffEventListeners(dElement: Element, snap: VElement): () -> Unit {
+        val patches = mutableListOf<() -> Unit>()
+
+        eventListeners.forEach { (key, value) ->
+            if (snap.eventListeners[key]?.hashCode() != value.hashCode()) {
+                patches.add {
+                    eventListeners[key]?.let {
+                        dElement.removeEventListener(key, it)
+                    }
+                    dElement.addEventListener(key, value)
+                }
+            }
+        }
+        snap.eventListeners.forEach { (key, value) ->
+            if (!eventListeners.containsKey(key)) {
+                patches.add {
+                    dElement.apply {
                         removeEventListener(key, value)
                     }
                 }
             }
         }
 
-        return { node: Node ->
-            node.apply {
-                patches.forEach {
-                    it(this)
-                }
+        return {
+            patches.forEach {
+                it()
             }
         }
     }
 
-    private fun diffChildren(new: VElement): Patch {
-        val childPatches = List(children.size) {
-            val oldChild = children[it]
-            val newChild = new.children.getOrNull(it)
-            oldChild.diff(newChild)
-        }
-
-        val extraPatches = mutableListOf<Patch>()
-        for (newChild in new.children.safeSlice(children.size until new.children.size)) {
-            extraPatches.add { node: Node ->
-                node.apply {
-                    appendChild(newChild.render())
-                }
+    private fun diffChildren(dElement: Element, snap: VElement): () -> Unit {
+        val childPatches = children.filter { current ->
+            snap.children.any { old ->
+                current.uuid == old.uuid
+            }
+        }.map { child ->
+            {
+                child.patch(dElement)
             }
         }
 
-        return { parentNode: Node ->
-            parentNode.apply {
-                for ((patch, child) in childPatches.zip(childNodes)) {
-                    patch(child)
-                }
-
-                extraPatches.forEach { patch ->
-                    patch(this)
-                }
+        val removalPatches = snap.children.filter { old ->
+            children.none { current ->
+                old.uuid == current.uuid
             }
+        }.map { child ->
+            {
+                child.patch(null)
+            }
+        }
+
+        return {
+            childPatches.forEach { it() }
+            removalPatches.forEach { it() }
         }
     }
 }
