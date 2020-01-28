@@ -124,10 +124,13 @@ allprojects {
 }
 
 tasks {
-  val publish by getting
   val release by creating(HttpTask::class) {
-    group = publish.group!!
-    dependsOn(publish)
+    allprojects.forEach {
+      val publish by it.tasks.getting
+      group = publish.group!!
+      dependsOn(publish)
+    }
+  
     config {
       it.request.setUri("https://gitlab.com")
     }
@@ -149,7 +152,7 @@ tasks {
                     }
                 ]
             },
-            "description": "N/A"
+            "description": "## Changelog\n### Breaking Changes\nN/A\n\n### New Features\nN/A\n\n### Fixes\nN/A"
         }
       """.trimIndent()
       )
