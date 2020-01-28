@@ -1,4 +1,4 @@
-image: registry.gitlab.com/lt.petuska/kvdom/konan:1.3.60-gradle6.0.1-jdk8
+image: gradle:6.0.1-jdk8
 
 # Disable the Gradle daemon for Continuous Integration servers as correctness
 # is usually a priority over speed in CI environments. Using a fresh
@@ -10,9 +10,9 @@ variables:
 before_script:
   - export GRADLE_USER_HOME=`pwd`/.gradle
 
-build:
-  stage: build
-  script: gradle --build-cache assemble --stacktrace
+test:
+  stage: test
+  script: gradle --build-cache check assemble --stacktrace
   only:
     - master
     - develop
@@ -24,23 +24,9 @@ build:
       - build
       - .gradle
 
-test:
-  stage: test
-  script: gradle check
-  only:
-    - master
-    - develop
-    - merge_requests
-  cache:
-    key: "$CI_PIPELINE_ID"
-    policy: pull
-    paths:
-      - build
-      - .gradle
-
 deploy:bintray:
   stage: deploy
-  script: gradle publish -Ppublish=true -Poverride=false
+  script: gradle release -Ppublish=true -Poverride=false -Pprod
   only:
     - master
   cache:
