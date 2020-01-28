@@ -1,9 +1,9 @@
 FROM gradle:6.0.1-jdk8
 
 RUN mkdir 'kotlin-install'
-ADD . kotlin-install
-RUN gradle -p kotlin-install buildNeeded
+ADD build.gradle.kts kotlin-install
+RUN gradle -p kotlin-install check
 RUN rm -rf 'kotlin-install'
-RUN ls
+RUN ls -la
 ENV KOTLIN_NATIVE_HOME="/root/.konan/kotlin-native-linux-1.3.60"
 ENV PATH="$KOTLIN_NATIVE_HOME/bin:$PATH"

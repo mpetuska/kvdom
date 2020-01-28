@@ -7,11 +7,12 @@ plugins {
   kotlin("multiplatform")
   id("org.jetbrains.dokka")
   id("maven-publish")
-  id("io.github.http-builder-ng.http-plugin") version "0.1.1"
+  id("io.github.http-builder-ng.http-plugin")
 }
 
 allprojects {
   apply(plugin = "org.jetbrains.kotlin.multiplatform")
+  apply(plugin = "io.github.http-builder-ng.http-plugin")
   apply(plugin = "org.jetbrains.dokka")
   apply(plugin = "maven-publish")
   
@@ -76,7 +77,7 @@ allprojects {
         val publish by tasks.getting
         group = publish.group!!
         publish.dependsOn(this)
-        dependsOn("publishAllPublicationsToBintrayRepository")
+        dependsOn("publish${this@withType.name[0].toUpperCase() + this@withType.name.substring(1)}PublicationToBintrayRepository")
         
         config {
           it.request.setUri("https://api.bintray.com")
@@ -123,23 +124,22 @@ allprojects {
   }
 }
 
-tasks {
-  val release by creating(HttpTask::class) {
-    allprojects.forEach {
-      val publish by it.tasks.getting
-      group = publish.group!!
-      dependsOn(publish)
-    }
+tasks.create("release", HttpTask::class) {
+  allprojects.forEach {
+    val publish by it.tasks.getting
+    dependsOn(publish)
+    group = publish.group!!
+  }
   
-    config {
-      it.request.setUri("https://gitlab.com")
-    }
-    post {
-      it.request.uri.setPath("/api/v4/projects/${System.getenv("CI_PROJECT_ID")}/releases")
-      it.request.headers["Authorization"] = "Bearer ${System.getenv("PRIVATE_TOKEN")}"
-      it.request.setContentType("application/json")
-      it.request.setBody(
-        """
+  config {
+    it.request.setUri("https://gitlab.com")
+  }
+  post {
+    it.request.uri.setPath("/api/v4/projects/${System.getenv("CI_PROJECT_ID")}/releases")
+    it.request.headers["Authorization"] = "Bearer ${System.getenv("PRIVATE_TOKEN")}"
+    it.request.setContentType("application/json")
+    it.request.setBody(
+      """
         {
             "name": "Release v${project.version}",
             "tag_name": "v${project.version}",
@@ -155,8 +155,7 @@ tasks {
             "description": "## Changelog\n### Breaking Changes\nN/A\n\n### New Features\nN/A\n\n### Fixes\nN/A"
         }
       """.trimIndent()
-      )
-    }
+    )
   }
 }
 
