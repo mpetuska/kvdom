@@ -1,4 +1,7 @@
-rootProject.name = "kvdom"
+rootProject.name = "kvdom-root"
 
-include("kvdom-dom")
-include("kvdom-core")
+include("kvdom")
+include("kvdom:kvdom-dom")
+include("kvdom:kvdom-core")
+include("kvdom:kvdom-dsl")
+include("kvdom-sample")
