@@ -3,27 +3,13 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile
 import org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink
 
 plugins {
-    kotlin("multiplatform") version "1.3.60"
-    idea
+    kotlin("multiplatform")
 }
-
-group = "lt.petuska"
-
-version = null ?: file("$projectDir/..//build.gradle.kts").readLines().find {
-    it.matches(Regex("\\s*version\\s*=\\s*\"\\d+\\.\\d+\\.\\d+(-SNAPSHOT)?\""))
-}!!.replace(Regex("^\\s*version\\s*=\\s*\""), "").replace(Regex("\"\\s*$"), "")
 
 repositories {
     jcenter()
     mavenCentral()
     mavenLocal()
-}
-
-idea {
-    module {
-        isDownloadSources = true
-        isDownloadJavadoc = true
-    }
 }
 
 val webDir = file("$projectDir/src/jsMain/web")
@@ -48,12 +34,13 @@ kotlin {
         val jsProcessResources by tasks.getting(Copy::class)
         browser {
             runTask {
-                dependsOn(jsProcessResources)
                 devServer = devServer?.copy(
-                    port = 3000,
-                    proxy = mapOf(
-                        "/api" to "http://localhost:8080"
-                    )
+                    inline = false,
+                    lazy = false,
+                    noInfo = true,
+                    open = false,
+                    overlay = true,
+                    port = 3000
                 )
             }
             webpackTask {
@@ -74,7 +61,7 @@ kotlin {
         sourceSets {
             val commonMain by getting {
                 dependencies {
-                    api("lt.petuska:kvdom:${project.version}")
+                    implementation(project(":kvdom"))
                 }
             }
             val wasm32Main by getting {
@@ -94,12 +81,16 @@ kotlin {
 }
 
 tasks {
-    val wrapper by getting(Wrapper::class) {
-        gradleVersion = "6.0.1"
-    }
     val jsProcessResources by getting(Copy::class) {
         from("$webDir/index.html") {
             expand(project.properties)
+        }
+    }
+    val jsBrowserRun by getting(org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack::class) {
+        group = "run"
+        doFirst {
+            println("Starting webpack-devServer")
+            println("Available on: http://localhost:3000")
         }
     }
     val wasm32ProcessResources by getting(Copy::class)
@@ -111,14 +102,23 @@ tasks {
         from(wasm32ProcessResources.destinationDir)
         destinationDir = file("$buildDir/bundle/wasm")
     }
+//    val kotlinNodeJsSetup by getting(NodeJsSetupTask::class)
+//    val wasmRun by creating(Exec::class) {
+//        dependsOn(wasmBundle, kotlinNodeJsSetup)
+//        group = "run"
+//        println(kotlinNodeJsSetup.destination)
+//        executable = "${kotlinNodeJsSetup.destination}/bin/node"
+//        workingDir = wasmBundle.destinationDir
+//        commandLine("http-server", "${wasmBundle.destinationDir}", "-c-1")
+//    }
     val assemble by getting {
         dependsOn(wasmBundle)
     }
-
+    
     val wasmJsInterop by creating(Exec::class) {
         workingDir = projectDir
         enabled = wasmJsinteropEnabled
-
+        
         val isWindows = System.getProperty("os.name").startsWith("Windows")
         val packageName = "kotlinx.interop.wasm.dom"
         val jsinteropKlibFile = "$buildDir/klib/$packageName.klib"

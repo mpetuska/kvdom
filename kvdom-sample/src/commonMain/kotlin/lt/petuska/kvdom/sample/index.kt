@@ -1,8 +1,11 @@
 package lt.petuska.kvdom.sample
 
-import lt.petuska.kvdom.core.node.VElement
 import lt.petuska.kvdom.core.node.VText
+import lt.petuska.kvdom.core.node.html.VDiv
+import lt.petuska.kvdom.dsl.*
+import lt.petuska.kvdom.core.node.text
 import lt.petuska.kvdom.dom.document
+import lt.petuska.kvdom.dom.node.html.HTMLElement
 import lt.petuska.kvdom.dom.node.setInterval
 import lt.petuska.kvdom.dom.window
 
@@ -13,37 +16,31 @@ fun main() {
     var clickCount = 0
 
     // Build your VDOM tree
-    val root = VElement("div").apply {
-        children.add(VElement("h2", children = mutableListOf(VText("Platform: $platform"))))
-        val countText = VText("Clicked $clickCount times")
-        val clickButton = VElement(
-            "button",
-            children = mutableListOf(
-                countText
-            ),
-            attributes = mutableMapOf("disabled" to "true")
-        )
-        val enableButton = VElement(
-            "button",
-            children = mutableListOf(
-                VText("Enable counter")
-            )
-        )
-        val disableButton = VElement(
-            "button",
-            children = mutableListOf(
-                VText("Disable counter")
-            ),
-            attributes = mutableMapOf("disabled" to "true")
-        )
-        val clicksContainer = VElement("div")
-
+    val root = VDiv().apply {
+        h2 {
+            text("Platform: $platform")
+        }
+        lateinit var countText: VText
+        val clickButton = button {
+            countText = text("Clicked $clickCount times")
+            attributes["disabled"] = "true"
+        }
+        val enableButton = button {
+            text("EnableCounter")
+        }
+        val disableButton = button {
+            text("Disable counter")
+            attributes["disabled"] = "true"
+        }
+        val clicksContainer = div()
         enableButton.eventListeners["click"] = {
             clickButton.eventListeners["click"] = {
                 clickCount++
                 countText.text = "Clicked $clickCount times"
                 println("Clicked!")
-                clicksContainer.children.add(VText("#$clickCount "))
+                clicksContainer.apply {
+                    text("#$clickCount ")
+                }
             }
             clickButton.eventListeners["contextmenu"] = {
                 it.preventDefault()
@@ -70,8 +67,7 @@ fun main() {
         children.add(clickButton)
         children.add(enableButton)
         children.add(disableButton)
-
-        children.add(VElement("br"))
+        htmlElement<HTMLElement>("br")
         children.add(clicksContainer)
     }
 
