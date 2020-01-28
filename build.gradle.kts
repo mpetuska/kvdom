@@ -2,6 +2,7 @@ plugins {
     kotlin("multiplatform") version "1.3.60" apply false
     id("org.jetbrains.dokka") version "0.10.0" apply false
     id("maven-publish")
+    id("io.github.http-builder-ng.http-plugin") version "0.1.1" apply false
     idea
 }
 
