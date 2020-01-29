@@ -58,4 +58,4 @@ kotlin {
 ```
 
 ## Usage
-For basic setup, please refer to the [Wiki](https://gitlab.com/lt.petuska/kvdom/-/wikis)
+For basic setup, please refer to the [Wiki](https://gitlab.com/lt.petuska/kvdom/-/wikis/Setup)
