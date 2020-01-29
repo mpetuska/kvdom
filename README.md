@@ -8,7 +8,7 @@ The project is currently in MVP alpha stage, containing the minimal logic requir
 required JS bindings implemented.
 
 ## Setup
-The project is published to [JCenter](http://jcenter.bintray.com), however it can also be obtained via its [Bintray repository](https://bintray.com/beta/#/mpetuska/kvdom).
+The project is published to [JCenter](http://jcenter.bintray.com), however it can also be obtained via its [Bintray repository](https://bintray.com/mpetuska/lt.petuska/kvdom).
 To be able to access them, include either to your repositories:
 ```kotlin
 repositories {
@@ -16,7 +16,7 @@ repositories {
     jcenter()
     // Or
     maven {
-        url = uri("https://dl.bintray.com/mpetuska/kvdom")
+        url = uri("https://dl.bintray.com/mpetuska/lt.petuska")
     }
 }
 ```
@@ -28,7 +28,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("lt.petuska.kvdom:kvdom-core:<VERSION>")
+                implementation("lt.petuska.kvdom:kvdom:<VERSION>")
             }
         }
     }
@@ -38,14 +38,19 @@ Alternatively you can add platform specific dependencies to respective targets:
 ```kotlin
 kotlin {
     sourceSets {
+        val commonMain by getting {
+            dependencies {
+                implementation("lt.petuska.kvdom:kvdom-metadata:<VERSION>")
+            }
+        }
         val jsMain by getting {
             dependencies {
-                implementation("lt.petuska.kvdom:kvdom-core-js:<VERSION>")
+                implementation("lt.petuska.kvdom:kvdom-js:<VERSION>")
             }
         }
         val wasm32Main by getting {
             dependencies {
-                implementation("lt.petuska.kvdom:kvdom-core-wasm32:<VERSION>")
+                implementation("lt.petuska.kvdom:kvdom-wasm32:<VERSION>")
             }
         }
     }
@@ -53,4 +58,4 @@ kotlin {
 ```
 
 ## Usage
-For basic setup, please refer to [kvdom-sample](kvdom-sample/src/commonMain/kotlin/lt/petuska/kvdom/sample/index.kt)
+For basic setup, please refer to the [Wiki](https://gitlab.com/lt.petuska/kvdom/-/wikis)
