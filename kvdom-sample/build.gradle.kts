@@ -86,7 +86,7 @@ tasks {
             expand(project.properties)
         }
     }
-    val jsBrowserRun by getting(org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack::class) {
+    val jsBrowserRun by getting {
         group = "run"
         doFirst {
             println("Starting webpack-devServer")
