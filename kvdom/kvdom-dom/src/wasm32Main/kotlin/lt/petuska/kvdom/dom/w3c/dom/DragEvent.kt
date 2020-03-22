@@ -8,7 +8,7 @@ import lt.petuska.kvdom.dom.w3c.dom.events.MouseEvent
 actual open class DragEvent actual constructor(
   type: String,
   eventInitDict: DragEventInit
-) : MouseEvent() {
+) : MouseEvent(type, eventInitDict) {
   actual open val dataTransfer: DataTransfer?
     get() = TODO("Not yet implemented")
   

@@ -8,7 +8,7 @@ import lt.petuska.kvdom.dom.w3c.dom.events.Event
 actual open class CloseEvent actual constructor(
   type: String,
   eventInitDict: CloseEventInit
-) : Event() {
+) : Event(type, eventInitDict) {
   actual open val wasClean: Boolean
     get() = TODO("Not yet implemented")
   actual open val code: Short

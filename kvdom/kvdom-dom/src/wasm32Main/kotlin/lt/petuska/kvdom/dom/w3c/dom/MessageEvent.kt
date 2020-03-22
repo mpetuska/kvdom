@@ -9,7 +9,7 @@ actual open class MessageEvent actual constructor(
   type: String,
   eventInitDict: MessageEventInit
 ) :
-  Event() {
+  Event(type, eventInitDict) {
   actual open val data: Any?
     get() = TODO("Not yet implemented")
   actual open val origin: String

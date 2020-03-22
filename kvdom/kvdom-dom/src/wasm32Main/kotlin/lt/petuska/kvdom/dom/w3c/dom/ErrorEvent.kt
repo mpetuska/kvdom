@@ -9,7 +9,7 @@ actual open class ErrorEvent actual constructor(
   type: String,
   eventInitDict: ErrorEventInit
 ) :
-  Event() {
+  Event(type, eventInitDict) {
   actual open val message: String
     get() = TODO("Not yet implemented")
   actual open val filename: String

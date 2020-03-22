@@ -3,7 +3,7 @@ package lt.petuska.kvdom.dom.w3c.dom
 /**
  * Exposes the JavaScript [DOMPoint](https://developer.mozilla.org/en/docs/Web/API/DOMPoint) to Kotlin
  */
-actual open class DOMPoint actual constructor() : DOMPointReadOnly() {
+actual open class DOMPoint actual constructor() : DOMPointReadOnly(0.0, 0.0, 0.0, 0.0) {
   actual constructor(point: DOMPointInit) : this() {
     TODO("Not yet implemented")
   }

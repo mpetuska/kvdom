@@ -6,8 +6,8 @@ import lt.petuska.kvdom.dom.event.EventType
 import lt.petuska.kvdom.dom.node.html.HTMLHeadingElement
 
 open class VHeading(
-    section: Int,
-    attributes: MutableMap<String, String> = mutableMapOf(),
-    eventListeners: MutableMap<EventType, EventListener<HTMLHeadingElement>> = mutableMapOf(),
-    children: MutableList<VNode<*>> = mutableListOf()
+  section: Int,
+  attributes: MutableMap<String, String> = mutableMapOf(),
+  eventListeners: MutableMap<EventType, EventListener<HTMLHeadingElement>> = mutableMapOf(),
+  children: MutableList<VNode<*>> = mutableListOf()
 ) : VHTMLElement<HTMLHeadingElement>("h$section", attributes, eventListeners, children)

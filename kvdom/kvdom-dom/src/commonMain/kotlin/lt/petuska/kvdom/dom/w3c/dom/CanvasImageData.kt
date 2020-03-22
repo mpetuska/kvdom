@@ -5,5 +5,13 @@ expect interface CanvasImageData {
   fun createImageData(imagedata: ImageData): ImageData
   fun getImageData(sx: Double, sy: Double, sw: Double, sh: Double): ImageData
   fun putImageData(imagedata: ImageData, dx: Double, dy: Double)
-  fun putImageData(imagedata: ImageData, dx: Double, dy: Double, dirtyX: Double, dirtyY: Double, dirtyWidth: Double, dirtyHeight: Double)
+  fun putImageData(
+    imagedata: ImageData,
+    dx: Double,
+    dy: Double,
+    dirtyX: Double,
+    dirtyY: Double,
+    dirtyWidth: Double,
+    dirtyHeight: Double
+  )
 }

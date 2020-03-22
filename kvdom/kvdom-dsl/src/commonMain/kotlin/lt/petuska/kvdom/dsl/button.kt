@@ -11,7 +11,7 @@ import lt.petuska.kvdom.dsl.util.KvdomDsl
 
 @KvdomDsl
 fun VElement<*>.button(
-    attributes: MutableMap<String, String> = mutableMapOf(),
-    eventListeners: MutableMap<EventType, EventListener<HTMLButtonElement>> = mutableMapOf(),
-    children: MutableList<VNode<*>> = mutableListOf(), builder: VButton.() -> Unit = {}
+  attributes: MutableMap<String, String> = mutableMapOf(),
+  eventListeners: MutableMap<EventType, EventListener<HTMLButtonElement>> = mutableMapOf(),
+  children: MutableList<VNode<*>> = mutableListOf(), builder: VButton.() -> Unit = {}
 ) = build(VButton(attributes, eventListeners, children), builder)

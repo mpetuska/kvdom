@@ -10,5 +10,14 @@ expect interface CanvasPath {
   fun arcTo(x1: Double, y1: Double, x2: Double, y2: Double, radiusX: Double, radiusY: Double, rotation: Double)
   fun rect(x: Double, y: Double, w: Double, h: Double)
   fun arc(x: Double, y: Double, radius: Double, startAngle: Double, endAngle: Double, anticlockwise: Boolean)
-  fun ellipse(x: Double, y: Double, radiusX: Double, radiusY: Double, rotation: Double, startAngle: Double, endAngle: Double, anticlockwise: Boolean)
+  fun ellipse(
+    x: Double,
+    y: Double,
+    radiusX: Double,
+    radiusY: Double,
+    rotation: Double,
+    startAngle: Double,
+    endAngle: Double,
+    anticlockwise: Boolean
+  )
 }

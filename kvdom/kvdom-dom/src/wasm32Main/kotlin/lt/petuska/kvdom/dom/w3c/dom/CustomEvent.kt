@@ -9,7 +9,7 @@ actual open class CustomEvent actual constructor(
   type: String,
   eventInitDict: CustomEventInit
 ) :
-  Event() {
+  Event(type, eventInitDict) {
   actual open val detail: Any?
     get() = TODO("Not yet implemented")
   

@@ -6,7 +6,7 @@ import lt.petuska.kvdom.dom.event.EventType
 import lt.petuska.kvdom.dom.node.html.HTMLDivElement
 
 open class VDiv(
-    attributes: MutableMap<String, String> = mutableMapOf(),
-    eventListeners: MutableMap<EventType, EventListener<HTMLDivElement>> = mutableMapOf(),
-    children: MutableList<VNode<*>> = mutableListOf()
+  attributes: MutableMap<String, String> = mutableMapOf(),
+  eventListeners: MutableMap<EventType, EventListener<HTMLDivElement>> = mutableMapOf(),
+  children: MutableList<VNode<*>> = mutableListOf()
 ) : VHTMLElement<HTMLDivElement>("div", attributes, eventListeners, children)

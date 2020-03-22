@@ -1,6 +1,19 @@
 package lt.petuska.kvdom.dom.w3c.dom.pointerevents
 
 import lt.petuska.kvdom.dom.w3c.dom.events.MouseEvent
+import org.khronos.webgl.*
+import org.w3c.css.masking.*
+import org.w3c.dom.clipboard.*
+import org.w3c.dom.mediacapture.*
+import org.w3c.dom.parsing.*
+import org.w3c.dom.svg.*
+import org.w3c.dom.url.*
+import org.w3c.fetch.*
+import org.w3c.files.*
+import org.w3c.notifications.*
+import org.w3c.performance.*
+import org.w3c.workers.*
+import org.w3c.xhr.*
 
 /*
  * Copyright 2010-2019 JetBrains s.r.o. and Kotlin Programming Language contributors.
@@ -30,7 +43,7 @@ import org.w3c.performance.*
 import org.w3c.workers.*
 import org.w3c.xhr.*
 
-public external interface PointerEventInit : MouseEventInit {
+external interface PointerEventInit : MouseEventInit {
   var pointerId: Int? /* = 0 */
     get() = definedExternally
     set(value) = definedExternally
@@ -64,7 +77,45 @@ public external interface PointerEventInit : MouseEventInit {
 }
 
 @kotlin.internal.InlineOnly
-public inline fun PointerEventInit(pointerId: Int? = 0, width: Double? = 1.0, height: Double? = 1.0, pressure: Float? = 0f, tangentialPressure: Float? = 0f, tiltX: Int? = 0, tiltY: Int? = 0, twist: Int? = 0, pointerType: String? = "", isPrimary: Boolean? = false, screenX: Int? = 0, screenY: Int? = 0, clientX: Int? = 0, clientY: Int? = 0, button: Short? = 0, buttons: Short? = 0, relatedTarget: EventTarget? = null, region: String? = null, ctrlKey: Boolean? = false, shiftKey: Boolean? = false, altKey: Boolean? = false, metaKey: Boolean? = false, modifierAltGraph: Boolean? = false, modifierCapsLock: Boolean? = false, modifierFn: Boolean? = false, modifierFnLock: Boolean? = false, modifierHyper: Boolean? = false, modifierNumLock: Boolean? = false, modifierScrollLock: Boolean? = false, modifierSuper: Boolean? = false, modifierSymbol: Boolean? = false, modifierSymbolLock: Boolean? = false, view: Window? = null, detail: Int? = 0, bubbles: Boolean? = false, cancelable: Boolean? = false, composed: Boolean? = false): PointerEventInit {
+inline fun PointerEventInit(
+  pointerId: Int? = 0,
+  width: Double? = 1.0,
+  height: Double? = 1.0,
+  pressure: Float? = 0f,
+  tangentialPressure: Float? = 0f,
+  tiltX: Int? = 0,
+  tiltY: Int? = 0,
+  twist: Int? = 0,
+  pointerType: String? = "",
+  isPrimary: Boolean? = false,
+  screenX: Int? = 0,
+  screenY: Int? = 0,
+  clientX: Int? = 0,
+  clientY: Int? = 0,
+  button: Short? = 0,
+  buttons: Short? = 0,
+  relatedTarget: EventTarget? = null,
+  region: String? = null,
+  ctrlKey: Boolean? = false,
+  shiftKey: Boolean? = false,
+  altKey: Boolean? = false,
+  metaKey: Boolean? = false,
+  modifierAltGraph: Boolean? = false,
+  modifierCapsLock: Boolean? = false,
+  modifierFn: Boolean? = false,
+  modifierFnLock: Boolean? = false,
+  modifierHyper: Boolean? = false,
+  modifierNumLock: Boolean? = false,
+  modifierScrollLock: Boolean? = false,
+  modifierSuper: Boolean? = false,
+  modifierSymbol: Boolean? = false,
+  modifierSymbolLock: Boolean? = false,
+  view: Window? = null,
+  detail: Int? = 0,
+  bubbles: Boolean? = false,
+  cancelable: Boolean? = false,
+  composed: Boolean? = false
+): PointerEventInit {
   val o = js("({})")
   o["pointerId"] = pointerId
   o["width"] = width
@@ -109,7 +160,7 @@ public inline fun PointerEventInit(pointerId: Int? = 0, width: Double? = 1.0, he
 /**
  * Exposes the JavaScript [PointerEvent](https://developer.mozilla.org/en/docs/Web/API/PointerEvent) to Kotlin
  */
-public external open class PointerEvent(type: String, eventInitDict: PointerEventInit = definedExternally) :
+public open external class PointerEvent(type: String, eventInitDict: PointerEventInit = definedExternally) :
   MouseEvent {
   open val pointerId: Int
   open val width: Double

@@ -7,9 +7,9 @@ import lt.petuska.kvdom.dom.event.EventType
 import lt.petuska.kvdom.dom.node.html.HTMLInputElement
 
 open class VInput(
-    attributes: MutableMap<String, String> = mutableMapOf(),
-    eventListeners: MutableMap<EventType, EventListener<HTMLInputElement>> = mutableMapOf(),
-    children: MutableList<VNode<*>> = mutableListOf()
+  attributes: MutableMap<String, String> = mutableMapOf(),
+  eventListeners: MutableMap<EventType, EventListener<HTMLInputElement>> = mutableMapOf(),
+  children: MutableList<VNode<*>> = mutableListOf()
 ) : VHTMLElement<HTMLInputElement>("input", attributes, eventListeners, children) {
-    var value by AttributeDelegate()
+  var value by AttributeDelegate()
 }

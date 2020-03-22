@@ -11,7 +11,7 @@ import lt.petuska.kvdom.dsl.util.KvdomDsl
 
 @KvdomDsl
 fun VElement<*>.label(
-    attributes: MutableMap<String, String> = mutableMapOf(),
-    eventListeners: MutableMap<EventType, EventListener<HTMLLabelElement>> = mutableMapOf(),
-    children: MutableList<VNode<*>> = mutableListOf(), builder: VLabel.() -> Unit = {}
+  attributes: MutableMap<String, String> = mutableMapOf(),
+  eventListeners: MutableMap<EventType, EventListener<HTMLLabelElement>> = mutableMapOf(),
+  children: MutableList<VNode<*>> = mutableListOf(), builder: VLabel.() -> Unit = {}
 ) = build(VLabel(attributes, eventListeners, children), builder)

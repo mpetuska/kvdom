@@ -11,7 +11,7 @@ import lt.petuska.kvdom.dsl.util.KvdomDsl
 
 @KvdomDsl
 fun VElement<*>.div(
-    attributes: MutableMap<String, String> = mutableMapOf(),
-    eventListeners: MutableMap<EventType, EventListener<HTMLDivElement>> = mutableMapOf(),
-    children: MutableList<VNode<*>> = mutableListOf(), builder: VDiv.() -> Unit = {}
+  attributes: MutableMap<String, String> = mutableMapOf(),
+  eventListeners: MutableMap<EventType, EventListener<HTMLDivElement>> = mutableMapOf(),
+  children: MutableList<VNode<*>> = mutableListOf(), builder: VDiv.() -> Unit = {}
 ) = build(VDiv(attributes, eventListeners, children), builder)

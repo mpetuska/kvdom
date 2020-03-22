@@ -9,7 +9,7 @@ actual open class DOMRect actual constructor(
   width: Double,
   height: Double
 ) :
-  DOMRectReadOnly() {
+  DOMRectReadOnly(x, y, width, height) {
   actual override var x: Double
     get() = TODO("Not yet implemented")
     set(value) {}

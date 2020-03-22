@@ -1,7 +1,5 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
-import lt.petuska.kvdom.dom.w3c.dom.events.Event
-import lt.petuska.kvdom.dom.w3c.dom.events.EventTarget
 import org.w3c.dom.get
 
 /**
@@ -9,4 +7,4 @@ import org.w3c.dom.get
  */
 actual typealias AudioTrackList = org.w3c.dom.AudioTrackList
 
-actual inline operator fun AudioTrackList.get(index: Int): AudioTrack? =get(index)
+actual inline operator fun AudioTrackList.get(index: Int): AudioTrack? = get(index)

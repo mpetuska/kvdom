@@ -6,7 +6,7 @@ import lt.petuska.kvdom.dom.event.EventType
 import lt.petuska.kvdom.dom.node.html.HTMLHRElement
 
 open class VHr(
-    attributes: MutableMap<String, String> = mutableMapOf(),
-    eventListeners: MutableMap<EventType, EventListener<HTMLHRElement>> = mutableMapOf(),
-    children: MutableList<VNode<*>> = mutableListOf()
+  attributes: MutableMap<String, String> = mutableMapOf(),
+  eventListeners: MutableMap<EventType, EventListener<HTMLHRElement>> = mutableMapOf(),
+  children: MutableList<VNode<*>> = mutableListOf()
 ) : VHTMLElement<HTMLHRElement>("hr", attributes, eventListeners, children)

@@ -11,7 +11,7 @@ import lt.petuska.kvdom.dsl.util.KvdomDsl
 
 @KvdomDsl
 fun VElement<*>.input(
-    attributes: MutableMap<String, String> = mutableMapOf(),
-    eventListeners: MutableMap<EventType, EventListener<HTMLInputElement>> = mutableMapOf(),
-    children: MutableList<VNode<*>> = mutableListOf(), builder: VInput.() -> Unit = {}
+  attributes: MutableMap<String, String> = mutableMapOf(),
+  eventListeners: MutableMap<EventType, EventListener<HTMLInputElement>> = mutableMapOf(),
+  children: MutableList<VNode<*>> = mutableListOf(), builder: VInput.() -> Unit = {}
 ) = build(VInput(attributes, eventListeners, children), builder)

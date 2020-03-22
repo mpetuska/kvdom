@@ -3,7 +3,7 @@ package lt.petuska.kvdom.dom.w3c.dom
 /**
  * Exposes the JavaScript [HTMLLegendElement](https://developer.mozilla.org/en/docs/Web/API/HTMLLegendElement) to Kotlin
  */
-expect  abstract class HTMLLegendElement() : HTMLElement {
+expect abstract class HTMLLegendElement() : HTMLElement {
   open val form: HTMLFormElement?
   open var align: String
   

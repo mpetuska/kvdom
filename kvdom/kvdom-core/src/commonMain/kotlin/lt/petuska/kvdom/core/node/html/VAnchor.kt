@@ -7,9 +7,9 @@ import lt.petuska.kvdom.dom.event.EventType
 import lt.petuska.kvdom.dom.node.html.HTMLAnchorElement
 
 open class VAnchor(
-    attributes: MutableMap<String, String> = mutableMapOf(),
-    eventListeners: MutableMap<EventType, EventListener<HTMLAnchorElement>> = mutableMapOf(),
-    children: MutableList<VNode<*>> = mutableListOf()
+  attributes: MutableMap<String, String> = mutableMapOf(),
+  eventListeners: MutableMap<EventType, EventListener<HTMLAnchorElement>> = mutableMapOf(),
+  children: MutableList<VNode<*>> = mutableListOf()
 ) : VHTMLElement<HTMLAnchorElement>("a", attributes, eventListeners, children) {
-    var href by AttributeDelegate()
+  var href by AttributeDelegate()
 }

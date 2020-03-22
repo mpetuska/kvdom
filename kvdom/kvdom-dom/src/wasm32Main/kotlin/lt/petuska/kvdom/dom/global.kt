@@ -7,10 +7,10 @@ import lt.petuska.kvdom.dom.node.Document
 import lt.petuska.kvdom.dom.node.Window
 
 actual val document: Document = allocateArena().run {
-    Document(this, jsGetDocument(this))
+  Document(this, jsGetDocument(this))
 }
 actual val window: Window = allocateArena().run {
-    Window(this, jsGetWindow(this))
+  Window(this, jsGetWindow(this))
 }
 
 @SymbolName("kvdom_Global_getDocument")

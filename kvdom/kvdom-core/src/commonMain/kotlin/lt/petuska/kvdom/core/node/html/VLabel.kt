@@ -6,7 +6,7 @@ import lt.petuska.kvdom.dom.event.EventType
 import lt.petuska.kvdom.dom.node.html.HTMLLabelElement
 
 open class VLabel(
-    attributes: MutableMap<String, String> = mutableMapOf(),
-    eventListeners: MutableMap<EventType, EventListener<HTMLLabelElement>> = mutableMapOf(),
-    children: MutableList<VNode<*>> = mutableListOf()
+  attributes: MutableMap<String, String> = mutableMapOf(),
+  eventListeners: MutableMap<EventType, EventListener<HTMLLabelElement>> = mutableMapOf(),
+  children: MutableList<VNode<*>> = mutableListOf()
 ) : VHTMLElement<HTMLLabelElement>("label", attributes, eventListeners, children)

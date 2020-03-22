@@ -3,7 +3,7 @@ package lt.petuska.kvdom.dom.w3c.dom
 /**
  * Exposes the JavaScript [CDATASection](https://developer.mozilla.org/en/docs/Web/API/CDATASection) to Kotlin
  */
-actual open class CDATASection actual constructor() : Text() {
+actual open class CDATASection actual constructor() : Text("") {
   actual companion object {
     actual val ELEMENT_NODE: Short
       get() = TODO("Not yet implemented")

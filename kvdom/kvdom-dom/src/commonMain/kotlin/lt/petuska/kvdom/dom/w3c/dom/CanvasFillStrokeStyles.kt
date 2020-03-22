@@ -1,6 +1,6 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
-expect  interface CanvasFillStrokeStyles {
+expect interface CanvasFillStrokeStyles {
   var strokeStyle: Any
   var fillStyle: Any
   fun createLinearGradient(x0: Double, y0: Double, x1: Double, y1: Double): CanvasGradient

@@ -1,3 +1,3 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
-actual typealias CanvasPathDrawingStyles=org.w3c.dom.CanvasPathDrawingStyles
+actual typealias CanvasPathDrawingStyles = org.w3c.dom.CanvasPathDrawingStyles

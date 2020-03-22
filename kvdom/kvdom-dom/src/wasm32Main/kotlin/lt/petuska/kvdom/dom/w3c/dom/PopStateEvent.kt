@@ -9,7 +9,7 @@ actual open class PopStateEvent actual constructor(
   type: String,
   eventInitDict: PopStateEventInit
 ) :
-  Event() {
+  Event(type, eventInitDict) {
   actual open val state: Any?
     get() = TODO("Not yet implemented")
   

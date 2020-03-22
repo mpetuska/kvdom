@@ -4,7 +4,10 @@ package lt.petuska.kvdom.dom.w3c.files
 /**
  * Exposes the JavaScript [Blob](https://developer.mozilla.org/en/docs/Web/API/Blob) to Kotlin
  */
-public external open class Blob(blobParts: Array<dynamic> = definedExternally, options: BlobPropertyBag = definedExternally) : ImageBitmapSource {
+public open external class Blob(
+  blobParts: Array<dynamic> = definedExternally,
+  options: BlobPropertyBag = definedExternally
+) : ImageBitmapSource {
   open val size: Number
   open val type: String
   open val isClosed: Boolean
@@ -12,14 +15,14 @@ public external open class Blob(blobParts: Array<dynamic> = definedExternally, o
   fun close()
 }
 
-public external interface BlobPropertyBag {
+external interface BlobPropertyBag {
   var type: String? /* = "" */
     get() = definedExternally
     set(value) = definedExternally
 }
 
 @kotlin.internal.InlineOnly
-public inline fun BlobPropertyBag(type: String? = ""): BlobPropertyBag {
+inline fun BlobPropertyBag(type: String? = ""): BlobPropertyBag {
   val o = js("({})")
   o["type"] = type
   return o
@@ -28,19 +31,23 @@ public inline fun BlobPropertyBag(type: String? = ""): BlobPropertyBag {
 /**
  * Exposes the JavaScript [File](https://developer.mozilla.org/en/docs/Web/API/File) to Kotlin
  */
-public external open class File(fileBits: Array<dynamic>, fileName: String, options: FilePropertyBag = definedExternally) : Blob {
+public open external class File(
+  fileBits: Array<dynamic>,
+  fileName: String,
+  options: FilePropertyBag = definedExternally
+) : Blob {
   open val name: String
   open val lastModified: Int
 }
 
-public external interface FilePropertyBag : BlobPropertyBag {
+external interface FilePropertyBag : BlobPropertyBag {
   var lastModified: Int?
     get() = definedExternally
     set(value) = definedExternally
 }
 
 @kotlin.internal.InlineOnly
-public inline fun FilePropertyBag(lastModified: Int? = undefined, type: String? = ""): FilePropertyBag {
+inline fun FilePropertyBag(lastModified: Int? = undefined, type: String? = ""): FilePropertyBag {
   val o = js("({})")
   o["lastModified"] = lastModified
   o["type"] = type
@@ -50,17 +57,17 @@ public inline fun FilePropertyBag(lastModified: Int? = undefined, type: String? 
 /**
  * Exposes the JavaScript [FileList](https://developer.mozilla.org/en/docs/Web/API/FileList) to Kotlin
  */
-public external abstract class FileList : ItemArrayLike<File> {
+public abstract external class FileList : ItemArrayLike<File> {
   override fun item(index: Int): File?
 }
 
 @kotlin.internal.InlineOnly
-public inline operator fun FileList.get(index: Int): File? = asDynamic()[index]
+inline operator fun FileList.get(index: Int): File? = asDynamic()[index]
 
 /**
  * Exposes the JavaScript [FileReader](https://developer.mozilla.org/en/docs/Web/API/FileReader) to Kotlin
  */
-public external open class FileReader : EventTarget {
+public open external class FileReader : EventTarget {
   open val readyState: Short
   open val result: dynamic
   open val error: dynamic
@@ -86,7 +93,7 @@ public external open class FileReader : EventTarget {
 /**
  * Exposes the JavaScript [FileReaderSync](https://developer.mozilla.org/en/docs/Web/API/FileReaderSync) to Kotlin
  */
-public external open class FileReaderSync {
+public open external class FileReaderSync {
   fun readAsArrayBuffer(blob: Blob): ArrayBuffer
   fun readAsBinaryString(blob: Blob): String
   fun readAsText(blob: Blob, label: String = definedExternally): String

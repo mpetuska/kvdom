@@ -9,7 +9,7 @@ actual open class StorageEvent actual constructor(
   type: String,
   eventInitDict: StorageEventInit
 ) :
-  Event() {
+  Event(type, eventInitDict) {
   actual open val key: String?
     get() = TODO("Not yet implemented")
   actual open val oldValue: String?

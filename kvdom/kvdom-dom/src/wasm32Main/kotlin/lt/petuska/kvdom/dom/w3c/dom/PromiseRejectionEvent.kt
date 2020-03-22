@@ -10,7 +10,7 @@ actual open class PromiseRejectionEvent actual constructor(
   type: String,
   eventInitDict: PromiseRejectionEventInit
 ) :
-  Event() {
+  Event(type, eventInitDict) {
   actual open val promise: Promise<Any?>
     get() = TODO("Not yet implemented")
   actual open val reason: Any?

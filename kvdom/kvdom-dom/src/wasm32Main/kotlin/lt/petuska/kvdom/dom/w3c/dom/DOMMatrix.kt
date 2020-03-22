@@ -6,7 +6,7 @@ import lt.petuska.kvdom.dom.khronos.webgl.Float64Array
 /**
  * Exposes the JavaScript [DOMMatrix](https://developer.mozilla.org/en/docs/Web/API/DOMMatrix) to Kotlin
  */
-actual open class DOMMatrix actual constructor() : DOMMatrixReadOnly() {
+actual open class DOMMatrix actual constructor() : DOMMatrixReadOnly(arrayOf()) {
   actual constructor(transformList: String) : this() {
     TODO("Not yet implemented")
   }

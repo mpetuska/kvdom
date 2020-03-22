@@ -11,7 +11,7 @@ import lt.petuska.kvdom.dsl.util.KvdomDsl
 
 @KvdomDsl
 fun VElement<*>.hr(
-    attributes: MutableMap<String, String> = mutableMapOf(),
-    eventListeners: MutableMap<EventType, EventListener<HTMLHRElement>> = mutableMapOf(),
-    children: MutableList<VNode<*>> = mutableListOf(), builder: VHr.() -> Unit = {}
+  attributes: MutableMap<String, String> = mutableMapOf(),
+  eventListeners: MutableMap<EventType, EventListener<HTMLHRElement>> = mutableMapOf(),
+  children: MutableList<VNode<*>> = mutableListOf(), builder: VHr.() -> Unit = {}
 ) = build(VHr(attributes, eventListeners, children), builder)

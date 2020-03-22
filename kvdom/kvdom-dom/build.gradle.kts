@@ -1,11 +1,11 @@
 kotlin {
-    sourceSets {
-        val wasm32Main by getting {
-            wasm32().compilations["main"].apply {
-              kotlinOptions.freeCompilerArgs = resources.files.map {
-                "-include-binary '${it.invariantSeparatorsPath}'"
-              }
-            }
+  sourceSets {
+    val wasm32Main by getting {
+      wasm32().compilations["main"].apply {
+        kotlinOptions.freeCompilerArgs = resources.files.flatMap {
+          listOf("-include-binary", " '${it.invariantSeparatorsPath}'")
         }
+      }
     }
+  }
 }
