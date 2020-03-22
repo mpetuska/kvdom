@@ -5,5 +5,3 @@ import lt.petuska.kvdom.dom.node.Window
 
 expect val document: Document
 expect val window: Window
-
-expect val definedExternally: Nothing

@@ -18,5 +18,3 @@ private external fun jsGetDocument(resultArena: Arena): Object
 
 @SymbolName("kvdom_Global_getWindow")
 private external fun jsGetWindow(resultArena: Arena): Object
-actual val definedExternally: Nothing
-  get() = TODO("Not yet implemented")
