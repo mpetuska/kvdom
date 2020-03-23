@@ -4,7 +4,7 @@ package lt.petuska.kvdom.dom.w3c.dom.events
 /**
  * Exposes the JavaScript [UIEvent](https://developer.mozilla.org/en/docs/Web/API/UIEvent) to Kotlin
  */
-public open external class UIEvent(type: String, eventInitDict: UIEventInit = definedExternally) : Event {
+open external class UIEvent(type: String, eventInitDict: UIEventInit = definedExternally) : Event {
   open val view: Window?
   open val detail: Int
   
@@ -45,7 +45,7 @@ inline fun UIEventInit(
 /**
  * Exposes the JavaScript [FocusEvent](https://developer.mozilla.org/en/docs/Web/API/FocusEvent) to Kotlin
  */
-public open external class FocusEvent(type: String, eventInitDict: FocusEventInit = definedExternally) : UIEvent {
+open external class FocusEvent(type: String, eventInitDict: FocusEventInit = definedExternally) : UIEvent {
   open val relatedTarget: EventTarget?
   
   companion object {
@@ -84,7 +84,7 @@ inline fun FocusEventInit(
 /**
  * Exposes the JavaScript [MouseEvent](https://developer.mozilla.org/en/docs/Web/API/MouseEvent) to Kotlin
  */
-public open external class MouseEvent(type: String, eventInitDict: MouseEventInit = definedExternally) : UIEvent,
+open external class MouseEvent(type: String, eventInitDict: MouseEventInit = definedExternally) : UIEvent,
   UnionElementOrMouseEvent {
   open val screenX: Int
   open val screenY: Int
@@ -295,7 +295,7 @@ inline fun EventModifierInit(
 /**
  * Exposes the JavaScript [WheelEvent](https://developer.mozilla.org/en/docs/Web/API/WheelEvent) to Kotlin
  */
-public open external class WheelEvent(type: String, eventInitDict: WheelEventInit = definedExternally) : MouseEvent {
+open external class WheelEvent(type: String, eventInitDict: WheelEventInit = definedExternally) : MouseEvent {
   open val deltaX: Double
   open val deltaY: Double
   open val deltaZ: Double
@@ -399,7 +399,7 @@ inline fun WheelEventInit(
 /**
  * Exposes the JavaScript [InputEvent](https://developer.mozilla.org/en/docs/Web/API/InputEvent) to Kotlin
  */
-public open external class InputEvent(type: String, eventInitDict: InputEventInit = definedExternally) : UIEvent {
+open external class InputEvent(type: String, eventInitDict: InputEventInit = definedExternally) : UIEvent {
   open val data: String
   open val isComposing: Boolean
   
@@ -444,7 +444,7 @@ inline fun InputEventInit(
 /**
  * Exposes the JavaScript [KeyboardEvent](https://developer.mozilla.org/en/docs/Web/API/KeyboardEvent) to Kotlin
  */
-public open external class KeyboardEvent(type: String, eventInitDict: KeyboardEventInit = definedExternally) : UIEvent {
+open external class KeyboardEvent(type: String, eventInitDict: KeyboardEventInit = definedExternally) : UIEvent {
   open val key: String
   open val code: String
   open val location: Int
@@ -547,7 +547,7 @@ inline fun KeyboardEventInit(
 /**
  * Exposes the JavaScript [CompositionEvent](https://developer.mozilla.org/en/docs/Web/API/CompositionEvent) to Kotlin
  */
-public open external class CompositionEvent(type: String, eventInitDict: CompositionEventInit = definedExternally) :
+open external class CompositionEvent(type: String, eventInitDict: CompositionEventInit = definedExternally) :
   UIEvent {
   open val data: String
   
@@ -585,37 +585,9 @@ inline fun CompositionEventInit(
 }
 
 /**
- * Exposes the JavaScript [Event](https://developer.mozilla.org/en/docs/Web/API/Event) to Kotlin
- */
-public open external class Event(type: String, eventInitDict: EventInit = definedExternally) {
-  open val type: String
-  open val target: EventTarget?
-  open val currentTarget: EventTarget?
-  open val eventPhase: Short
-  open val bubbles: Boolean
-  open val cancelable: Boolean
-  open val defaultPrevented: Boolean
-  open val composed: Boolean
-  open val isTrusted: Boolean
-  open val timeStamp: Number
-  fun composedPath(): Array<EventTarget>
-  fun stopPropagation()
-  fun stopImmediatePropagation()
-  fun preventDefault()
-  fun initEvent(type: String, bubbles: Boolean, cancelable: Boolean)
-  
-  companion object {
-    val NONE: Short
-    val CAPTURING_PHASE: Short
-    val AT_TARGET: Short
-    val BUBBLING_PHASE: Short
-  }
-}
-
-/**
  * Exposes the JavaScript [EventTarget](https://developer.mozilla.org/en/docs/Web/API/EventTarget) to Kotlin
  */
-public abstract external class EventTarget {
+abstract external class EventTarget {
   fun addEventListener(type: String, callback: EventListener?, options: dynamic = definedExternally)
   fun addEventListener(type: String, callback: ((Event) -> Unit)?, options: dynamic = definedExternally)
   fun removeEventListener(type: String, callback: EventListener?, options: dynamic = definedExternally)
