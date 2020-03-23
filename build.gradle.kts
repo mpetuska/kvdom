@@ -1,5 +1,5 @@
 plugins {
-  kotlin("multiplatform") version "1.3.70" apply false
+  kotlin("multiplatform") version "1.3.71" apply false
   id("org.jetbrains.dokka") version "0.10.0" apply false
   id("maven-publish")
   id("io.github.http-builder-ng.http-plugin") version "0.1.1" apply false
@@ -25,6 +25,6 @@ allprojects {
 
 tasks {
   val wrapper by getting(Wrapper::class) {
-    gradleVersion = "6.0.1"
+    gradleVersion = "6.2.2"
   }
 }
