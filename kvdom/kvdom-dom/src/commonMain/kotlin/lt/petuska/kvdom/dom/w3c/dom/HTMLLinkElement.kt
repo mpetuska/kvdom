@@ -1,12 +1,14 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
 import lt.petuska.kvdom.dom.w3c.dom.css.LinkStyle
 import lt.petuska.kvdom.dom.w3c.fetch.RequestDestination
 
 /**
  * Exposes the JavaScript [HTMLLinkElement](https://developer.mozilla.org/en/docs/Web/API/HTMLLinkElement) to Kotlin
  */
-expect abstract class HTMLLinkElement() : HTMLElement, LinkStyle {
+@NoWASM
+expect abstract class HTMLLinkElement : HTMLElement, LinkStyle {
   open var href: String
   open var crossOrigin: String?
   open var rel: String

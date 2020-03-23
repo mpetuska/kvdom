@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [MediaError](https://developer.mozilla.org/en/docs/Web/API/MediaError) to Kotlin
  */
-expect abstract class MediaError() {
+@NoWASM
+expect abstract class MediaError {
   open val code: Short
   
   companion object {

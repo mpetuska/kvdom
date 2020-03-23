@@ -1,4 +1,10 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
-actual typealias DocumentAndElementEventHandlers = org.w3c.dom.DocumentAndElementEventHandlers
+import lt.petuska.kvdom.dom.Dynamic
+import lt.petuska.kvdom.dom.w3c.dom.clipboard.ClipboardEvent
 
+actual external interface DocumentAndElementEventHandlers {
+  actual var oncopy: ((ClipboardEvent) -> Dynamic)?
+  actual var oncut: ((ClipboardEvent) -> Dynamic)?
+  actual var onpaste: ((ClipboardEvent) -> Dynamic)?
+}

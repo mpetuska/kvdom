@@ -1,12 +1,13 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
 import lt.petuska.kvdom.dom.khronos.webgl.TexImageSource
 
 /**
  * Exposes the JavaScript [HTMLImageElement](https://developer.mozilla.org/en/docs/Web/API/HTMLImageElement) to Kotlin
  */
-expect abstract class HTMLImageElement() : HTMLElement,
-  HTMLOrSVGImageElement, TexImageSource {
+@NoWASM
+expect abstract class HTMLImageElement : HTMLElement, HTMLOrSVGImageElement, TexImageSource {
   open var alt: String
   open var src: String
   open var srcset: String

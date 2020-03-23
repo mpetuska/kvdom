@@ -1,5 +1,7 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.Dynamic
+import lt.petuska.kvdom.dom.NoWASM
 import lt.petuska.kvdom.dom.w3c.fetch.Promise
 import lt.petuska.kvdom.dom.w3c.fetch.RequestInit
 import lt.petuska.kvdom.dom.w3c.fetch.Response
@@ -13,15 +15,15 @@ actual interface WindowOrWorkerGlobalScope {
   actual val caches: CacheStorage
   actual fun btoa(data: String): String
   actual fun atob(data: String): String
-  actual fun setTimeout(handler: Any, timeout: Int, vararg arguments: Any?): Int
+  actual fun setTimeout(handler: Dynamic, timeout: Int, vararg arguments: Any?): Int
   actual fun clearTimeout(handle: Int)
-  actual fun setInterval(handler: Any, timeout: Int, vararg arguments: Any?): Int
+  actual fun setInterval(handler: Dynamic, timeout: Int, vararg arguments: Any?): Int
   actual fun clearInterval(handle: Int)
-  actual fun createImageBitmap(
-    image: ImageBitmapSource,
-    options: ImageBitmapOptions
-  ): Promise<ImageBitmap>
   
+  @NoWASM
+  actual fun createImageBitmap(image: ImageBitmapSource, options: ImageBitmapOptions): Promise<ImageBitmap>
+  
+  @NoWASM
   actual fun createImageBitmap(
     image: ImageBitmapSource,
     sx: Int,
@@ -31,8 +33,6 @@ actual interface WindowOrWorkerGlobalScope {
     options: ImageBitmapOptions
   ): Promise<ImageBitmap>
   
-  actual fun fetch(
-    input: Any,
-    init: RequestInit
-  ): Promise<Response>
+  @NoWASM
+  actual fun fetch(input: Dynamic, init: RequestInit): Promise<Response>
 }

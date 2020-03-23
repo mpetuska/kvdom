@@ -1,13 +1,13 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
 import lt.petuska.kvdom.dom.w3c.dom.css.ElementCSSInlineStyle
 
 /**
  * Exposes the JavaScript [HTMLElement](https://developer.mozilla.org/en/docs/Web/API/HTMLElement) to Kotlin
  */
-actual abstract class HTMLElement actual constructor() : Element(),
-  GlobalEventHandlers,
-  DocumentAndElementEventHandlers,
+@NoWASM
+actual abstract class HTMLElement : Element(), GlobalEventHandlers, DocumentAndElementEventHandlers,
   ElementContentEditable, ElementCSSInlineStyle {
   actual open var title: String
     get() = TODO("Not yet implemented")

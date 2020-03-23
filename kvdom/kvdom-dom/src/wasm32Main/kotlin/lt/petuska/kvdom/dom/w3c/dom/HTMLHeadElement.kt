@@ -1,8 +1,11 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLHeadElement](https://developer.mozilla.org/en/docs/Web/API/HTMLHeadElement) to Kotlin
  */
+@NoWASM
 actual abstract class HTMLHeadElement actual constructor() : HTMLElement() {
   actual companion object {
     actual val ELEMENT_NODE: Short

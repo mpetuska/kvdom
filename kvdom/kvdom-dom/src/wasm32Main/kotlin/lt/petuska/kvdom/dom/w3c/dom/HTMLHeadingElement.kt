@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLHeadingElement](https://developer.mozilla.org/en/docs/Web/API/HTMLHeadingElement) to Kotlin
  */
-actual abstract class HTMLHeadingElement actual constructor() : HTMLElement() {
+@NoWASM
+actual abstract class HTMLHeadingElement : HTMLElement() {
   actual open var align: String
     get() = TODO("Not yet implemented")
     set(value) {}

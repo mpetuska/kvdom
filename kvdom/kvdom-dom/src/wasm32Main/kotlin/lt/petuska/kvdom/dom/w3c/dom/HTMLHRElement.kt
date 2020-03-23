@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLHRElement](https://developer.mozilla.org/en/docs/Web/API/HTMLHRElement) to Kotlin
  */
-actual abstract class HTMLHRElement actual constructor() : HTMLElement() {
+@NoWASM
+actual abstract class HTMLHRElement : HTMLElement() {
   actual open var align: String
     get() = TODO("Not yet implemented")
     set(value) {}

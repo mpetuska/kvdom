@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLParamElement](https://developer.mozilla.org/en/docs/Web/API/HTMLParamElement) to Kotlin
  */
-expect abstract class HTMLParamElement() : HTMLElement {
+@NoWASM
+expect abstract class HTMLParamElement : HTMLElement {
   open var name: String
   open var value: String
   open var type: String

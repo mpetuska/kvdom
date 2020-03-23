@@ -1,13 +1,15 @@
 package lt.petuska.kvdom.dom.w3c.fetch
 
+import lt.petuska.kvdom.dom.NoWASM
 
 /**
  * Exposes the JavaScript [Promise object](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) to Kotlin.
  */
+@Suppress("NOT_DOCUMENTED")
+@NoWASM
 expect open class Promise<out T>(executor: (resolve: (T) -> Unit, reject: (Throwable) -> Unit) -> Unit) {
   open fun <S> then(onFulfilled: ((T) -> S)?): Promise<S>
   open fun <S> then(onFulfilled: ((T) -> S)?, onRejected: ((Throwable) -> S)?): Promise<S>
-  
   open fun <S> catch(onRejected: (Throwable) -> S): Promise<S>
   
   companion object {
@@ -23,9 +25,17 @@ expect open class Promise<out T>(executor: (resolve: (T) -> Unit, reject: (Throw
 }
 
 // It's workaround for KT-19672 since we can fix it properly until KT-11265 isn't fixed.
-expect inline fun <T, S> Promise<Promise<T>>.then(noinline onFulfilled: ((T) -> S)?): Promise<S>
+@NoWASM
+fun <T, S> Promise<Promise<T>>.then(onFulfilled: ((T) -> S)?): Promise<S> {
+  @Suppress("UNCHECKED_CAST")
+  return (this as Promise<T>).then(onFulfilled)
+}
 
-expect inline fun <T, S> Promise<Promise<T>>.then(
-  noinline onFulfilled: ((T) -> S)?,
-  noinline onRejected: ((Throwable) -> S)?
-): Promise<S>
+@NoWASM
+fun <T, S> Promise<Promise<T>>.then(
+  onFulfilled: ((T) -> S)?,
+  onRejected: ((Throwable) -> S)?
+): Promise<S> {
+  @Suppress("UNCHECKED_CAST")
+  return (this as Promise<T>).then(onFulfilled, onRejected)
+}

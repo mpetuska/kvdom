@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLPreElement](https://developer.mozilla.org/en/docs/Web/API/HTMLPreElement) to Kotlin
  */
-expect abstract class HTMLPreElement() : HTMLElement {
+@NoWASM
+expect abstract class HTMLPreElement : HTMLElement {
   open var width: Int
   
   companion object {

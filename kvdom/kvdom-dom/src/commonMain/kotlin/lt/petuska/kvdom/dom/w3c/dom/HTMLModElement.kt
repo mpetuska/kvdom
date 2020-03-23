@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLModElement](https://developer.mozilla.org/en/docs/Web/API/HTMLModElement) to Kotlin
  */
-expect abstract class HTMLModElement() : HTMLElement {
+@NoWASM
+expect abstract class HTMLModElement : HTMLElement {
   open var cite: String
   open var dateTime: String
   

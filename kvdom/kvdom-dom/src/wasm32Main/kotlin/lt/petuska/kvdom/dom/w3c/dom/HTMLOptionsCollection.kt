@@ -1,26 +1,34 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
-/**
- * Exposes the JavaScript [HTMLOptionsCollection](https://developer.mozilla.org/en/docs/Web/API/HTMLOptionsCollection) to Kotlin
- */
-actual abstract class HTMLOptionsCollection actual constructor() : HTMLCollection() {
-  actual open var selectedIndex: Int
-    get() = TODO("Not yet implemented")
+import lt.petuska.kvdom.dom.Dynamic
+import lt.petuska.kvdom.dom.NoWASM
+
+@NoWASM
+actual abstract class HTMLOptionsCollection : HTMLCollection() {
+  actual override var length: Int
+    get() {
+      TODO("Not yet implemented")
+    }
     set(value) {}
+  actual open var selectedIndex: Int
+    get() {
+      TODO("Not yet implemented")
+    }
+    set(value) {
+      TODO("Not yet implemented")
+    }
   
-  actual fun add(
-    element: UnionHTMLOptGroupElementOrHTMLOptionElement,
-    before: Any
-  ) {
+  actual fun add(element: UnionHTMLOptGroupElementOrHTMLOptionElement, before: Dynamic) {
+    TODO("Not yet implemented")
   }
   
   actual fun remove(index: Int) {
+    TODO("Not yet implemented")
   }
 }
 
-actual inline operator fun HTMLOptionsCollection.set(
-  index: Int,
-  option: HTMLOptionElement?
-) {
+@NoWASM
+actual operator fun HTMLOptionsCollection.set(index: Int, option: HTMLOptionElement?) {
+  TODO("Not yet implemented")
 }
 

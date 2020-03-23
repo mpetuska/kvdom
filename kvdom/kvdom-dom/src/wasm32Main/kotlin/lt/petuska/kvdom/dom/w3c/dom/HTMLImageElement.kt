@@ -1,12 +1,13 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
 import lt.petuska.kvdom.dom.khronos.webgl.TexImageSource
 
 /**
  * Exposes the JavaScript [HTMLImageElement](https://developer.mozilla.org/en/docs/Web/API/HTMLImageElement) to Kotlin
  */
-actual abstract class HTMLImageElement actual constructor() : HTMLElement(),
-  HTMLOrSVGImageElement, TexImageSource {
+@NoWASM
+actual abstract class HTMLImageElement : HTMLElement(), HTMLOrSVGImageElement, TexImageSource {
   actual open var alt: String
     get() = TODO("Not yet implemented")
     set(value) {}

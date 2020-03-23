@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLModElement](https://developer.mozilla.org/en/docs/Web/API/HTMLModElement) to Kotlin
  */
-actual abstract class HTMLModElement actual constructor() : HTMLElement() {
+@NoWASM
+actual abstract class HTMLModElement : HTMLElement() {
   actual open var cite: String
     get() = TODO("Not yet implemented")
     set(value) {}

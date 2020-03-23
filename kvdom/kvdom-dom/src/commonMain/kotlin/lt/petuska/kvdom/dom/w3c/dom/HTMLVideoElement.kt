@@ -1,12 +1,13 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
 import lt.petuska.kvdom.dom.khronos.webgl.TexImageSource
 
 /**
  * Exposes the JavaScript [HTMLVideoElement](https://developer.mozilla.org/en/docs/Web/API/HTMLVideoElement) to Kotlin
  */
-expect abstract class HTMLVideoElement() : HTMLMediaElement,
-  CanvasImageSource, TexImageSource {
+@NoWASM
+expect abstract class HTMLVideoElement : HTMLMediaElement, CanvasImageSource, TexImageSource {
   open var width: Int
   open var height: Int
   open val videoWidth: Int

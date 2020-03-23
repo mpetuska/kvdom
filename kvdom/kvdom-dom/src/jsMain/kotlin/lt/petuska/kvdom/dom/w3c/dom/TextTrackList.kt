@@ -1,9 +1,16 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.Dynamic
 import lt.petuska.kvdom.dom.w3c.dom.events.Event
 import lt.petuska.kvdom.dom.w3c.dom.events.EventTarget
-import org.w3c.dom.get
 
-actual typealias TextTrackList = org.w3c.dom.TextTrackList
+actual abstract external class TextTrackList : EventTarget {
+  actual open val length: Int
+  actual open var onchange: ((Event) -> Dynamic)?
+  actual open var onaddtrack: ((TrackEvent) -> Dynamic)?
+  actual open var onremovetrack: ((TrackEvent) -> Dynamic)?
+  actual fun getTrackById(id: String): TextTrack?
+}
 
-actual inline operator fun TextTrackList.get(index: Int): TextTrack? = get(index)
+@Suppress("UnsafeCastFromDynamic")
+actual operator fun TextTrackList.get(index: Int): TextTrack? = asDynamic()[index]

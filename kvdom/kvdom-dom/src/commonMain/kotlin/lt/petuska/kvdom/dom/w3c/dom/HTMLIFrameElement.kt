@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLIFrameElement](https://developer.mozilla.org/en/docs/Web/API/HTMLIFrameElement) to Kotlin
  */
-expect abstract class HTMLIFrameElement() : HTMLElement {
+@NoWASM
+expect abstract class HTMLIFrameElement : HTMLElement {
   open var src: String
   open var srcdoc: String
   open var name: String

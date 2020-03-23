@@ -1,6 +1,9 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
-actual abstract class TextTrackCueList actual constructor() {
+import lt.petuska.kvdom.dom.NoWASM
+
+@NoWASM
+actual abstract class TextTrackCueList {
   actual open val length: Int
     get() = TODO("Not yet implemented")
   
@@ -9,6 +12,7 @@ actual abstract class TextTrackCueList actual constructor() {
   }
 }
 
-actual inline operator fun TextTrackCueList.get(index: Int): TextTrackCue? {
+@NoWASM
+actual operator fun TextTrackCueList.get(index: Int): TextTrackCue? {
   TODO("Not yet implemented")
 }

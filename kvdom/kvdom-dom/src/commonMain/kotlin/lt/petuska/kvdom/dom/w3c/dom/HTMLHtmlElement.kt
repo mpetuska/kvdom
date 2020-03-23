@@ -1,8 +1,11 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLHtmlElement](https://developer.mozilla.org/en/docs/Web/API/HTMLHtmlElement) to Kotlin
  */
+@NoWASM
 expect abstract class HTMLHtmlElement() : HTMLElement {
   open var version: String
   

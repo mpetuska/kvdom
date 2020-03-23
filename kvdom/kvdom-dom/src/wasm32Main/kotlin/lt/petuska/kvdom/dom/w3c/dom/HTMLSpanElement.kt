@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLSpanElement](https://developer.mozilla.org/en/docs/Web/API/HTMLSpanElement) to Kotlin
  */
-actual abstract class HTMLSpanElement actual constructor() : HTMLElement() {
+@NoWASM
+actual abstract class HTMLSpanElement : HTMLElement() {
   actual companion object {
     actual val ELEMENT_NODE: Short
       get() = TODO("Not yet implemented")

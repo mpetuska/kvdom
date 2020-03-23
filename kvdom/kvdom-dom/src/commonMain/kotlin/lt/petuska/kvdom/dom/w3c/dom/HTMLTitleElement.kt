@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLTitleElement](https://developer.mozilla.org/en/docs/Web/API/HTMLTitleElement) to Kotlin
  */
-expect abstract class HTMLTitleElement() : HTMLElement {
+@NoWASM
+expect abstract class HTMLTitleElement : HTMLElement {
   open var text: String
   
   companion object {

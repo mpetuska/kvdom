@@ -1,8 +1,15 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
-import org.w3c.dom.get
+actual abstract external class HTMLAllCollection {
+  actual open val length: Int
+  
+  actual fun item(nameOrIndex: String): UnionElementOrHTMLCollection?
+  
+  actual fun namedItem(name: String): UnionElementOrHTMLCollection?
+}
 
-actual typealias HTMLAllCollection = org.w3c.dom.HTMLAllCollection
+@Suppress("UnsafeCastFromDynamic")
+actual operator fun HTMLAllCollection.get(index: Int): Element? = asDynamic()[index]
 
-actual inline operator fun HTMLAllCollection.get(index: Int): Element? = get(index)
-actual inline operator fun HTMLAllCollection.get(name: String): UnionElementOrHTMLCollection? = get(name)
+@Suppress("UnsafeCastFromDynamic")
+actual operator fun HTMLAllCollection.get(name: String): UnionElementOrHTMLCollection? = asDynamic()[name]

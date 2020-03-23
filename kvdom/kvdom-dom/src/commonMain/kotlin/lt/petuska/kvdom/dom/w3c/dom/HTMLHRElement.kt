@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLHRElement](https://developer.mozilla.org/en/docs/Web/API/HTMLHRElement) to Kotlin
  */
-expect abstract class HTMLHRElement() : HTMLElement {
+@NoWASM
+expect abstract class HTMLHRElement : HTMLElement {
   open var align: String
   open var color: String
   open var noShade: Boolean

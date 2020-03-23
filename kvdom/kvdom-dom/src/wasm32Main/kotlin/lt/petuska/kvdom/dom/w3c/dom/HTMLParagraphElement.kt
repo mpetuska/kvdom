@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLParagraphElement](https://developer.mozilla.org/en/docs/Web/API/HTMLParagraphElement) to Kotlin
  */
-actual abstract class HTMLParagraphElement actual constructor() : HTMLElement() {
+@NoWASM
+actual abstract class HTMLParagraphElement : HTMLElement() {
   actual open var align: String
     get() = TODO("Not yet implemented")
     set(value) {}

@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLQuoteElement](https://developer.mozilla.org/en/docs/Web/API/HTMLQuoteElement) to Kotlin
  */
-expect abstract class HTMLQuoteElement() : HTMLElement {
+@NoWASM
+expect abstract class HTMLQuoteElement : HTMLElement {
   open var cite: String
   
   companion object {

@@ -51,47 +51,47 @@ inline fun WebGLContextAttributes(
   return o
 }
 
-public abstract external class WebGLObject
+abstract external class WebGLObject
 
 /**
  * Exposes the JavaScript [WebGLBuffer](https://developer.mozilla.org/en/docs/Web/API/WebGLBuffer) to Kotlin
  */
-public abstract external class WebGLBuffer : WebGLObject
+abstract external class WebGLBuffer : WebGLObject
 
 /**
  * Exposes the JavaScript [WebGLFramebuffer](https://developer.mozilla.org/en/docs/Web/API/WebGLFramebuffer) to Kotlin
  */
-public abstract external class WebGLFramebuffer : WebGLObject
+abstract external class WebGLFramebuffer : WebGLObject
 
 /**
  * Exposes the JavaScript [WebGLProgram](https://developer.mozilla.org/en/docs/Web/API/WebGLProgram) to Kotlin
  */
-public abstract external class WebGLProgram : WebGLObject
+abstract external class WebGLProgram : WebGLObject
 
 /**
  * Exposes the JavaScript [WebGLRenderbuffer](https://developer.mozilla.org/en/docs/Web/API/WebGLRenderbuffer) to Kotlin
  */
-public abstract external class WebGLRenderbuffer : WebGLObject
+abstract external class WebGLRenderbuffer : WebGLObject
 
 /**
  * Exposes the JavaScript [WebGLShader](https://developer.mozilla.org/en/docs/Web/API/WebGLShader) to Kotlin
  */
-public abstract external class WebGLShader : WebGLObject
+abstract external class WebGLShader : WebGLObject
 
 /**
  * Exposes the JavaScript [WebGLTexture](https://developer.mozilla.org/en/docs/Web/API/WebGLTexture) to Kotlin
  */
-public abstract external class WebGLTexture : WebGLObject
+abstract external class WebGLTexture : WebGLObject
 
 /**
  * Exposes the JavaScript [WebGLUniformLocation](https://developer.mozilla.org/en/docs/Web/API/WebGLUniformLocation) to Kotlin
  */
-public abstract external class WebGLUniformLocation
+abstract external class WebGLUniformLocation
 
 /**
  * Exposes the JavaScript [WebGLActiveInfo](https://developer.mozilla.org/en/docs/Web/API/WebGLActiveInfo) to Kotlin
  */
-public abstract external class WebGLActiveInfo {
+abstract external class WebGLActiveInfo {
   open val size: Int
   open val type: Int
   open val name: String
@@ -100,7 +100,7 @@ public abstract external class WebGLActiveInfo {
 /**
  * Exposes the JavaScript [WebGLShaderPrecisionFormat](https://developer.mozilla.org/en/docs/Web/API/WebGLShaderPrecisionFormat) to Kotlin
  */
-public abstract external class WebGLShaderPrecisionFormat {
+abstract external class WebGLShaderPrecisionFormat {
   open val rangeMin: Int
   open val rangeMax: Int
   open val precision: Int
@@ -616,7 +616,7 @@ external interface WebGLRenderingContextBase {
 /**
  * Exposes the JavaScript [WebGLRenderingContext](https://developer.mozilla.org/en/docs/Web/API/WebGLRenderingContext) to Kotlin
  */
-public abstract external class WebGLRenderingContext : WebGLRenderingContextBase, RenderingContext {
+abstract external class WebGLRenderingContext : WebGLRenderingContextBase, RenderingContext {
   companion object {
     val DEPTH_BUFFER_BIT: Int
     val STENCIL_BUFFER_BIT: Int
@@ -921,8 +921,7 @@ public abstract external class WebGLRenderingContext : WebGLRenderingContextBase
 /**
  * Exposes the JavaScript [WebGLContextEvent](https://developer.mozilla.org/en/docs/Web/API/WebGLContextEvent) to Kotlin
  */
-public open external class WebGLContextEvent(type: String, eventInit: WebGLContextEventInit = definedExternally) :
-  Event {
+open external class WebGLContextEvent(type: String, eventInit: WebGLContextEventInit = definedExternally) : Event {
   open val statusMessage: String
   
   companion object {
@@ -957,7 +956,7 @@ inline fun WebGLContextEventInit(
 /**
  * Exposes the JavaScript [ArrayBuffer](https://developer.mozilla.org/en/docs/Web/API/ArrayBuffer) to Kotlin
  */
-public open external class ArrayBuffer(length: Int) : BufferDataSource {
+open external class ArrayBuffer(length: Int) : BufferDataSource {
   open val byteLength: Int
   fun slice(begin: Int, end: Int = definedExternally): ArrayBuffer
   
@@ -978,7 +977,7 @@ external interface ArrayBufferView : BufferDataSource {
 /**
  * Exposes the JavaScript [Int8Array](https://developer.mozilla.org/en/docs/Web/API/Int8Array) to Kotlin
  */
-public open external class Int8Array : ArrayBufferView {
+open external class Int8Array : ArrayBufferView {
   constructor(length: Int)
   constructor(array: Int8Array)
   constructor(array: Array<Byte>)
@@ -1008,7 +1007,7 @@ inline operator fun Int8Array.set(index: Int, value: Byte) {
 /**
  * Exposes the JavaScript [Uint8Array](https://developer.mozilla.org/en/docs/Web/API/Uint8Array) to Kotlin
  */
-public open external class Uint8Array : ArrayBufferView {
+open external class Uint8Array : ArrayBufferView {
   constructor(length: Int)
   constructor(array: Uint8Array)
   constructor(array: Array<Byte>)
@@ -1038,7 +1037,7 @@ inline operator fun Uint8Array.set(index: Int, value: Byte) {
 /**
  * Exposes the JavaScript [Uint8ClampedArray](https://developer.mozilla.org/en/docs/Web/API/Uint8ClampedArray) to Kotlin
  */
-public open external class Uint8ClampedArray : ArrayBufferView {
+open external class Uint8ClampedArray : ArrayBufferView {
   constructor(length: Int)
   constructor(array: Uint8ClampedArray)
   constructor(array: Array<Byte>)
@@ -1068,7 +1067,7 @@ inline operator fun Uint8ClampedArray.set(index: Int, value: Byte) {
 /**
  * Exposes the JavaScript [Int16Array](https://developer.mozilla.org/en/docs/Web/API/Int16Array) to Kotlin
  */
-public open external class Int16Array : ArrayBufferView {
+open external class Int16Array : ArrayBufferView {
   constructor(length: Int)
   constructor(array: Int16Array)
   constructor(array: Array<Array>)
@@ -1098,7 +1097,7 @@ inline operator fun Int16Array.set(index: Int, value: Short) {
 /**
  * Exposes the JavaScript [Uint16Array](https://developer.mozilla.org/en/docs/Web/API/Uint16Array) to Kotlin
  */
-public open external class Uint16Array : ArrayBufferView {
+open external class Uint16Array : ArrayBufferView {
   constructor(length: Int)
   constructor(array: Uint16Array)
   constructor(array: Array<Array>)
@@ -1128,7 +1127,7 @@ inline operator fun Uint16Array.set(index: Int, value: Short) {
 /**
  * Exposes the JavaScript [Int32Array](https://developer.mozilla.org/en/docs/Web/API/Int32Array) to Kotlin
  */
-public open external class Int32Array : ArrayBufferView {
+open external class Int32Array : ArrayBufferView {
   constructor(length: Int)
   constructor(array: Int32Array)
   constructor(array: Array<Int>)
@@ -1158,7 +1157,7 @@ inline operator fun Int32Array.set(index: Int, value: Int) {
 /**
  * Exposes the JavaScript [Uint32Array](https://developer.mozilla.org/en/docs/Web/API/Uint32Array) to Kotlin
  */
-public open external class Uint32Array : ArrayBufferView {
+open external class Uint32Array : ArrayBufferView {
   constructor(length: Int)
   constructor(array: Uint32Array)
   constructor(array: Array<Int>)
@@ -1188,7 +1187,7 @@ inline operator fun Uint32Array.set(index: Int, value: Int) {
 /**
  * Exposes the JavaScript [Float32Array](https://developer.mozilla.org/en/docs/Web/API/Float32Array) to Kotlin
  */
-public open external class Float32Array : ArrayBufferView {
+open external class Float32Array : ArrayBufferView {
   constructor(length: Int)
   constructor(array: Float32Array)
   constructor(array: Array<Array>)
@@ -1218,7 +1217,7 @@ inline operator fun Float32Array.set(index: Int, value: Float) {
 /**
  * Exposes the JavaScript [Float64Array](https://developer.mozilla.org/en/docs/Web/API/Float64Array) to Kotlin
  */
-public open external class Float64Array : ArrayBufferView {
+open external class Float64Array : ArrayBufferView {
   constructor(length: Int)
   constructor(array: Float64Array)
   constructor(array: Array<Double>)
@@ -1248,7 +1247,7 @@ inline operator fun Float64Array.set(index: Int, value: Double) {
 /**
  * Exposes the JavaScript [DataView](https://developer.mozilla.org/en/docs/Web/API/DataView) to Kotlin
  */
-public open external class DataView(
+open external class DataView(
   buffer: ArrayBuffer,
   byteOffset: Int = definedExternally,
   byteLength: Int = definedExternally
@@ -1276,3 +1275,4 @@ public open external class DataView(
 
 external interface BufferDataSource
 
+external interface TexImageSource

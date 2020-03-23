@@ -5,4 +5,5 @@ package lt.petuska.kvdom.dom.w3c.dom
  */
 expect interface Slotable {
   val assignedSlot: HTMLSlotElement?
+//    get() = definedExternally
 }

@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLSpanElement](https://developer.mozilla.org/en/docs/Web/API/HTMLSpanElement) to Kotlin
  */
-expect abstract class HTMLSpanElement() : HTMLElement {
+@NoWASM
+expect abstract class HTMLSpanElement : HTMLElement {
   companion object {
     val ELEMENT_NODE: Short
     val ATTRIBUTE_NODE: Short

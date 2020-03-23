@@ -1,31 +1,19 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLEmbedElement](https://developer.mozilla.org/en/docs/Web/API/HTMLEmbedElement) to Kotlin
  */
-actual abstract class HTMLEmbedElement actual constructor() : HTMLElement() {
-  actual open var src: String
-    get() = TODO("Not yet implemented")
-    set(value) {}
-  actual open var type: String
-    get() = TODO("Not yet implemented")
-    set(value) {}
-  actual open var width: String
-    get() = TODO("Not yet implemented")
-    set(value) {}
-  actual open var height: String
-    get() = TODO("Not yet implemented")
-    set(value) {}
-  actual open var align: String
-    get() = TODO("Not yet implemented")
-    set(value) {}
-  actual open var name: String
-    get() = TODO("Not yet implemented")
-    set(value) {}
-  
-  actual fun getSVGDocument(): Document? {
-    TODO("Not yet implemented")
-  }
+@NoWASM
+actual abstract class HTMLEmbedElement : HTMLElement() {
+  actual abstract var src: String
+  actual abstract var type: String
+  actual abstract var width: String
+  actual abstract var height: String
+  actual abstract var align: String
+  actual abstract var name: String
+  actual abstract fun getSVGDocument(): Document?
   
   actual companion object {
     actual val ELEMENT_NODE: Short

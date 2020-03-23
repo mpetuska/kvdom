@@ -1,16 +1,19 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLEmbedElement](https://developer.mozilla.org/en/docs/Web/API/HTMLEmbedElement) to Kotlin
  */
-expect abstract class HTMLEmbedElement() : HTMLElement {
-  open var src: String
-  open var type: String
-  open var width: String
-  open var height: String
-  open var align: String
-  open var name: String
-  fun getSVGDocument(): Document?
+@NoWASM
+expect abstract class HTMLEmbedElement : HTMLElement {
+  abstract var src: String
+  abstract var type: String
+  abstract var width: String
+  abstract var height: String
+  abstract var align: String
+  abstract var name: String
+  abstract fun getSVGDocument(): Document?
   
   companion object {
     val ELEMENT_NODE: Short

@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLPreElement](https://developer.mozilla.org/en/docs/Web/API/HTMLPreElement) to Kotlin
  */
-actual abstract class HTMLPreElement actual constructor() : HTMLElement() {
+@NoWASM
+actual abstract class HTMLPreElement : HTMLElement() {
   actual open var width: Int
     get() = TODO("Not yet implemented")
     set(value) {}

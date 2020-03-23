@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLTitleElement](https://developer.mozilla.org/en/docs/Web/API/HTMLTitleElement) to Kotlin
  */
-actual abstract class HTMLTitleElement actual constructor() : HTMLElement() {
+@NoWASM
+actual abstract class HTMLTitleElement : HTMLElement() {
   actual open var text: String
     get() = TODO("Not yet implemented")
     set(value) {}

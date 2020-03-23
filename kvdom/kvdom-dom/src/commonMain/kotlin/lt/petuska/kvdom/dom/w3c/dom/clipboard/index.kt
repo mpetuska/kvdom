@@ -4,7 +4,6 @@ import lt.petuska.kvdom.dom.w3c.dom.DataTransfer
 import lt.petuska.kvdom.dom.w3c.dom.EventInit
 import lt.petuska.kvdom.dom.w3c.dom.events.Event
 import lt.petuska.kvdom.dom.w3c.dom.events.EventTarget
-import lt.petuska.kvdom.dom.w3c.fetch.Promise
 
 
 external interface ClipboardEventInit : EventInit {
@@ -31,7 +30,7 @@ inline fun ClipboardEventInit(
 /**
  * Exposes the JavaScript [ClipboardEvent](https://developer.mozilla.org/en/docs/Web/API/ClipboardEvent) to Kotlin
  */
-public open external class ClipboardEvent(type: String, eventInitDict: ClipboardEventInit = definedExternally) : Event {
+open external class ClipboardEvent(type: String, eventInitDict: ClipboardEventInit = definedExternally) : Event {
   open val clipboardData: DataTransfer?
   
   companion object {
@@ -45,7 +44,7 @@ public open external class ClipboardEvent(type: String, eventInitDict: Clipboard
 /**
  * Exposes the JavaScript [Clipboard](https://developer.mozilla.org/en/docs/Web/API/Clipboard) to Kotlin
  */
-public abstract external class Clipboard : EventTarget {
+abstract external class Clipboard : EventTarget {
   fun read(): Promise<DataTransfer>
   fun readText(): Promise<String>
   fun write(data: DataTransfer): Promise<Unit>

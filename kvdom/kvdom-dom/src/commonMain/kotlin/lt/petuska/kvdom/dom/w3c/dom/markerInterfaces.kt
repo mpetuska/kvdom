@@ -1,0 +1,17 @@
+package lt.petuska.kvdom.dom.w3c.dom
+
+expect interface UnionElementOrHTMLCollection
+expect interface UnionHTMLOptGroupElementOrHTMLOptionElement
+expect interface UnionAudioTrackOrTextTrackOrVideoTrack
+expect interface UnionElementOrMouseEvent
+expect interface RenderingContext
+expect interface HTMLOrSVGImageElement : CanvasImageSource
+expect interface CanvasImageSource : ImageBitmapSource
+expect interface ImageBitmapSource
+expect interface UnionMessagePortOrWindowProxy
+expect interface HTMLOrSVGScriptElement
+expect interface UnionElementOrRadioNodeList
+expect interface ElementContentEditable {
+  var contentEditable: String
+  val isContentEditable: Boolean
+}

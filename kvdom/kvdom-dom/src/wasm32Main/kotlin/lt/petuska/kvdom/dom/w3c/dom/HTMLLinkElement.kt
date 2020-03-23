@@ -1,12 +1,14 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
 import lt.petuska.kvdom.dom.w3c.dom.css.LinkStyle
 import lt.petuska.kvdom.dom.w3c.fetch.RequestDestination
 
 /**
  * Exposes the JavaScript [HTMLLinkElement](https://developer.mozilla.org/en/docs/Web/API/HTMLLinkElement) to Kotlin
  */
-actual abstract class HTMLLinkElement actual constructor() : HTMLElement(), LinkStyle {
+@NoWASM
+actual abstract class HTMLLinkElement : HTMLElement(), LinkStyle {
   actual open var href: String
     get() = TODO("Not yet implemented")
     set(value) {}
@@ -92,5 +94,4 @@ actual abstract class HTMLLinkElement actual constructor() : HTMLElement(), Link
     actual val DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC: Short
       get() = TODO("Not yet implemented")
   }
-  
 }

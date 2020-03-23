@@ -1,14 +1,17 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.Dynamic
+import lt.petuska.kvdom.dom.NoWASM
 import lt.petuska.kvdom.dom.w3c.fetch.Promise
 
 /**
  * Exposes the JavaScript [HTMLMediaElement](https://developer.mozilla.org/en/docs/Web/API/HTMLMediaElement) to Kotlin
  */
-expect abstract class HTMLMediaElement() : HTMLElement {
+@NoWASM
+expect abstract class HTMLMediaElement : HTMLElement {
   open val error: MediaError?
   open var src: String
-  open var srcObject: Any
+  open var srcObject: Dynamic
   open val currentSrc: String
   open var crossOrigin: String?
   open val networkState: Short
@@ -36,10 +39,14 @@ expect abstract class HTMLMediaElement() : HTMLElement {
   fun load()
   fun canPlayType(type: String): CanPlayTypeResult
   fun fastSeek(time: Double)
-  fun getStartDate(): Any
+  fun getStartDate(): Dynamic
   fun play(): Promise<Unit>
   fun pause()
-  fun addTextTrack(kind: TextTrackKind, label: String, language: String): TextTrack
+  fun addTextTrack(
+    kind: TextTrackKind,
+    label: String = "",
+    language: String = ""
+  ): TextTrack
   
   companion object {
     val NETWORK_EMPTY: Short

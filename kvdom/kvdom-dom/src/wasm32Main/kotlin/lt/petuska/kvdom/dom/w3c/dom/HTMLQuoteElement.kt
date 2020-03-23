@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLQuoteElement](https://developer.mozilla.org/en/docs/Web/API/HTMLQuoteElement) to Kotlin
  */
-actual abstract class HTMLQuoteElement actual constructor() : HTMLElement() {
+@NoWASM
+actual abstract class HTMLQuoteElement : HTMLElement() {
   actual open var cite: String
     get() = TODO("Not yet implemented")
     set(value) {}

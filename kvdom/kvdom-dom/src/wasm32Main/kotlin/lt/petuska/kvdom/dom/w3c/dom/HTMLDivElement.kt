@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLDivElement](https://developer.mozilla.org/en/docs/Web/API/HTMLDivElement) to Kotlin
  */
-actual abstract class HTMLDivElement actual constructor() : HTMLElement() {
+@NoWASM
+actual abstract class HTMLDivElement : HTMLElement() {
   actual open var align: String
     get() = TODO("Not yet implemented")
     set(value) {}

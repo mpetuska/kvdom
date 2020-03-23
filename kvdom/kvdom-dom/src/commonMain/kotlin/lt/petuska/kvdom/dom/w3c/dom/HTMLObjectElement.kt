@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLObjectElement](https://developer.mozilla.org/en/docs/Web/API/HTMLObjectElement) to Kotlin
  */
-expect abstract class HTMLObjectElement() : HTMLElement {
+@NoWASM
+expect abstract class HTMLObjectElement : HTMLElement {
   open var data: String
   open var type: String
   open var typeMustMatch: Boolean

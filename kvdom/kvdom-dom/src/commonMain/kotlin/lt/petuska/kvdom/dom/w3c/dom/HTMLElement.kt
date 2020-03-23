@@ -1,13 +1,13 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
 import lt.petuska.kvdom.dom.w3c.dom.css.ElementCSSInlineStyle
 
 /**
  * Exposes the JavaScript [HTMLElement](https://developer.mozilla.org/en/docs/Web/API/HTMLElement) to Kotlin
  */
-expect abstract class HTMLElement() : Element,
-  GlobalEventHandlers,
-  DocumentAndElementEventHandlers,
+@NoWASM
+expect abstract class HTMLElement() : Element, GlobalEventHandlers, DocumentAndElementEventHandlers,
   ElementContentEditable, ElementCSSInlineStyle {
   open var title: String
   open var lang: String

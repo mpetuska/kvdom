@@ -1,19 +1,5 @@
 package lt.petuska.kvdom.dom.w3c.fetch
 
-import lt.petuska.kvdom.dom.khronos.webgl.ArrayBuffer
-import org.khronos.webgl.*
-import org.w3c.css.masking.*
-import org.w3c.dom.clipboard.*
-import org.w3c.dom.mediacapture.*
-import org.w3c.dom.parsing.*
-import org.w3c.dom.pointerevents.*
-import org.w3c.dom.svg.*
-import org.w3c.dom.url.*
-import org.w3c.files.*
-import org.w3c.notifications.*
-import org.w3c.performance.*
-import org.w3c.workers.*
-import org.w3c.xhr.*
 
 /**
  * Exposes the JavaScript [Headers](https://developer.mozilla.org/en/docs/Web/API/Headers) to Kotlin
@@ -174,11 +160,7 @@ external interface ResponseInit {
 }
 
 @kotlin.internal.InlineOnly
-inline fun ResponseInit(
-  status: Short? = 200,
-  statusText: String? = "OK",
-  headers: dynamic = undefined
-): ResponseInit {
+inline fun ResponseInit(status: Short? = 200, statusText: String? = "OK", headers: dynamic = undefined): ResponseInit {
   val o = js("({})")
   o["status"] = status
   o["statusText"] = statusText
@@ -267,8 +249,7 @@ external interface RequestMode {
 
 inline val RequestMode.Companion.NAVIGATE: RequestMode get() = "navigate".asDynamic().unsafeCast<RequestMode>()
 
-inline val RequestMode.Companion.SAME_ORIGIN: RequestMode
-  get() = "same-origin".asDynamic().unsafeCast<RequestMode>()
+inline val RequestMode.Companion.SAME_ORIGIN: RequestMode get() = "same-origin".asDynamic().unsafeCast<RequestMode>()
 
 inline val RequestMode.Companion.NO_CORS: RequestMode get() = "no-cors".asDynamic().unsafeCast<RequestMode>()
 
@@ -297,16 +278,13 @@ external interface RequestCache {
 
 inline val RequestCache.Companion.DEFAULT: RequestCache get() = "default".asDynamic().unsafeCast<RequestCache>()
 
-inline val RequestCache.Companion.NO_STORE: RequestCache
-  get() = "no-store".asDynamic().unsafeCast<RequestCache>()
+inline val RequestCache.Companion.NO_STORE: RequestCache get() = "no-store".asDynamic().unsafeCast<RequestCache>()
 
 inline val RequestCache.Companion.RELOAD: RequestCache get() = "reload".asDynamic().unsafeCast<RequestCache>()
 
-inline val RequestCache.Companion.NO_CACHE: RequestCache
-  get() = "no-cache".asDynamic().unsafeCast<RequestCache>()
+inline val RequestCache.Companion.NO_CACHE: RequestCache get() = "no-cache".asDynamic().unsafeCast<RequestCache>()
 
-inline val RequestCache.Companion.FORCE_CACHE: RequestCache
-  get() = "force-cache".asDynamic().unsafeCast<RequestCache>()
+inline val RequestCache.Companion.FORCE_CACHE: RequestCache get() = "force-cache".asDynamic().unsafeCast<RequestCache>()
 
 inline val RequestCache.Companion.ONLY_IF_CACHED: RequestCache
   get() = "only-if-cached".asDynamic().unsafeCast<RequestCache>()
@@ -317,14 +295,11 @@ external interface RequestRedirect {
   companion object
 }
 
-inline val RequestRedirect.Companion.FOLLOW: RequestRedirect
-  get() = "follow".asDynamic().unsafeCast<RequestRedirect>()
+inline val RequestRedirect.Companion.FOLLOW: RequestRedirect get() = "follow".asDynamic().unsafeCast<RequestRedirect>()
 
-inline val RequestRedirect.Companion.ERROR: RequestRedirect
-  get() = "error".asDynamic().unsafeCast<RequestRedirect>()
+inline val RequestRedirect.Companion.ERROR: RequestRedirect get() = "error".asDynamic().unsafeCast<RequestRedirect>()
 
-inline val RequestRedirect.Companion.MANUAL: RequestRedirect
-  get() = "manual".asDynamic().unsafeCast<RequestRedirect>()
+inline val RequestRedirect.Companion.MANUAL: RequestRedirect get() = "manual".asDynamic().unsafeCast<RequestRedirect>()
 
 /* please, don't implement this interface! */
 @Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")

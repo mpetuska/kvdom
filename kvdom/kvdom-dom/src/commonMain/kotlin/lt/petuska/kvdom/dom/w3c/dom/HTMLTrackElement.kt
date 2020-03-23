@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLTrackElement](https://developer.mozilla.org/en/docs/Web/API/HTMLTrackElement) to Kotlin
  */
-expect abstract class HTMLTrackElement() : HTMLElement {
+@NoWASM
+expect abstract class HTMLTrackElement : HTMLElement {
   open var kind: String
   open var src: String
   open var srclang: String

@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLParagraphElement](https://developer.mozilla.org/en/docs/Web/API/HTMLParagraphElement) to Kotlin
  */
-expect abstract class HTMLParagraphElement() : HTMLElement {
+@NoWASM
+expect abstract class HTMLParagraphElement : HTMLElement {
   open var align: String
   
   companion object {

@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLPictureElement](https://developer.mozilla.org/en/docs/Web/API/HTMLPictureElement) to Kotlin
  */
-actual abstract class HTMLPictureElement actual constructor() : HTMLElement() {
+@NoWASM
+actual abstract class HTMLPictureElement : HTMLElement() {
   actual companion object {
     actual val ELEMENT_NODE: Short
       get() = TODO("Not yet implemented")

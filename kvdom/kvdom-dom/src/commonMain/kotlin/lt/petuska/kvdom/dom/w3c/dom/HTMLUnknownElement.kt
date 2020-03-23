@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLUnknownElement](https://developer.mozilla.org/en/docs/Web/API/HTMLUnknownElement) to Kotlin
  */
-expect abstract class HTMLUnknownElement() : HTMLElement {
+@NoWASM
+expect abstract class HTMLUnknownElement : HTMLElement {
   companion object {
     val ELEMENT_NODE: Short
     val ATTRIBUTE_NODE: Short

@@ -1,6 +1,9 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
-actual abstract class HTMLAllCollection actual constructor() {
+import lt.petuska.kvdom.dom.NoWASM
+
+@NoWASM
+actual abstract class HTMLAllCollection {
   actual open val length: Int
     get() = TODO("Not yet implemented")
   
@@ -13,10 +16,12 @@ actual abstract class HTMLAllCollection actual constructor() {
   }
 }
 
-actual inline operator fun HTMLAllCollection.get(index: Int): Element? {
+@NoWASM
+actual operator fun HTMLAllCollection.get(index: Int): Element? {
   TODO("Not yet implemented")
 }
 
-actual inline operator fun HTMLAllCollection.get(name: String): UnionElementOrHTMLCollection? {
+@NoWASM
+actual operator fun HTMLAllCollection.get(name: String): UnionElementOrHTMLCollection? {
   TODO("Not yet implemented")
 }

@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLTrackElement](https://developer.mozilla.org/en/docs/Web/API/HTMLTrackElement) to Kotlin
  */
-actual abstract class HTMLTrackElement actual constructor() : HTMLElement() {
+@NoWASM
+actual abstract class HTMLTrackElement : HTMLElement() {
   actual open var kind: String
     get() = TODO("Not yet implemented")
     set(value) {}

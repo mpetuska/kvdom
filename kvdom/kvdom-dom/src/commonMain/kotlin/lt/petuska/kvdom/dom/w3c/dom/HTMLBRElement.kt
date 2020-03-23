@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLBRElement](https://developer.mozilla.org/en/docs/Web/API/HTMLBRElement) to Kotlin
  */
-expect abstract class HTMLBRElement() : HTMLElement {
+@NoWASM
+expect abstract class HTMLBRElement : HTMLElement {
   open var clear: String
   
   companion object {

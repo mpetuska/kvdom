@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLSourceElement](https://developer.mozilla.org/en/docs/Web/API/HTMLSourceElement) to Kotlin
  */
-actual abstract class HTMLSourceElement actual constructor() : HTMLElement() {
+@NoWASM
+actual abstract class HTMLSourceElement : HTMLElement() {
   actual open var src: String
     get() = TODO("Not yet implemented")
     set(value) {}

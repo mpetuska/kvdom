@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLUListElement](https://developer.mozilla.org/en/docs/Web/API/HTMLUListElement) to Kotlin
  */
-actual abstract class HTMLUListElement actual constructor() : HTMLElement() {
+@NoWASM
+actual abstract class HTMLUListElement : HTMLElement() {
   actual open var compact: Boolean
     get() = TODO("Not yet implemented")
     set(value) {}

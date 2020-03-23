@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLBodyElement](https://developer.mozilla.org/en/docs/Web/API/HTMLBodyElement) to Kotlin
  */
-expect abstract class HTMLBodyElement() : HTMLElement,
+@NoWASM
+expect abstract class HTMLBodyElement : HTMLElement,
   WindowEventHandlers {
   open var text: String
   open var link: String

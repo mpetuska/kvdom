@@ -1,10 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
 import lt.petuska.kvdom.dom.w3c.dom.events.EventTarget
 
 /**
  * Exposes the JavaScript [Node](https://developer.mozilla.org/en/docs/Web/API/Node) to Kotlin
  */
+@NoWASM
 expect abstract class Node() : EventTarget {
   open val nodeType: Short
   open val nodeName: String
@@ -20,10 +22,10 @@ expect abstract class Node() : EventTarget {
   open val nextSibling: Node?
   open var nodeValue: String?
   open var textContent: String?
-  fun getRootNode(options: GetRootNodeOptions): Node
+  fun getRootNode(options: GetRootNodeOptions = GetRootNodeOptions()): Node
   fun hasChildNodes(): Boolean
   fun normalize()
-  fun cloneNode(deep: Boolean): Node
+  fun cloneNode(deep: Boolean = false): Node
   fun isEqualNode(otherNode: Node?): Boolean
   fun isSameNode(otherNode: Node?): Boolean
   fun compareDocumentPosition(other: Node): Short
@@ -56,4 +58,12 @@ expect abstract class Node() : EventTarget {
     val DOCUMENT_POSITION_CONTAINED_BY: Short
     val DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC: Short
   }
+}
+
+expect interface GetRootNodeOptions {
+  var composed: Boolean? /* = false */
+}
+
+fun GetRootNodeOptions(composed: Boolean? = false): GetRootNodeOptions = object : GetRootNodeOptions {
+  override var composed: Boolean? = composed
 }

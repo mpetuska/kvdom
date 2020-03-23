@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLIFrameElement](https://developer.mozilla.org/en/docs/Web/API/HTMLIFrameElement) to Kotlin
  */
-actual abstract class HTMLIFrameElement actual constructor() : HTMLElement() {
+@NoWASM
+actual abstract class HTMLIFrameElement : HTMLElement() {
   actual open var src: String
     get() = TODO("Not yet implemented")
     set(value) {}

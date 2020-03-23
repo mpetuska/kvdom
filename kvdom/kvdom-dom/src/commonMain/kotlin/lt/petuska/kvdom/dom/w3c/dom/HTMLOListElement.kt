@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLOListElement](https://developer.mozilla.org/en/docs/Web/API/HTMLOListElement) to Kotlin
  */
-expect abstract class HTMLOListElement() : HTMLElement {
+@NoWASM
+expect abstract class HTMLOListElement : HTMLElement {
   open var reversed: Boolean
   open var start: Int
   open var type: String

@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLAnchorElement](https://developer.mozilla.org/en/docs/Web/API/HTMLAnchorElement) to Kotlin
  */
-actual abstract class HTMLAnchorElement actual constructor() : HTMLElement(),
+@NoWASM
+actual abstract class HTMLAnchorElement : HTMLElement(),
   HTMLHyperlinkElementUtils {
   actual open var target: String
     get() = TODO("Not yet implemented")

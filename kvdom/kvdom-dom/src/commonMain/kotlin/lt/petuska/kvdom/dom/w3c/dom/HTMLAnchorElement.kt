@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLAnchorElement](https://developer.mozilla.org/en/docs/Web/API/HTMLAnchorElement) to Kotlin
  */
-expect abstract class HTMLAnchorElement() : HTMLElement,
+@NoWASM
+expect abstract class HTMLAnchorElement : HTMLElement,
   HTMLHyperlinkElementUtils {
   open var target: String
   open var download: String

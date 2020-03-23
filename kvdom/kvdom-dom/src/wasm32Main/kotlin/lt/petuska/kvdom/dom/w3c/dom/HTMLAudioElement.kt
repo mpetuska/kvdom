@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLAudioElement](https://developer.mozilla.org/en/docs/Web/API/HTMLAudioElement) to Kotlin
  */
-actual abstract class HTMLAudioElement actual constructor() : HTMLMediaElement() {
+@NoWASM
+actual abstract class HTMLAudioElement : HTMLMediaElement() {
   actual companion object {
     actual val NETWORK_EMPTY: Short
       get() = TODO("Not yet implemented")

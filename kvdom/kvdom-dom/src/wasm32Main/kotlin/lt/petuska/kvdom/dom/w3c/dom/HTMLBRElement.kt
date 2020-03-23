@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLBRElement](https://developer.mozilla.org/en/docs/Web/API/HTMLBRElement) to Kotlin
  */
-actual abstract class HTMLBRElement actual constructor() : HTMLElement() {
+@NoWASM
+actual abstract class HTMLBRElement : HTMLElement() {
   actual open var clear: String
     get() = TODO("Not yet implemented")
     set(value) {}

@@ -1,10 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [VideoTrack](https://developer.mozilla.org/en/docs/Web/API/VideoTrack) to Kotlin
  */
-actual abstract class VideoTrack actual constructor() :
-  UnionAudioTrackOrTextTrackOrVideoTrack {
+@NoWASM
+actual abstract class VideoTrack : UnionAudioTrackOrTextTrackOrVideoTrack {
   actual open val id: String
     get() = TODO("Not yet implemented")
   actual open val kind: String

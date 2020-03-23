@@ -1,12 +1,13 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
 import lt.petuska.kvdom.dom.w3c.dom.css.LinkStyle
 
 /**
  * Exposes the JavaScript [HTMLStyleElement](https://developer.mozilla.org/en/docs/Web/API/HTMLStyleElement) to Kotlin
  */
-expect abstract class HTMLStyleElement() : HTMLElement,
-  LinkStyle {
+@NoWASM
+expect abstract class HTMLStyleElement : HTMLElement, LinkStyle {
   open var media: String
   open var nonce: String
   open var type: String

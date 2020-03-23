@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLParamElement](https://developer.mozilla.org/en/docs/Web/API/HTMLParamElement) to Kotlin
  */
-actual abstract class HTMLParamElement actual constructor() : HTMLElement() {
+@NoWASM
+actual abstract class HTMLParamElement : HTMLElement() {
   actual open var name: String
     get() = TODO("Not yet implemented")
     set(value) {}

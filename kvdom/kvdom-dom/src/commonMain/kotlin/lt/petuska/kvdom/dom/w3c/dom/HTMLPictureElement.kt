@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLPictureElement](https://developer.mozilla.org/en/docs/Web/API/HTMLPictureElement) to Kotlin
  */
-expect abstract class HTMLPictureElement() : HTMLElement {
+@NoWASM
+expect abstract class HTMLPictureElement : HTMLElement {
   companion object {
     val ELEMENT_NODE: Short
     val ATTRIBUTE_NODE: Short

@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLMetaElement](https://developer.mozilla.org/en/docs/Web/API/HTMLMetaElement) to Kotlin
  */
-expect abstract class HTMLMetaElement() : HTMLElement {
+@NoWASM
+expect abstract class HTMLMetaElement : HTMLElement {
   open var name: String
   open var httpEquiv: String
   open var content: String

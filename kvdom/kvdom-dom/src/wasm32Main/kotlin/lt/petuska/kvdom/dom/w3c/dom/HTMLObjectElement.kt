@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLObjectElement](https://developer.mozilla.org/en/docs/Web/API/HTMLObjectElement) to Kotlin
  */
-actual abstract class HTMLObjectElement actual constructor() : HTMLElement() {
+@NoWASM
+actual abstract class HTMLObjectElement : HTMLElement() {
   actual open var data: String
     get() = TODO("Not yet implemented")
     set(value) {}

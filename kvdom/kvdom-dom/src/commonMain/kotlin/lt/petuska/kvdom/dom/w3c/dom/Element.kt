@@ -1,78 +1,77 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.Dynamic
+import lt.petuska.kvdom.dom.NoWASM
 import lt.petuska.kvdom.dom.w3c.dom.css.UnionElementOrProcessingInstruction
 import lt.petuska.kvdom.dom.w3c.fetch.Promise
 
 /**
  * Exposes the JavaScript [Element](https://developer.mozilla.org/en/docs/Web/API/Element) to Kotlin
  */
-expect abstract class Element() : Node,
-  ParentNode,
-  NonDocumentTypeChildNode,
-  ChildNode, Slotable,
-  GeometryUtils,
-  UnionElementOrHTMLCollection,
-  UnionElementOrRadioNodeList,
-  UnionElementOrMouseEvent, UnionElementOrProcessingInstruction {
-  open val namespaceURI: String?
-  open val prefix: String?
-  open val localName: String
-  open val tagName: String
-  open var id: String
-  open var className: String
-  open val classList: DOMTokenList
-  open var slot: String
-  open val attributes: NamedNodeMap
-  open val shadowRoot: ShadowRoot?
-  open var scrollTop: Double
-  open var scrollLeft: Double
-  open val scrollWidth: Int
-  open val scrollHeight: Int
-  open val clientTop: Int
-  open val clientLeft: Int
-  open val clientWidth: Int
-  open val clientHeight: Int
-  open var innerHTML: String
-  open var outerHTML: String
-  fun hasAttributes(): Boolean
-  fun getAttributeNames(): Array<String>
-  fun getAttribute(qualifiedName: String): String?
-  fun getAttributeNS(namespace: String?, localName: String): String?
-  fun setAttribute(qualifiedName: String, value: String)
-  fun setAttributeNS(namespace: String?, qualifiedName: String, value: String)
-  fun removeAttribute(qualifiedName: String)
-  fun removeAttributeNS(namespace: String?, localName: String)
-  fun hasAttribute(qualifiedName: String): Boolean
-  fun hasAttributeNS(namespace: String?, localName: String): Boolean
-  fun getAttributeNode(qualifiedName: String): Attr?
-  fun getAttributeNodeNS(namespace: String?, localName: String): Attr?
-  fun setAttributeNode(attr: Attr): Attr?
-  fun setAttributeNodeNS(attr: Attr): Attr?
-  fun removeAttributeNode(attr: Attr): Attr
-  fun attachShadow(init: ShadowRootInit): ShadowRoot
-  fun closest(selectors: String): Element?
-  fun matches(selectors: String): Boolean
-  fun webkitMatchesSelector(selectors: String): Boolean
-  fun getElementsByTagName(qualifiedName: String): HTMLCollection
-  fun getElementsByTagNameNS(namespace: String?, localName: String): HTMLCollection
-  fun getElementsByClassName(classNames: String): HTMLCollection
-  fun insertAdjacentElement(where: String, element: Element): Element?
-  fun insertAdjacentText(where: String, data: String)
-  fun getClientRects(): Array<DOMRect>
-  fun getBoundingClientRect(): DOMRect
-  fun scrollIntoView()
-  fun scrollIntoView(arg: Any)
-  fun scroll(options: ScrollToOptions)
-  fun scroll(x: Double, y: Double)
-  fun scrollTo(options: ScrollToOptions)
-  fun scrollTo(x: Double, y: Double)
-  fun scrollBy(options: ScrollToOptions)
-  fun scrollBy(x: Double, y: Double)
-  fun insertAdjacentHTML(position: String, text: String)
-  fun setPointerCapture(pointerId: Int)
-  fun releasePointerCapture(pointerId: Int)
-  fun hasPointerCapture(pointerId: Int): Boolean
-  fun requestFullscreen(): Promise<Unit>
+@NoWASM
+expect abstract class Element : Node, ParentNode, NonDocumentTypeChildNode, ChildNode, Slotable, GeometryUtils,
+  UnionElementOrHTMLCollection, UnionElementOrRadioNodeList, UnionElementOrMouseEvent,
+  UnionElementOrProcessingInstruction {
+  
+  abstract val namespaceURI: String?
+  abstract val prefix: String?
+  abstract val localName: String
+  abstract val tagName: String
+  abstract var id: String
+  abstract var className: String
+  abstract val classList: DOMTokenList
+  abstract var slot: String
+  abstract val attributes: NamedNodeMap
+  abstract val shadowRoot: ShadowRoot?
+  abstract var scrollTop: Double
+  abstract var scrollLeft: Double
+  abstract val scrollWidth: Int
+  abstract val scrollHeight: Int
+  abstract val clientTop: Int
+  abstract val clientLeft: Int
+  abstract val clientWidth: Int
+  abstract val clientHeight: Int
+  abstract var innerHTML: String
+  abstract var outerHTML: String
+  abstract fun hasAttributes(): Boolean
+  abstract fun getAttributeNames(): Array<String>
+  abstract fun getAttribute(qualifiedName: String): String?
+  abstract fun getAttributeNS(namespace: String?, localName: String): String?
+  abstract fun setAttribute(qualifiedName: String, value: String)
+  abstract fun setAttributeNS(namespace: String?, qualifiedName: String, value: String)
+  abstract fun removeAttribute(qualifiedName: String)
+  abstract fun removeAttributeNS(namespace: String?, localName: String)
+  abstract fun hasAttribute(qualifiedName: String): Boolean
+  abstract fun hasAttributeNS(namespace: String?, localName: String): Boolean
+  abstract fun getAttributeNode(qualifiedName: String): Attr?
+  abstract fun getAttributeNodeNS(namespace: String?, localName: String): Attr?
+  abstract fun setAttributeNode(attr: Attr): Attr?
+  abstract fun setAttributeNodeNS(attr: Attr): Attr?
+  abstract fun removeAttributeNode(attr: Attr): Attr
+  abstract fun attachShadow(init: ShadowRootInit): ShadowRoot
+  abstract fun closest(selectors: String): Element?
+  abstract fun matches(selectors: String): Boolean
+  abstract fun webkitMatchesSelector(selectors: String): Boolean
+  abstract fun getElementsByTagName(qualifiedName: String): HTMLCollection
+  abstract fun getElementsByTagNameNS(namespace: String?, localName: String): HTMLCollection
+  abstract fun getElementsByClassName(classNames: String): HTMLCollection
+  abstract fun insertAdjacentElement(where: String, element: Element): Element?
+  abstract fun insertAdjacentText(where: String, data: String)
+  abstract fun getClientRects(): Array<DOMRect>
+  abstract fun getBoundingClientRect(): DOMRect
+  abstract fun scrollIntoView()
+  abstract fun scrollIntoView(arg: Dynamic)
+  abstract fun scroll(options: ScrollToOptions)
+  abstract fun scroll(x: Double, y: Double)
+  abstract fun scrollTo(options: ScrollToOptions)
+  abstract fun scrollTo(x: Double, y: Double)
+  abstract fun scrollBy(options: ScrollToOptions)
+  abstract fun scrollBy(x: Double, y: Double)
+  abstract fun insertAdjacentHTML(position: String, text: String)
+  abstract fun setPointerCapture(pointerId: Int)
+  abstract fun releasePointerCapture(pointerId: Int)
+  abstract fun hasPointerCapture(pointerId: Int): Boolean
+  abstract fun requestFullscreen(): Promise<Unit>
   
   companion object {
     val ELEMENT_NODE: Short

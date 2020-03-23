@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLTimeElement](https://developer.mozilla.org/en/docs/Web/API/HTMLTimeElement) to Kotlin
  */
-actual abstract class HTMLTimeElement actual constructor() : HTMLElement() {
+@NoWASM
+actual abstract class HTMLTimeElement : HTMLElement() {
   actual open var dateTime: String
     get() = TODO("Not yet implemented")
     set(value) {}

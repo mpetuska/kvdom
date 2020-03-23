@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [MediaError](https://developer.mozilla.org/en/docs/Web/API/MediaError) to Kotlin
  */
-actual abstract class MediaError actual constructor() {
+@NoWASM
+actual abstract class MediaError {
   actual open val code: Short
     get() = TODO("Not yet implemented")
   

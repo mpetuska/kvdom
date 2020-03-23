@@ -1,11 +1,13 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
 import lt.petuska.kvdom.dom.w3c.dom.events.EventTarget
 
 /**
  * Exposes the JavaScript [Node](https://developer.mozilla.org/en/docs/Web/API/Node) to Kotlin
  */
-actual abstract class Node actual constructor() : EventTarget() {
+@NoWASM
+actual abstract class Node : EventTarget() {
   actual open val nodeType: Short
     get() = TODO("Not yet implemented")
   actual open val nodeName: String
@@ -141,4 +143,8 @@ actual abstract class Node actual constructor() : EventTarget() {
       get() = TODO("Not yet implemented")
   }
   
+}
+
+actual interface GetRootNodeOptions {
+  actual var composed: Boolean?
 }

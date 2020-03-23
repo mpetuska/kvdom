@@ -1,8 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.fetch
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [Promise object](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) to Kotlin.
  */
+@Suppress("NOT_DOCUMENTED")
+@NoWASM
 actual open class Promise<out T> actual constructor(executor: (resolve: (T) -> Unit, reject: (Throwable) -> Unit) -> Unit) {
   actual open fun <S> then(onFulfilled: ((T) -> S)?): Promise<S> {
     TODO("Not yet implemented")
@@ -42,15 +46,4 @@ actual open class Promise<out T> actual constructor(executor: (resolve: (T) -> U
     
   }
   
-}
-
-actual inline fun <T, S> Promise<Promise<T>>.then(noinline onFulfilled: ((T) -> S)?): Promise<S> {
-  TODO("Not yet implemented")
-}
-
-actual inline fun <T, S> Promise<Promise<T>>.then(
-  noinline onFulfilled: ((T) -> S)?,
-  noinline onRejected: ((Throwable) -> S)?
-): Promise<S> {
-  TODO("Not yet implemented")
 }

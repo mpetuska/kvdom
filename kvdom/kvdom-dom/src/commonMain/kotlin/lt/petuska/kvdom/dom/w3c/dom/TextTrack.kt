@@ -1,13 +1,15 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.Dynamic
+import lt.petuska.kvdom.dom.NoWASM
 import lt.petuska.kvdom.dom.w3c.dom.events.Event
 import lt.petuska.kvdom.dom.w3c.dom.events.EventTarget
 
 /**
  * Exposes the JavaScript [TextTrack](https://developer.mozilla.org/en/docs/Web/API/TextTrack) to Kotlin
  */
-expect abstract class TextTrack() : EventTarget,
-  UnionAudioTrackOrTextTrackOrVideoTrack {
+@NoWASM
+expect abstract class TextTrack : EventTarget, UnionAudioTrackOrTextTrackOrVideoTrack {
   open val kind: TextTrackKind
   open val label: String
   open val language: String
@@ -16,7 +18,7 @@ expect abstract class TextTrack() : EventTarget,
   open var mode: TextTrackMode
   open val cues: TextTrackCueList?
   open val activeCues: TextTrackCueList?
-  open var oncuechange: ((Event) -> Any)?
+  open var oncuechange: ((Event) -> Dynamic)?
   fun addCue(cue: TextTrackCue)
   fun removeCue(cue: TextTrackCue)
 }

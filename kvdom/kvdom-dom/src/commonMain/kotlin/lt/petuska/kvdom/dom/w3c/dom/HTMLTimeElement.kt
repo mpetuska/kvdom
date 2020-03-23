@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLTimeElement](https://developer.mozilla.org/en/docs/Web/API/HTMLTimeElement) to Kotlin
  */
-expect abstract class HTMLTimeElement() : HTMLElement {
+@NoWASM
+expect abstract class HTMLTimeElement : HTMLElement {
   open var dateTime: String
   
   companion object {

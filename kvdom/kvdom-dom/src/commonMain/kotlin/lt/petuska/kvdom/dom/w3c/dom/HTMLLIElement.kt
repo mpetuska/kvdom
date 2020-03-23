@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLLIElement](https://developer.mozilla.org/en/docs/Web/API/HTMLLIElement) to Kotlin
  */
-expect abstract class HTMLLIElement() : HTMLElement {
+@NoWASM
+expect abstract class HTMLLIElement : HTMLElement {
   open var value: Int
   open var type: String
   

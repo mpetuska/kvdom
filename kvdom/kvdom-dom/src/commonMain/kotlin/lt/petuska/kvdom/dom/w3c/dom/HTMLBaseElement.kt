@@ -1,9 +1,12 @@
 package lt.petuska.kvdom.dom.w3c.dom
 
+import lt.petuska.kvdom.dom.NoWASM
+
 /**
  * Exposes the JavaScript [HTMLBaseElement](https://developer.mozilla.org/en/docs/Web/API/HTMLBaseElement) to Kotlin
  */
-expect abstract class HTMLBaseElement() : HTMLElement {
+@NoWASM
+expect abstract class HTMLBaseElement : HTMLElement {
   open var href: String
   open var target: String
   
