@@ -5,8 +5,16 @@ import org.w3c.dom.*
 
 typealias VBuilder = TypedVBuilder<*>
 
-@DslMarker
-annotation class VBuilderDSL
+inline fun <T : Element> TypedVBuilder(
+  tag: String,
+  attrs: MutableMap<String, String> = mutableMapOf(),
+  data: MutableMap<String, ModuleData> = mutableMapOf(),
+  hooks: TypedVBuilder.VElementHooksBuilder<T> = TypedVBuilder.VElementHooksBuilder(),
+  key: String? = null,
+  ns: String? = null,
+  children: MutableList<VNode<*>> = mutableListOf(),
+  block: TypedVBuilder<T>.() -> Unit,
+) = TypedVBuilder(tag, attrs, data, hooks, key, ns, children).apply(block)
 
 open class TypedVBuilder<T : Element> constructor(
   val tag: String,
@@ -16,11 +24,7 @@ open class TypedVBuilder<T : Element> constructor(
   var key: String? = null,
   var ns: String? = null,
   val children: MutableList<VNode<*>> = mutableListOf(),
-  block: TypedVBuilder<T>.() -> Unit,
 ) {
-  init {
-    block()
-  }
   
   operator fun String.unaryPlus() {
     children.add(VText(this, null))
@@ -54,6 +58,3 @@ open class TypedVBuilder<T : Element> constructor(
     }
   }
 }
-
-@VBuilderDSL
-fun <T : Element> TypedVBuilder<T>.hooks(block: TypedVBuilder.VElementHooksBuilder<T>.() -> Unit) = hooks.block()

@@ -2,56 +2,52 @@ package lt.petuska.kvdom.sample
 
 import lt.petuska.kvdom.core.*
 import lt.petuska.kvdom.core.domain.*
-import lt.petuska.kvdom.core.module.*
+import lt.petuska.kvdom.core.module.hooks.*
 import lt.petuska.kvdom.dsl.*
 import org.w3c.dom.*
 import kotlin.browser.*
 import kotlin.math.*
 
-val modules = arrayOf(LifecycleLogger)
+val modules = arrayOf(/*LifecycleLogger, */Hooks)
 val patch = kvdom<HTMLDivElement>(document.getElementById("root")!!, *modules)
 var tree: VElement<HTMLDivElement>? = null
 
 fun main() {
-  //STATE
-  val state = object {
-    var clickCount = 0
-    var clickDisabled = true
-  }
-  
   // Build your VDOM tree
   fun render() = element<HTMLDivElement>("div") {
+    var clickDisabled by useState(false)
+    var clickCount by useState(0)
     h2 {
       +"Platform: $platform"
     }
     button {
-      attrs["disabled"] = "${state.clickDisabled}"
+      attrs["disabled"] = "${clickDisabled}"
       hooks.create = {
         it.addEventListener("click", {
-          state.clickCount++
+          clickCount++
         })
         it.addEventListener("contextmenu", { e ->
           e.preventDefault()
-          state.clickCount = max(state.clickCount - 1, 0)
+          clickCount = max(clickCount - 1, 0)
         })
       }
-      +"Clicked ${state.clickCount} times"
+      +"Clicked $clickCount times"
     }
     button {
-      attrs["disabled"] = "${!state.clickDisabled}"
+      attrs["disabled"] = "${!clickDisabled}"
       hooks.create = {
         it.addEventListener("click", {
-          state.clickDisabled = false
+          clickDisabled = false
         })
       }
       +"EnableCounter"
     }
     button {
-      attrs["disabled"] = "${state.clickDisabled}"
+      attrs["disabled"] = "$clickDisabled"
       hooks {
         create = {
           it.addEventListener("click", {
-            state.clickDisabled = true
+            clickDisabled = true
           })
         }
       }
@@ -59,7 +55,7 @@ fun main() {
     }
     element<HTMLBRElement>("br")
     div {
-      repeat(state.clickCount) {
+      repeat(clickCount) {
         div {
           +"Click #${it + 1}"
         }
@@ -68,6 +64,7 @@ fun main() {
   }
   
   window.setInterval({
+//    tree = tree.patch(render())
     tree = null.patch(render())
-  }, 500)
+  }, 1000)
 }
