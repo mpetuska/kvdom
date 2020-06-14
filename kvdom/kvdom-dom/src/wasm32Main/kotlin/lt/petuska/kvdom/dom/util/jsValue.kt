@@ -1,12 +1,6 @@
 package lt.petuska.kvdom.dom.util
 
-import kotlinx.wasm.jsinterop.Arena
-import kotlinx.wasm.jsinterop.ArenaManager
-import kotlinx.wasm.jsinterop.JsValue
-import kotlinx.wasm.jsinterop.Object
-import kotlinx.wasm.jsinterop.Pointer
-import kotlinx.wasm.jsinterop.stringLengthBytes
-import kotlinx.wasm.jsinterop.stringPointer
+import kotlinx.wasm.jsinterop.*
 
 
 fun JsValue.getObjProperty(name: String): JsValue {
@@ -46,7 +40,7 @@ private external fun js_JsObject_getStringPropertyLength(
   arena: Arena,
   index: Object,
   namePtr: Pointer,
-  nameLen: Int
+  nameLen: Int,
 ): Int
 
 @SymbolName("kvdom_JsObject_getStringPropertyChar")
@@ -55,7 +49,7 @@ private external fun js_JsObject_getStringPropertyChar(
   index: Object,
   namePtr: Pointer,
   nameLen: Int,
-  charIndex: Int
+  charIndex: Int,
 ): Int
 
 @SymbolName("kvdom_JsObject_setStringProperty")
@@ -65,5 +59,5 @@ private external fun js_JsObject_setStringProperty(
   namePtr: Pointer,
   nameLen: Int,
   valuePtr: Pointer,
-  valueLen: Int
+  valueLen: Int,
 ): Int

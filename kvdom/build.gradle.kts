@@ -1,6 +1,6 @@
-import io.github.httpbuilderng.http.HttpTask
-import org.jetbrains.dokka.gradle.DokkaTask
-import org.jetbrains.kotlin.gradle.plugin.getKotlinPluginVersion
+import io.github.httpbuilderng.http.*
+import org.jetbrains.dokka.gradle.*
+import org.jetbrains.kotlin.gradle.plugin.*
 
 
 plugins {
@@ -18,17 +18,10 @@ allprojects {
   
   kotlin {
     js {
-      compilations.all {
-        kotlinOptions {
-          moduleKind = "umd"
-          sourceMap = true
-          metaInfo = true
-          sourceMapEmbedSources = "always"
-        }
-      }
-      browser {}
+      browser()
     }
     wasm32()
+  
     sourceSets {
       val commonMain by getting {
         dependencies {
@@ -39,6 +32,16 @@ allprojects {
         dependencies {
           api(kotlin("stdlib-js"))
         }
+      }
+      val wasm32Main by getting {
+        wasm32().compilations["main"].apply {
+          kotlinOptions.freeCompilerArgs = resources.files.flatMap {
+            listOf("-include-binary", it.invariantSeparatorsPath)
+          }
+        }
+      }
+      all {
+        languageSettings.useExperimentalAnnotation("kotlin.RequiresOptIn")
       }
     }
   }
