@@ -1,4 +1,4 @@
-package lt.petuska.kvdom.core.module.hooks
+package lt.petuska.kvdom.hooks
 
 import lt.petuska.kvdom.core.domain.*
 import kotlin.reflect.*
