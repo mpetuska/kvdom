@@ -66,5 +66,5 @@ fun main() {
   window.setInterval({
 //    tree = tree.patch(render())
     tree = null.patch(render())
-  }, 1000)
+  }, 500)
 }
