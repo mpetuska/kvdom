@@ -2,6 +2,7 @@ package lt.petuska.kvdom.sample
 
 import lt.petuska.kvdom.core.*
 import lt.petuska.kvdom.core.domain.*
+import lt.petuska.kvdom.core.module.events.*
 import lt.petuska.kvdom.dsl.*
 import lt.petuska.kvdom.hooks.*
 import org.w3c.dom.*
@@ -10,6 +11,7 @@ import kotlin.math.*
 
 val modules = arrayOf(
 //  LifecycleLogger,
+  Events,
   Hooks,
 )
 val patch = kvdom<HTMLDivElement>(document.getElementById("root")!!, *modules)
@@ -17,7 +19,7 @@ var tree: VElement<HTMLDivElement>? = null
 
 fun main() {
   // Build your VDOM tree
-  fun render() = element<HTMLDivElement>("div") {
+  fun render() = vBuilder {
     var clickDisabled by useState(false)
     var clickCount by useState(0)
     h2 {
@@ -25,34 +27,38 @@ fun main() {
     }
     button {
       attrs["disabled"] = "$clickDisabled"
-      hooks.create = {
-        it.addEventListener("click", {
+      on("contextmenu") {
+        it.preventDefault()
+        clickCount = max(clickCount - 1, 0)
+        // Conditional Event handling
+        if (clickCount > 4) {
+          println(clickCount)
+        }
+      }
+      // Conditional Event Handlers
+      if (clickCount >= 4) {
+        on("click") {
           clickCount++
-        })
-        it.addEventListener("contextmenu", { e ->
-          e.preventDefault()
-          clickCount = max(clickCount - 1, 0)
-        })
+          println(clickCount)
+        }
+      } else {
+        on("click") {
+          clickCount++
+        }
       }
       +"Clicked $clickCount times"
     }
     button {
       attrs["disabled"] = "${!clickDisabled}"
-      hooks.create = {
-        it.addEventListener("click", {
-          clickDisabled = false
-        })
+      on("click") {
+        clickDisabled = false
       }
       +"EnableCounter"
     }
     button {
       attrs["disabled"] = "$clickDisabled"
-      hooks {
-        create = {
-          it.addEventListener("click", {
-            clickDisabled = true
-          })
-        }
+      on("click") {
+        clickDisabled = true
       }
       +"DisableCounter"
     }
@@ -68,6 +74,5 @@ fun main() {
   
   window.setInterval({
     tree = tree.patch(render())
-//    tree = null.patch(render())
   }, 33)
 }

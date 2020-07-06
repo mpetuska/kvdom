@@ -7,7 +7,7 @@ import kotlin.browser.*
 data class VElement<T : Element> internal constructor(
   val tag: String,
   val attrs: Map<String, String>,
-  val data: Map<String, ModuleData>,
+  internal val _data: MutableMap<String, ModuleData>,
   val hooks: VElementHooks<T>,
   val key: String?,
   val ns: String?,
@@ -15,11 +15,13 @@ data class VElement<T : Element> internal constructor(
   val textContent: String?,
   var ref: T?,
 ) {
+  val data: Map<String, ModuleData>
+    get() = _data
   
   fun copy(): VElement<T> =
     VElement(tag,
       HashMap(attrs),
-      data.mapValues { it.value.copy() },
+      _data.mapValues { it.value.copy() }.toMutableMap(),
       hooks,
       key,
       ns,
@@ -58,5 +60,8 @@ data class VElement<T : Element> internal constructor(
   }
   
   @Suppress("UNCHECKED_CAST")
-  fun <T : ModuleData> getModuleData(moduleId: String): T? = data[moduleId] as? T
+  fun <T : ModuleData> getModuleData(moduleId: String, default: T? = null): T? =
+    _data[moduleId] as? T ?: default?.also {
+      _data[moduleId] = it
+    }
 }

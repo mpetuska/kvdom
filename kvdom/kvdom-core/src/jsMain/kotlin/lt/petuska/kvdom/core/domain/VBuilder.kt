@@ -27,6 +27,10 @@ open class TypedVBuilder<T : Element> constructor(
   val children: MutableList<VElement<*>> = mutableListOf(),
   var textContent: String? = null,
 ) {
+  @Suppress("UNCHECKED_CAST")
+  fun <T : ModuleData> getModuleData(moduleId: String, default: T? = null): T? = data[moduleId] as? T ?: default?.also {
+    data[moduleId] = it
+  }
   
   operator fun String?.unaryPlus() {
     textContent = this

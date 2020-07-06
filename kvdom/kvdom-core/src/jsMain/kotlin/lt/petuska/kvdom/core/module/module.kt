@@ -10,6 +10,8 @@ interface ModuleData {
 
 interface Module<T : ModuleData> {
   val id: String; get() = this::class.simpleName!!
+  val defaultModuleData: () -> T?; get() = { null }
+  val dependencies: List<Module<*>>; get() = listOf()
   
   /**
    * Patch process begins
@@ -19,7 +21,7 @@ interface Module<T : ModuleData> {
   /**
    * DOM element has been created based on a VElement
    */
-  val create: VElement<*>.(ref: Element, moduleData: T?) -> Unit; get() = { _, _ -> }
+  val create: VElement<*>.(ref: Element) -> Unit; get() = { _ -> }
   
   /**
    * Element is being updated

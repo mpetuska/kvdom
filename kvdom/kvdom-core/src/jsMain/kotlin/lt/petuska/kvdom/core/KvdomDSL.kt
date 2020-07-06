@@ -8,6 +8,10 @@ import org.w3c.dom.*
 annotation class KvdomDSL
 
 @KvdomDSL
+inline fun vBuilder(attrs: Map<String, String> = mapOf(), block: TypedVBuilder<HTMLDivElement>.() -> Unit = {}) =
+  element("div", attrs, block = block)
+
+@KvdomDSL
 inline fun <T : Element> element(
   tag: String,
   attrs: Map<String, String> = mapOf(),

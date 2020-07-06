@@ -8,34 +8,51 @@ import kotlin.dom.*
 
 typealias Patch<T> = T?.(newVElement: T?) -> T?
 
-private fun Array<out Module<*>>.assertDistinct() = groupBy { it.id }
-  .filterValues { it.size > 1 }
-  .takeIf { it.isNotEmpty() }
-  ?.let {
-    val error = buildString {
-      appendLine("Duplicate Module IDs found")
-      it.forEach { (id, modules) ->
-        appendLine("ID: $id; Modules: ${modules.joinToString { it::class.simpleName ?: "UNKNOWN" }}")
-      }
-    }
-    throw IllegalArgumentException(error)
-  }
-
 private fun Array<out Module<*>>.pre() = forEach { it.pre() }
 private fun Array<out Module<*>>.create(vElement: VElement<*>, ref: Element) =
-  forEach { it.create(vElement, ref, vElement.getModuleData(it.id)) }
+  forEach {
+    if (vElement.getModuleData<ModuleData>(it.id) == null) {
+      it.defaultModuleData()?.let { md ->
+        vElement._data[it.id] = md
+      }
+    }
+    it.create(vElement, ref)
+  }
 
 private fun Array<out Module<*>>.update(oldVElement: VElement<*>, nevVElement: VElement<*>) =
-  forEach { it.update(nevVElement, oldVElement, nevVElement.getModuleData(it.id)) }
+  forEach {
+    if (nevVElement.getModuleData<ModuleData>(it.id) == null) {
+      it.defaultModuleData()?.let { md ->
+        nevVElement._data[it.id] = md
+      }
+    }
+    it.update(nevVElement, oldVElement, nevVElement.getModuleData(it.id))
+  }
 
 private fun Array<out Module<*>>.destroy(vElement: VElement<*>) =
   forEach { it.destroy(vElement, vElement.getModuleData(it.id)) }
 
 private fun Array<out Module<*>>.post() = forEach { it.post() }
 
-
 fun <T : Element> kvdom(container: Element, vararg modules: Module<*>): Patch<VElement<T>> {
-  modules.assertDistinct()
+  val mods = run {
+    val tmp = mutableListOf(*modules)
+    tmp.reverse()
+    fun Module<*>.resolveDependencies(moduleList: MutableList<Module<*>>) {
+      dependencies.forEach { dep ->
+        if (moduleList.none { m -> m.id == dep.id }) {
+          moduleList.add(dep)
+          dep.resolveDependencies(moduleList)
+        }
+      }
+    }
+    modules.forEach {
+      it.resolveDependencies(tmp)
+    }
+    tmp.reverse()
+    tmp.distinctBy { it.id }.toTypedArray()
+  }
+  
   fun <T : Element> VElement<T>.createElement(insertedVElementQueue: MutableList<Pair<VElement<*>, *>>): T {
     this.hooks.init?.invoke(this)
     val children = this.children
@@ -44,7 +61,7 @@ fun <T : Element> kvdom(container: Element, vararg modules: Module<*>): Patch<VE
     children.forEach {
       dElm.appendChild(it.createElement(insertedVElementQueue))
     }
-    modules.create(this, dElm as Element)
+    mods.create(this, dElm as Element)
     this.hooks.let {
       it.create?.invoke(this, dElm)
       if (it.insert != null) {
@@ -57,7 +74,7 @@ fun <T : Element> kvdom(container: Element, vararg modules: Module<*>): Patch<VE
   
   fun <T : Element> VElement<T>.invokeDestroyHook() {
     hooks.destroy?.invoke(this)
-    modules.destroy(this)
+    mods.destroy(this)
     children.forEach {
       it.invokeDestroyHook()
     }
@@ -65,7 +82,7 @@ fun <T : Element> kvdom(container: Element, vararg modules: Module<*>): Patch<VE
   
   fun <T : Element> VElement<T>.remove(cbChain: MutableList<() -> Unit>) {
     invokeDestroyHook()
-    modules.forEach { module: Module<*> ->
+    mods.forEach { module: Module<*> ->
       val next = cbChain.size - 1
       cbChain.add {
         @Suppress("UNCHECKED_CAST")
@@ -126,7 +143,7 @@ fun <T : Element> kvdom(container: Element, vararg modules: Module<*>): Patch<VE
     } else {
       val oldCh = children
       val newCh = newVElement.children
-      modules.update(this, newVElement)
+      mods.update(this, newVElement)
       patchAttrs(newVElement)
       when {
         oldCh.isNotEmpty() && newCh.isNotEmpty() -> {
@@ -161,7 +178,7 @@ fun <T : Element> kvdom(container: Element, vararg modules: Module<*>): Patch<VE
   
   return { newVElement ->
     val insertedVElementQueue = mutableListOf<Pair<VElement<Element>, Element>>()
-    modules.pre()
+    mods.pre()
     
     when {
       newVElement == null -> {
@@ -180,9 +197,9 @@ fun <T : Element> kvdom(container: Element, vararg modules: Module<*>): Patch<VE
         patch(newVElement, insertedVElementQueue as MutableList<Pair<VElement<*>, *>>)
       }
     }
-    
+  
     insertedVElementQueue.forEach { it.first.hooks.insert?.invoke(it.first, it.second) }
-    modules.post()
+    mods.post()
     newVElement
   }
 }
