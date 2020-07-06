@@ -1,8 +1,8 @@
 package lt.petuska.kvdom.core.domain
 
+import kotlinx.browser.*
 import lt.petuska.kvdom.core.module.*
 import org.w3c.dom.*
-import kotlin.browser.*
 
 data class VElement<T : Element> internal constructor(
   val tag: String,

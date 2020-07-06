@@ -1,4 +1,4 @@
-FROM gradle:6.2.2-jdk8
+FROM gradle:6.5-jdk8
 
 RUN mkdir -p kotlin-install/src/wasm32Main/kotlin
 ADD build.gradle.kts kotlin-install

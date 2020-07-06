@@ -1,9 +1,9 @@
 package lt.petuska.kvdom.core
 
+import kotlinx.dom.*
 import lt.petuska.kvdom.core.domain.*
 import lt.petuska.kvdom.core.module.*
 import org.w3c.dom.*
-import kotlin.dom.*
 
 
 typealias Patch<T> = T?.(newVElement: T?) -> T?

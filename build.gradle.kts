@@ -1,6 +1,6 @@
 plugins {
-  kotlin("multiplatform") version "1.4-M2" apply false
-  id("org.jetbrains.dokka") version "0.10.0" apply false
+  kotlin("multiplatform") version "1.4-M3" apply false
+  id("org.jetbrains.dokka") version "0.10.1" apply false
   id("maven-publish")
   id("io.github.http-builder-ng.http-plugin") version "0.1.1" apply false
   idea
@@ -8,7 +8,7 @@ plugins {
 
 allprojects {
   group = "lt.petuska"
-  version = "0.0.3"
+  version = "0.1.0-M1"
   apply(plugin = "idea")
   
   idea {

@@ -1,6 +1,7 @@
 import io.github.httpbuilderng.http.*
 import org.jetbrains.dokka.gradle.*
 import org.jetbrains.kotlin.gradle.plugin.*
+import java.io.*
 
 
 plugins {
@@ -127,6 +128,14 @@ allprojects {
   }
 }
 
+fun getCommitHash() = ByteArrayOutputStream().use { os ->
+  exec {
+    commandLine("git", "rev-parse", "HEAD")
+    standardOutput = os
+  }
+  os.toString().trim()
+}
+
 tasks.create("release", HttpTask::class) {
   allprojects.forEach {
     val publish by it.tasks.getting
@@ -141,18 +150,20 @@ tasks.create("release", HttpTask::class) {
     it.request.uri.setPath("/api/v4/projects/${System.getenv("CI_PROJECT_ID")}/releases")
     it.request.headers["Authorization"] = "Bearer ${System.getenv("PRIVATE_TOKEN")}"
     it.request.setContentType("application/json")
+    fun buildPackageLink(project: Project) = """{
+                          "name": "${project.name}",
+                          "url": "https://bintray.com/${System.getenv("BINTRAY_USER")}/${project.group}/${project.name}/${project.version}",
+                          "link_type": "package"
+                        }""".trimIndent()
     it.request.setBody(
       """
         {
             "name": "Release v${project.version}",
             "tag_name": "v${project.version}",
-            "ref": "master",
+            "ref": "${getCommitHash()}",
             "assets": {
                 "links": [
-                    {
-                        "name": "${project.name}",
-                        "url": "https://bintray.com/${System.getenv("BINTRAY_USER")}/${project.group}/${project.name}/${project.version}"
-                    }
+                    ${(setOf(project) + subprojects).joinToString(",", transform = ::buildPackageLink)}
                 ]
             },
             "description": "## Changelog\n### Breaking Changes\nN/A\n\n### New Features\nN/A\n\n### Fixes\nN/A"
