@@ -12,9 +12,10 @@ inline fun <T : Element> TypedVBuilder(
   hooks: TypedVBuilder.VElementHooksBuilder<T> = TypedVBuilder.VElementHooksBuilder(),
   key: String? = null,
   ns: String? = null,
-  children: MutableList<VNode<*>> = mutableListOf(),
+  children: MutableList<VElement<*>> = mutableListOf(),
+  textContent: String? = null,
   block: TypedVBuilder<T>.() -> Unit,
-) = TypedVBuilder(tag, attrs, data, hooks, key, ns, children).apply(block)
+) = TypedVBuilder(tag, attrs, data, hooks, key, ns, children, textContent).apply(block)
 
 open class TypedVBuilder<T : Element> constructor(
   val tag: String,
@@ -23,14 +24,15 @@ open class TypedVBuilder<T : Element> constructor(
   val hooks: VElementHooksBuilder<T> = VElementHooksBuilder(),
   var key: String? = null,
   var ns: String? = null,
-  val children: MutableList<VNode<*>> = mutableListOf(),
+  val children: MutableList<VElement<*>> = mutableListOf(),
+  var textContent: String? = null,
 ) {
   
-  operator fun String.unaryPlus() {
-    children.add(VText(this, null))
+  operator fun String?.unaryPlus() {
+    textContent = this
   }
   
-  fun build(): VElement<T> = VElement(tag, attrs, data, hooks.build(), key, ns, children, null)
+  fun build(): VElement<T> = VElement(tag, attrs, data, hooks.build(), key, ns, children, textContent, null)
   
   operator fun invoke(parent: TypedVBuilder<*>? = null): VElement<T> = build().also {
     parent?.children?.add(it)

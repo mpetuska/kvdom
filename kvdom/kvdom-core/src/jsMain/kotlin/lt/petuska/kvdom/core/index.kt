@@ -4,7 +4,6 @@ import lt.petuska.kvdom.core.domain.*
 import lt.petuska.kvdom.core.module.*
 import org.w3c.dom.*
 import kotlin.dom.*
-import kotlin.math.*
 
 
 typealias Patch<T> = T?.(newVElement: T?) -> T?
@@ -19,13 +18,15 @@ private fun Array<out Module<*>>.assertDistinct() = groupBy { it.id }
         appendLine("ID: $id; Modules: ${modules.joinToString { it::class.simpleName ?: "UNKNOWN" }}")
       }
     }
-    console.error(error)
     throw IllegalArgumentException(error)
   }
 
 private fun Array<out Module<*>>.pre() = forEach { it.pre() }
 private fun Array<out Module<*>>.create(vElement: VElement<*>, ref: Element) =
   forEach { it.create(vElement, ref, vElement.getModuleData(it.id)) }
+
+private fun Array<out Module<*>>.update(oldVElement: VElement<*>, nevVElement: VElement<*>) =
+  forEach { it.update(nevVElement, oldVElement, nevVElement.getModuleData(it.id)) }
 
 private fun Array<out Module<*>>.destroy(vElement: VElement<*>) =
   forEach { it.destroy(vElement, vElement.getModuleData(it.id)) }
@@ -35,44 +36,30 @@ private fun Array<out Module<*>>.post() = forEach { it.post() }
 
 fun <T : Element> kvdom(container: Element, vararg modules: Module<*>): Patch<VElement<T>> {
   modules.assertDistinct()
-  val str = modules.joinToString { it.id }
-  val test = modules.groupBy { it.id }
-    .filterValues { it.size > 1 }.size
-  
-  fun <T : Node> VNode<T>.createNode(insertedVElementQueue: MutableList<Pair<VElement<*>, *>>): T {
-    val dNode = when (this) {
-      is VText -> this.render().also {
-        this.ref = it
+  fun <T : Element> VElement<T>.createElement(insertedVElementQueue: MutableList<Pair<VElement<*>, *>>): T {
+    this.hooks.init?.invoke(this)
+    val children = this.children
+    val dElm = this.render()
+    this.ref = dElm
+    children.forEach {
+      dElm.appendChild(it.createElement(insertedVElementQueue))
+    }
+    modules.create(this, dElm as Element)
+    this.hooks.let {
+      it.create?.invoke(this, dElm)
+      if (it.insert != null) {
+        insertedVElementQueue.add(this to dElm)
       }
-      is VElement -> {
-        this.hooks.init?.invoke(this)
-        val children = this.children
-        val dElm = this.render()
-        this.ref = dElm
-        children.forEach {
-          dElm.appendChild(it.createNode(insertedVElementQueue))
-        }
-        modules.create(this, dElm as Element)
-        this.hooks.let {
-          it.create?.invoke(this, dElm)
-          if (it.insert != null) {
-            insertedVElementQueue.add(this to dElm)
-          }
-        }
-        dElm
-      }
-      else -> throw IllegalArgumentException("VNode ${this::class.simpleName} not supported")
     }
     
-    @Suppress("UNCHECKED_CAST")
-    return dNode as T
+    return dElm
   }
   
   fun <T : Element> VElement<T>.invokeDestroyHook() {
     hooks.destroy?.invoke(this)
     modules.destroy(this)
     children.forEach {
-      if (it is VElement<*>) it.invokeDestroyHook()
+      it.invokeDestroyHook()
     }
   }
   
@@ -93,20 +80,35 @@ fun <T : Element> kvdom(container: Element, vararg modules: Module<*>): Patch<VE
     }
   }
   
-  fun <T : Node> VNode<T>.remove() {
+  fun <T : Element> VElement<T>.remove() {
     val chain = mutableListOf<() -> Unit>({
       val ref = ref
       ref?.parentNode?.removeChild(ref)
     })
-    if (this is VElement<*>) remove(chain)
+    remove(chain)
     
     chain.last()()
   }
   
-  fun VElement<*>.removeVNodes(start: Int, end: Int, vararg nodes: VNode<*>) {
-    require(start <= end)
-    for (i in start until min(end, nodes.size)) {
-      nodes[i].remove()
+  fun <T : Element> VElement<T>.patchAttrs(newVElement: VElement<T>) {
+    val elm = newVElement.ref!!
+    fun Element.setAttr(key: String, value: String) {
+      when {
+        value.equals("true", true) -> setAttribute(key, "")
+        value.equals("false", true) -> removeAttribute(key)
+        else -> setAttribute(key, value)
+      }
+    }
+    
+    val oldAttrs = HashMap(attrs)
+    newVElement.attrs.forEach { (attr, value) ->
+      if (oldAttrs[attr] != value) {
+        elm.setAttr(attr, value)
+      }
+      oldAttrs.remove(attr)
+    }
+    oldAttrs.forEach { (attr) ->
+      elm.removeAttribute(attr)
     }
   }
   
@@ -114,7 +116,47 @@ fun <T : Element> kvdom(container: Element, vararg modules: Module<*>): Patch<VE
     newVElement: VElement<T>,
     insertedVElementQueue: MutableList<Pair<VElement<*>, *>>,
   ) {
-    //TODO
+    val hooks = newVElement.hooks
+    hooks.prePatch?.invoke(newVElement, this)
+    newVElement.ref = ref!!
+    val elm = newVElement.ref as T
+    if (tag != newVElement.tag) {
+      remove()
+      elm.parentNode!!.appendChild(newVElement.createElement(insertedVElementQueue))
+    } else {
+      val oldCh = children
+      val newCh = newVElement.children
+      modules.update(this, newVElement)
+      patchAttrs(newVElement)
+      when {
+        oldCh.isNotEmpty() && newCh.isNotEmpty() -> {
+          oldCh.zip(newCh).forEach { (old, new) ->
+            @Suppress("UNCHECKED_CAST")
+            (old as VElement<Element>).patch(new as VElement<Element>, insertedVElementQueue)
+          }
+          if (oldCh.size > newCh.size) {
+            oldCh.subList(newCh.size, oldCh.size).forEach { it.remove() }
+          } else if (newCh.size > oldCh.size) {
+            newCh.subList(oldCh.size, newCh.size).forEach {
+              elm.appendChild(it.createElement(insertedVElementQueue))
+            }
+          }
+        }
+        newCh.isNotEmpty() -> {
+          newCh.forEach {
+            elm.appendChild(it.createElement(insertedVElementQueue))
+          }
+        }
+        oldCh.isNotEmpty() -> {
+          oldCh.forEach { it.remove() }
+        }
+      }
+      if (textContent != newVElement.textContent) {
+        elm.textContent = newVElement.textContent
+      }
+    }
+    
+    hooks.postPatch?.invoke(newVElement, this)
   }
   
   return { newVElement ->
@@ -130,7 +172,7 @@ fun <T : Element> kvdom(container: Element, vararg modules: Module<*>): Patch<VE
         // Mount
         container.clear()
         @Suppress("UNCHECKED_CAST")
-        val dNode = newVElement.createNode(insertedVElementQueue as MutableList<Pair<VElement<*>, *>>)
+        val dNode = newVElement.createElement(insertedVElementQueue as MutableList<Pair<VElement<*>, *>>)
         container.appendChild(dNode)
       }
       else -> {

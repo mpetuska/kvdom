@@ -11,25 +11,35 @@ data class VElement<T : Element> internal constructor(
   val hooks: VElementHooks<T>,
   val key: String?,
   val ns: String?,
-  val children: MutableList<VNode<*>>,
-  override var ref: T?,
-) : VNode<T>() {
+  val children: MutableList<VElement<*>>,
+  val textContent: String?,
+  var ref: T?,
+) {
   
-  override fun copy(): VElement<T> =
-    VElement(tag, HashMap(attrs), data.mapValues { it.value.copy() }, hooks, key, ns, ArrayList(children), ref)
+  fun copy(): VElement<T> =
+    VElement(tag,
+      HashMap(attrs),
+      data.mapValues { it.value.copy() },
+      hooks,
+      key,
+      ns,
+      ArrayList(children),
+      textContent,
+      ref)
   
-  override fun toHtml(): String = buildString {
+  fun toHtml(): String = buildString {
     attrs.entries
       .joinToString(" ", "<$tag ", " >") { "${it.key}=\"${it.value}\"" }
       .let { append(it) }
     children.forEach {
       append(it.toHtml())
     }
+    append(textContent)
     append("</$tag>")
   }
   
   @Suppress("UNCHECKED_CAST")
-  override fun render(): T = (if (ns == null) {
+  fun render(): T = (if (ns == null) {
     document.createElement(tag)
   } else {
     document.createElementNS(tag, ns)
@@ -41,6 +51,9 @@ data class VElement<T : Element> internal constructor(
       } else {
         it.setAttribute(key, value)
       }
+    }
+    if (textContent != null) {
+      it.textContent = textContent
     }
   }
   

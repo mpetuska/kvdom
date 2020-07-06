@@ -8,7 +8,10 @@ import org.w3c.dom.*
 import kotlin.browser.*
 import kotlin.math.*
 
-val modules = arrayOf(/*LifecycleLogger, */Hooks)
+val modules = arrayOf(
+//  LifecycleLogger,
+  Hooks,
+)
 val patch = kvdom<HTMLDivElement>(document.getElementById("root")!!, *modules)
 var tree: VElement<HTMLDivElement>? = null
 
@@ -64,7 +67,7 @@ fun main() {
   }
   
   window.setInterval({
-//    tree = tree.patch(render())
-    tree = null.patch(render())
-  }, 500)
+    tree = tree.patch(render())
+//    tree = null.patch(render())
+  }, 33)
 }

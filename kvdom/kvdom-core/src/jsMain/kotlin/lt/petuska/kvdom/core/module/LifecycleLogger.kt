@@ -5,18 +5,20 @@ import org.w3c.dom.*
 
 object LifecycleLogger : Module<ModuleData> {
   override val destroy: VElement<*>.(moduleData: ModuleData?) -> Unit = {
-    console.log("Destroying", ref)
+    print("Destroying "); println(ref)
   }
   override val remove: VElement<*>.(removeCallback: () -> Unit, moduleData: ModuleData?) -> Unit = { cb, _ ->
-    console.log("Removing", ref)
+    print("Removing "); println(ref)
     cb()
   }
-  override val pre: () -> Unit = { println("Pre") }
+  override val pre: () -> Unit = {
+    println("Pre")
+  }
   override val create: VElement<*>.(ref: Element, moduleData: ModuleData?) -> Unit = { ref, _ ->
-    console.log("Create", ref)
+    print("Creating "); println(ref)
   }
   override val update: VElement<*>.(oldVNode: VElement<*>, moduleData: ModuleData?) -> Unit = { _, _ ->
-    console.log("Update", ref)
+    print("Updating "); println(ref)
   }
   override val post: () -> Unit = {
     println("Post")

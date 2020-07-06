@@ -56,7 +56,7 @@ interface Module<T : ModuleData> {
    * The hook is only triggered when an element is to be removed from its parent – not if it is the child of an
    * element that is removed. For that, see the destroy hook.
    */
-  val remove: VElement<*>.(removeCallback: () -> Unit, moduleData: T?) -> Unit; get() = { _, _ -> }
+  val remove: VElement<*>.(removeCallback: () -> Unit, moduleData: T?) -> Unit; get() = { cb, _ -> cb() }
   
   /**
    * Patch process is done
