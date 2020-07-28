@@ -1,7 +1,7 @@
 # **K**otlin **V**irtual **D**ocument **O**bject **M**odel (KVDOM)
 
 A multiplatform virtual-dom library built from scratch with kotlin, for kotlin. 
-Available for `common`, `js` and `wasm` targets.
+Available for `metadata`, `js` and `wasm` targets.
 
 ## !! Notice !!
 The project is currently in MVP alpha stage, containing the minimal logic required for it to work as common module and

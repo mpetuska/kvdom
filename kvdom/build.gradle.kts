@@ -1,130 +1,182 @@
+import Build_gradle.MavenPomFile
 import io.github.httpbuilderng.http.HttpTask
-import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.plugin.getKotlinPluginVersion
+import java.io.ByteArrayOutputStream
 
 
 plugins {
   kotlin("multiplatform")
-  id("org.jetbrains.dokka")
   id("maven-publish")
+  id("org.jetbrains.dokka")
   id("io.github.http-builder-ng.http-plugin")
 }
 
+val repoHost = "gitlab.com"
+val repoPath = "lt.petuska/kvdom"
+val repo = "$repoHost/$repoPath"
+val repoUrl = "https://$repo"
+
 allprojects {
   apply(plugin = "org.jetbrains.kotlin.multiplatform")
+  apply(plugin = "maven-publish")
   apply(plugin = "io.github.http-builder-ng.http-plugin")
   apply(plugin = "org.jetbrains.dokka")
-  apply(plugin = "maven-publish")
   
-  kotlin {
-    js {
-      compilations.all {
-        kotlinOptions {
-          moduleKind = "umd"
-          sourceMap = true
-          metaInfo = true
-          sourceMapEmbedSources = "always"
+  
+  fun MavenPublication.config(config: MavenPomFile.() -> Unit = {}) {
+    pom {
+      name by project.name
+      description by "Kotlin MPP Virtual DOM available for common, js and wasm targets. Compatible with Kotlin v${getKotlinPluginVersion()}"
+      url by repoUrl
+      licenses {
+        license {
+          name by "The Apache License, Version 2.0"
+          url by "http://www.apache.org/licenses/LICENSE-2.0.txt"
+          distribution by "repo"
         }
       }
-      browser {}
+      developers {
+        developer {
+          id by "mpetuska"
+          name by "Martynas Petuška"
+          email by "martynas.petuska@outlook.com"
+        }
+      }
+      scm {
+        url by "https://$repo"
+        connection by "scm:git:https://$repo.git"
+        developerConnection by "scm:git:git@$repoHost:$repoPath.git"
+      }
+      config()
     }
-    wasm32()
-    sourceSets {
-      val commonMain by getting {
-        dependencies {
-          api(kotlin("stdlib-common"))
-        }
-      }
-      val jsMain by getting {
-        dependencies {
-          api(kotlin("stdlib-js"))
+  }
+  
+  fun MavenPublication.jar(taskName: String, config: Action<Jar>) = artifact(tasks.create(taskName, Jar::class, config))
+  
+  fun MavenPublication.javadocJar(taskName: String, config: Jar.() -> Unit = {}) = jar(taskName) {
+    archiveClassifier by "javadoc"
+    config()
+  }
+  
+  publishing {
+    publications {
+      repositories {
+        maven {
+          name = "bintray"
+          url = uri(
+            "https://api.bintray.com/maven/${System.getenv("BINTRAY_USER")}/${project.group}/${project.name}/" +
+                ";publish=${if ("true".equals(project.properties["publish"] as? String?, true)) 1 else 0}" +
+                ";override=${if ("true".equals(project.properties["override"] as? String?, true)) 1 else 0}"
+          )
+          credentials {
+            username = System.getenv("BINTRAY_USER")
+            password = System.getenv("BINTRAY_KEY")
+          }
         }
       }
     }
   }
   
-  publishing {
-    publications.withType<MavenPublication> {
-      pom {
-        val repoHost = "gitlab.com"
-        val repoPath = "lt.petuska/kvdom"
-        val repo = "$repoHost/$repoPath"
-        name.set(project.name)
-        description.set("Kotlin MPP Virtual DOM available for common, js and wasm targets. Compatible with Kotlin v${getKotlinPluginVersion()}")
-        url.set("https://$repo")
-        licenses {
-          license {
-            name.set("The Apache License, Version 2.0")
-            url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-            distribution.set("repo")
-          }
-        }
-        developers {
-          developer {
-            id.set("mpetuska")
-            name.set("Martynas Petuška")
-            email.set("martynas.petuska@gmail.com")
-          }
-        }
-        scm {
-          url.set("https://$repo")
-          connection.set("scm:git:https://$repo.git")
-          developerConnection.set("scm:git:git@$repoHost:$repoPath.git")
+  kotlin {
+    js {
+      browser()
+      listOf(compilations["main"], compilations["test"]).forEach {
+        with(it.kotlinOptions) {
+          moduleKind = "umd"
+          sourceMap = true
+          sourceMapEmbedSources = "always"
+          metaInfo = true
         }
       }
-      
-      tasks.create("${name}PostPublish", HttpTask::class) {
-        val publish by tasks.getting
-        group = publish.group!!
-        publish.dependsOn(this)
-        dependsOn("publish${this@withType.name[0].toUpperCase() + this@withType.name.substring(1)}PublicationToBintrayRepository")
+      mavenPublication {
+        groupId = group as String
+        artifactId = "${project.name}-js"
+        config { name by "${project.name}-js" }
         
-        config {
-          it.request.setUri("https://api.bintray.com")
+        javadocJar("jsJavadocJar")
+        jar("jsTestSourcesJar") {
+          archiveClassifier by "test-sources"
+          with(sourceSets["jsTest"]) {
+            from(kotlin, resources)
+          }
         }
-        delete {
-          it.request.uri.setPath("/packages/${System.getenv("BINTRAY_USER")}/${project.group}/${project.name}/versions/$artifactId")
-          it.request.auth.basic(System.getenv("BINTRAY_USER"), System.getenv("BINTRAY_KEY"))
+      }
+    }
+    wasm32 {
+      mavenPublication {
+        groupId = group as String
+        artifactId = "${project.name}-wasm32"
+        config { name by "${project.name}-wasm32" }
+        
+        javadocJar("wasm32JavadocJar")
+        jar("wasm32TestSourcesJar") {
+          archiveClassifier by "test-sources"
+          with(sourceSets["wasm32Test"]) {
+            from(kotlin, resources)
+          }
+        }
+      }
+    }
+    metadata {
+      mavenPublication {
+        groupId = group as String
+        artifactId = "${project.name}-metadata"
+        config { name by "${project.name}-metadata" }
+        
+        javadocJar("metadataJavadocJar")
+        jar("metadataTestSourcesJar") {
+          archiveClassifier by "test-sources"
+          with(sourceSets["commonTest"]) {
+            from(kotlin, resources)
+          }
         }
       }
     }
     
-    repositories {
-      maven {
-        name = "bintray"
-        url = uri(
-          "https://api.bintray.com/maven/${System.getenv("BINTRAY_USER")}/${project.group}/${project.name}/" +
-              ";publish=${if ("true".equals(project.properties["publish"] as? String?, true)) 1 else 0}" +
-              ";override=${if ("true".equals(project.properties["override"] as? String?, true)) 1 else 0}"
-        )
-        credentials {
-          username = System.getenv("BINTRAY_USER")
-          password = System.getenv("BINTRAY_KEY")
+    sourceSets {
+      val wasm32Main by getting {
+        wasm32().compilations["main"].apply {
+          kotlinOptions.freeCompilerArgs = resources.files.flatMap {
+            listOf("-include-binary", it.invariantSeparatorsPath)
+          }
         }
+      }
+      all {
+        languageSettings.useExperimentalAnnotation("kotlin.RequiresOptIn")
       }
     }
   }
   
   tasks {
-    val dokka by getting(DokkaTask::class) {
-      val urlBase =
-        "https://gitlab.com/lt.petuska/kvdom/tree/v${version}"
-      multiplatform {
-        val global by creating {
+    dokkaHtml {
+      dokkaSourceSets {
+        create("commonMain")
+        create("jsMain")
+        create("wasm32Main")
+        configureEach {
+          val projectPath = "${sourceSetID.moduleName.replace(":", "/")}/src/${sourceSetID.sourceSetName}/kotlin"
+          
+          reportUndocumented = true
           sourceLink {
-            url = "$urlBase/$path"
+            path = "${rootProject.rootDir}$projectPath"
+            url = "https://gitlab.com/${rootProject.group}/${rootProject.name}/tree/v$version$projectPath"
             lineSuffix = "#L"
           }
         }
-        val common by creating {}
-        val js by creating {}
-        val wasm32 by creating {}
       }
     }
   }
 }
 
-tasks.create("release", HttpTask::class) {
+fun getCommitHash() = ByteArrayOutputStream().use { os ->
+  exec {
+    commandLine("git", "rev-parse", "HEAD")
+    standardOutput = os
+  }
+  os.toString().trim()
+}
+
+tasks.create("gitLabRelease", HttpTask::class) {
   allprojects.forEach {
     val publish by it.tasks.getting
     dependsOn(publish)
@@ -138,18 +190,20 @@ tasks.create("release", HttpTask::class) {
     it.request.uri.setPath("/api/v4/projects/${System.getenv("CI_PROJECT_ID")}/releases")
     it.request.headers["Authorization"] = "Bearer ${System.getenv("PRIVATE_TOKEN")}"
     it.request.setContentType("application/json")
+    fun buildPackageLink(project: Project) = """{
+                          "name": "${project.name}",
+                          "url": "https://bintray.com/${System.getenv("BINTRAY_USER")}/${project.group}/${project.name}/${project.version}",
+                          "link_type": "package"
+                        }""".trimIndent()
     it.request.setBody(
       """
         {
             "name": "Release v${project.version}",
             "tag_name": "v${project.version}",
-            "ref": "master",
+            "ref": "${getCommitHash()}",
             "assets": {
                 "links": [
-                    {
-                        "name": "${project.name}",
-                        "url": "https://bintray.com/${System.getenv("BINTRAY_USER")}/${project.group}/${project.name}/${project.version}"
-                    }
+                    ${(setOf(project) + subprojects).joinToString(",", transform = ::buildPackageLink)}
                 ]
             },
             "description": "## Changelog\n### Breaking Changes\nN/A\n\n### New Features\nN/A\n\n### Fixes\nN/A"
@@ -164,10 +218,16 @@ kotlin {
     val commonMain by getting {
       dependencies {
         subprojects.forEach {
-          println("Adding [${it.name}] to root project")
-          api(project(":${project.name}:${it.name}"))
+          println("Adding [${it.path}] to root project")
+          api(project(it.path))
         }
       }
     }
   }
+}
+
+typealias MavenPomFile = org.gradle.api.publish.maven.MavenPom
+
+infix fun <T> Property<T>.by(value: T) {
+  set(value)
 }

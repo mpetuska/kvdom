@@ -1,81 +1,165 @@
 package lt.petuska.kvdom.sample
 
-import lt.petuska.kvdom.core.node.VText
-import lt.petuska.kvdom.core.node.html.VDiv
-import lt.petuska.kvdom.dsl.*
-import lt.petuska.kvdom.core.node.text
+import kotlinx.html.*
+import kotlinx.html.js.onClickFunction
+import kotlinx.html.js.onContextMenuFunction
+import lt.petuska.kvdom.core.domain.VElement
+import lt.petuska.kvdom.core.domain.vBuilder
+import lt.petuska.kvdom.core.kvdom
+import lt.petuska.kvdom.core.module.events.Events
+import lt.petuska.kvdom.core.module.events.on
+import lt.petuska.kvdom.core.module.hooks.Hooks
+import lt.petuska.kvdom.core.module.hooks.useState
 import lt.petuska.kvdom.dom.document
-import lt.petuska.kvdom.dom.node.html.HTMLElement
-import lt.petuska.kvdom.dom.node.setInterval
+import lt.petuska.kvdom.dom.html.HTMLDivElement
+import lt.petuska.kvdom.dom.setInterval
 import lt.petuska.kvdom.dom.window
+import lt.petuska.kvdom.dsl.*
+import kotlin.math.max
+import kotlin.random.Random
 
-expect val platform: String
 
+// Build your VDOM tree
+fun render() = vBuilder {
+  var clickDisabled by useState(false)
+  var clickCount by useState(0)
+  h2 {
+    +"Platform: $platform"
+  }
+  h3 {
+    +"Rendered with: vBuilder"
+  }
+  button {
+    attrs["disabled"] = "$clickDisabled"
+    on("contextmenu") {
+      it.preventDefault()
+      clickCount = max(clickCount - 1, 0)
+      // Conditional Event handling
+      if (clickCount > 4) {
+        println(clickCount)
+      }
+    }
+    // Conditional Event Handlers
+    if (clickCount >= 4) {
+      on("click") {
+        clickCount++
+        println(clickCount)
+      }
+    } else {
+      on("click") {
+        clickCount++
+      }
+    }
+    +"Clicked $clickCount times"
+  }
+  button {
+    attrs["disabled"] = "${!clickDisabled}"
+    on("click") {
+      clickDisabled = false
+    }
+    +"EnableCounter"
+  }
+  button {
+    attrs["disabled"] = "$clickDisabled"
+    on("click") {
+      clickDisabled = true
+    }
+    +"DisableCounter"
+  }
+  br()
+  div {
+    repeat(clickCount) {
+      div {
+        +"Click #${it + 1}"
+      }
+    }
+  }
+}
+
+fun renderKotlinx() = KVDOMBuilder {
+  var clickDisabled by useState(false)
+  var clickCount by useState(0)
+  var surprising by useState(false)
+  h2 {
+    +"Platform: $platform"
+  }
+  h3 {
+    +"Rendered with: kotlinx-html"
+  }
+  button {
+    disabled = clickDisabled
+    onContextMenuFunction = {
+      it.preventDefault()
+      clickCount = max(clickCount - 1, 0)
+      // Conditional Event handling
+      if (clickCount > 4) {
+        println(clickCount)
+      }
+    }
+    // Conditional Event Handlers
+    if (clickCount >= 4) {
+      onClickFunction = {
+        clickCount++
+        println(clickCount)
+      }
+    } else {
+      onClickFunction = {
+        clickCount++
+      }
+    }
+    +"Clicked $clickCount times"
+  }
+  button {
+    disabled = !clickDisabled
+    onClickFunction = {
+      clickDisabled = false
+    }
+    +"EnableCounter"
+  }
+  button {
+    disabled = clickDisabled
+    onClickFunction = {
+      clickDisabled = true
+    }
+    +"DisableCounter"
+  }
+  button {
+    onClickFunction = {
+      surprising = !surprising
+    }
+    +if (surprising) "Enough!" else "Surprise Me!"
+  }
+  br()
+  div {
+    if (!surprising) {
+      repeat(clickCount) {
+        div {
+          +"Click #${it + 1}"
+        }
+      }
+    } else {
+      repeat(Random(currentTimeMillis()).nextInt(100, 1000)) {
+        span {
+          +"Surprise #$it"
+        }
+      }
+    }
+  }
+}
+
+val modules = arrayOf(
+//  LifecycleLogger,
+  Events,
+  Hooks,
+)
 
 fun main() {
-    var clickCount = 0
-
-    // Build your VDOM tree
-    val root = VDiv().apply {
-        h2 {
-            text("Platform: $platform")
-        }
-        lateinit var countText: VText
-        val clickButton = button {
-            countText = text("Clicked $clickCount times")
-            attributes["disabled"] = "true"
-        }
-        val enableButton = button {
-            text("EnableCounter")
-        }
-        val disableButton = button {
-            text("Disable counter")
-            attributes["disabled"] = "true"
-        }
-        val clicksContainer = div()
-        enableButton.eventListeners["click"] = {
-            clickButton.eventListeners["click"] = {
-                clickCount++
-                countText.text = "Clicked $clickCount times"
-                println("Clicked!")
-                clicksContainer.apply {
-                    text("#$clickCount ")
-                }
-            }
-            clickButton.eventListeners["contextmenu"] = {
-                it.preventDefault()
-                if (clickCount > 0) {
-                    clickCount--
-                    countText.text = "Clicked $clickCount times"
-                    clicksContainer.children.removeAt(clickCount)
-                    println("Unclicked!")
-                }
-            }
-            enableButton.attributes["disabled"] = "true"
-            disableButton.attributes.remove("disabled")
-            clickButton.attributes.remove("disabled")
-            println("Enabled!")
-        }
-        disableButton.eventListeners["click"] = {
-            clickButton.eventListeners.remove("click")
-            clickButton.eventListeners.remove("contextmenu")
-            clickButton.attributes["disabled"] = "true"
-            disableButton.attributes["disabled"] = "true"
-            enableButton.attributes.remove("disabled")
-            println("Disabled!")
-        }
-        children.add(clickButton)
-        children.add(enableButton)
-        children.add(disableButton)
-        htmlElement<HTMLElement>("br")
-        children.add(clicksContainer)
-    }
-
-    // Mount your rendered root VElement
-    val dRoot = document.getElementById("root")!!
-
-    // Start render timer
-    window.setInterval(100) {
-        root.patch(dRoot)
-    }
+  val container = document.getElementById("root")!!
+  val patch = kvdom(container, *modules)
+  var tree: VElement<HTMLDivElement>? = null
+  window.setInterval(33) {
+//    val next = render()
+    val next = renderKotlinx()
+    tree = tree.patch(next)
+  }
 }
