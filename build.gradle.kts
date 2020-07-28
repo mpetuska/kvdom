@@ -8,7 +8,7 @@ plugins {
 
 allprojects {
   group = "lt.petuska"
-  version = "0.1.0-M2"
+  version = "0.1.0-M3"
   apply(plugin = "idea")
   
   idea {

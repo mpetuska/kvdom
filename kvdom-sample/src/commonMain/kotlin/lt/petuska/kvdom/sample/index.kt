@@ -157,7 +157,7 @@ fun main() {
   val container = document.getElementById("root")!!
   val patch = kvdom(container, *modules)
   var tree: VElement<HTMLDivElement>? = null
-  window.setInterval(33) {
+  window.setInterval(150) {
 //    val next = render()
     val next = renderKotlinx()
     tree = tree.patch(next)
