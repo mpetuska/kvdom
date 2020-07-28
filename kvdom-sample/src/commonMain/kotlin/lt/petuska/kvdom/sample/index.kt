@@ -4,77 +4,18 @@ import kotlinx.html.*
 import kotlinx.html.js.onClickFunction
 import kotlinx.html.js.onContextMenuFunction
 import lt.petuska.kvdom.core.domain.VElement
-import lt.petuska.kvdom.core.domain.vBuilder
 import lt.petuska.kvdom.core.kvdom
 import lt.petuska.kvdom.core.module.events.Events
-import lt.petuska.kvdom.core.module.events.on
 import lt.petuska.kvdom.core.module.hooks.Hooks
 import lt.petuska.kvdom.core.module.hooks.useState
 import lt.petuska.kvdom.dom.document
 import lt.petuska.kvdom.dom.html.HTMLDivElement
 import lt.petuska.kvdom.dom.setInterval
 import lt.petuska.kvdom.dom.window
-import lt.petuska.kvdom.dsl.*
+import lt.petuska.kvdom.dsl.KVDOMBuilder
 import kotlin.math.max
 import kotlin.random.Random
 
-
-// Build your VDOM tree
-fun render() = vBuilder {
-  var clickDisabled by useState(false)
-  var clickCount by useState(0)
-  h2 {
-    +"Platform: $platform"
-  }
-  h3 {
-    +"Rendered with: vBuilder"
-  }
-  button {
-    attrs["disabled"] = "$clickDisabled"
-    on("contextmenu") {
-      it.preventDefault()
-      clickCount = max(clickCount - 1, 0)
-      // Conditional Event handling
-      if (clickCount > 4) {
-        println(clickCount)
-      }
-    }
-    // Conditional Event Handlers
-    if (clickCount >= 4) {
-      on("click") {
-        clickCount++
-        println(clickCount)
-      }
-    } else {
-      on("click") {
-        clickCount++
-      }
-    }
-    +"Clicked $clickCount times"
-  }
-  button {
-    attrs["disabled"] = "${!clickDisabled}"
-    on("click") {
-      clickDisabled = false
-    }
-    +"EnableCounter"
-  }
-  button {
-    attrs["disabled"] = "$clickDisabled"
-    on("click") {
-      clickDisabled = true
-    }
-    +"DisableCounter"
-  }
-  br()
-  div {
-    repeat(clickCount) {
-      div {
-        +"Click #${it + 1}"
-      }
-    }
-  }
-}
 
 fun renderKotlinx() = KVDOMBuilder {
   var clickDisabled by useState(false)
@@ -111,15 +52,19 @@ fun renderKotlinx() = KVDOMBuilder {
   }
   button {
     disabled = !clickDisabled
-    onClickFunction = {
-      clickDisabled = false
+    if (!clickDisabled) {
+      onClickFunction = {
+        clickDisabled = false
+      }
     }
     +"EnableCounter"
   }
   button {
     disabled = clickDisabled
-    onClickFunction = {
-      clickDisabled = true
+    if (!clickDisabled) {
+      onClickFunction = {
+        clickDisabled = true
+      }
     }
     +"DisableCounter"
   }
@@ -138,7 +83,8 @@ fun renderKotlinx() = KVDOMBuilder {
         }
       }
     } else {
-      repeat(Random(currentTimeMillis()).nextInt(100, 1000)) {
+      val random = Random(currentTimeMillis())
+      (0 until random.nextInt(100, 1000)).toList().map { random.nextInt(0, 1000) }.forEach {
         span {
           +"Surprise #$it"
         }
@@ -158,7 +104,6 @@ fun main() {
   val patch = kvdom(container, *modules)
   var tree: VElement<HTMLDivElement>? = null
   window.setInterval(150) {
-//    val next = render()
     val next = renderKotlinx()
     tree = tree.patch(next)
   }

@@ -9,6 +9,7 @@ import lt.petuska.kvdom.core.domain.VElement
 import lt.petuska.kvdom.core.domain.element
 import lt.petuska.kvdom.core.module.events.on
 import lt.petuska.kvdom.dom.Element
+import lt.petuska.kvdom.dom.Event
 import lt.petuska.kvdom.dom.EventHandler
 import lt.petuska.kvdom.dom.html.HTMLDivElement
 import org.w3c.dom.events.Event as W3CEvent
@@ -22,6 +23,20 @@ inline fun <T : Element> KVDOMBuilder(root: VBuilder<T>, crossinline block: KVDO
 
 inline fun KVDOMBuilder(crossinline block: KVDOMBuilder<HTMLDivElement>.() -> Unit) =
   KVDOMBuilder(element("div"), block)
+
+typealias W3CEventHandler = (W3CEvent) -> Unit
+
+fun W3CEventHandler.convert(): EventHandler = {
+  val w = object : W3CEvent {
+    override fun initEvent(eventTypeArg: String, canBubbleArg: Boolean, cancelableArg: Boolean) =
+      it.initEvent(eventTypeArg, canBubbleArg, cancelableArg)
+    
+    override fun preventDefault() = it.preventDefault()
+    
+    override fun stopPropagation() = it.stopPropagation()
+  }
+  this(w)
+}
 
 class KVDOMBuilder<T : Element> @PublishedApi internal constructor(private val root: VBuilder<T>) :
   TagConsumer<VBuilder<T>> {
@@ -52,23 +67,12 @@ class KVDOMBuilder<T : Element> @PublishedApi internal constructor(private val r
     }
   }
   
-  override fun onTagEvent(tag: Tag, event: String, value: (W3CEvent) -> Unit) {
+  override fun onTagEvent(tag: Tag, event: String, value: (Event) -> Unit) {
     when {
       path.isEmpty() -> throw IllegalStateException("No current tag")
       path.last().tag.toLowerCase() != tag.tagName.toLowerCase() -> throw IllegalStateException("Wrong current tag")
       else -> path.last().apply {
-        val wrapped: EventHandler = {
-          val w = object : W3CEvent {
-            override fun initEvent(eventTypeArg: String, canBubbleArg: Boolean, cancelableArg: Boolean) =
-              it.initEvent(eventTypeArg, canBubbleArg, cancelableArg)
-            
-            override fun preventDefault() = it.preventDefault()
-            
-            override fun stopPropagation() = it.stopPropagation()
-          }
-          value(w)
-        }
-        on(event.removePrefix("on"), wrapped)
+        on(event.removePrefix("on"), value)
       }
     }
   }
