@@ -1,8 +1,6 @@
 package lt.petuska.kvdom.dom
 
-import kotlinx.wasm.jsinterop.Arena
-import kotlinx.wasm.jsinterop.JsValue
-import kotlinx.wasm.jsinterop.Object
+import kotlinx.wasm.jsinterop.*
 
 actual open class Event(arena: Arena, index: Object) : JsValue(arena, index) {
   actual fun preventDefault() {
@@ -10,13 +8,16 @@ actual open class Event(arena: Arena, index: Object) : JsValue(arena, index) {
   }
   
   actual fun initEvent(type: String, bubbles: Boolean, cancelable: Boolean) {
-    TODO()
+    js_initEvent(
+      arena, index,
+      stringPointer(type), stringLengthBytes(type),
+      bubbles.compareTo(true), cancelable.compareTo(true)
+    )
   }
   
   actual fun stopPropagation() {
-    TODO()
+    js_stopPropagation(arena, index)
   }
-  
 }
 
 @SymbolName("kvdom_Event_preventDefault")
@@ -24,3 +25,20 @@ private external fun js_preventDefault(
   arena: Arena,
   index: Object,
 )
+
+@SymbolName("kvdom_Event_stopPropagation")
+private external fun js_stopPropagation(
+  arena: Arena,
+  index: Object,
+)
+
+@SymbolName("kvdom_Event_initEvent")
+private external fun js_initEvent(
+  arena: Arena,
+  index: Object,
+  typePtr: Pointer,
+  typeLen: Int,
+  bubbles: Int,
+  cancelable: Int,
+)
+
