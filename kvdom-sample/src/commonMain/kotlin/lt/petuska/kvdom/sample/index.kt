@@ -1,20 +1,16 @@
 package lt.petuska.kvdom.sample
 
 import kotlinx.html.*
-import kotlinx.html.js.onClickFunction
-import kotlinx.html.js.onContextMenuFunction
-import lt.petuska.kvdom.core.domain.VElement
-import lt.petuska.kvdom.core.kvdom
-import lt.petuska.kvdom.core.module.events.Events
-import lt.petuska.kvdom.core.module.hooks.Hooks
-import lt.petuska.kvdom.core.module.hooks.useState
-import lt.petuska.kvdom.dom.document
-import lt.petuska.kvdom.dom.html.HTMLDivElement
-import lt.petuska.kvdom.dom.setInterval
-import lt.petuska.kvdom.dom.window
-import lt.petuska.kvdom.dsl.KVDOMBuilder
-import kotlin.math.max
-import kotlin.random.Random
+import kotlinx.html.js.*
+import lt.petuska.kvdom.core.*
+import lt.petuska.kvdom.core.domain.*
+import lt.petuska.kvdom.core.module.events.*
+import lt.petuska.kvdom.core.module.hooks.*
+import lt.petuska.kvdom.dom.*
+import lt.petuska.kvdom.dom.html.*
+import lt.petuska.kvdom.dsl.*
+import kotlin.math.*
+import kotlin.random.*
 
 
 fun renderKotlinx() = KVDOMBuilder {
@@ -52,7 +48,7 @@ fun renderKotlinx() = KVDOMBuilder {
   }
   button {
     disabled = !clickDisabled
-    if (!clickDisabled) {
+    if (clickDisabled) {
       onClickFunction = {
         clickDisabled = false
       }

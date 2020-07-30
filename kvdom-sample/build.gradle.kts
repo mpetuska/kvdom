@@ -4,7 +4,7 @@ plugins {
 }
 
 kotlin {
-  js {
+  js(IR) {
     binaries.executable()
     browser {
       distribution {
@@ -55,10 +55,35 @@ afterEvaluate {
       create("wasm${type}Run", Exec::class) {
         dependsOn(wasmBundle, kotlinNodeJsSetup)
         group = "run"
-        val exeType = if (org.gradle.internal.os.OperatingSystem.current().isWindows) ".cmd" else ""
+  
+        val node = if (org.gradle.internal.os.OperatingSystem.current().isWindows) {
+          kotlinNodeJsSetup.destination
+            .resolve("node.exe")
+        } else {
+          kotlinNodeJsSetup.destination
+            .resolve("bin")
+            .resolve("node")
+        }
+  
+        val npx = if (org.gradle.internal.os.OperatingSystem.current().isWindows) {
+          kotlinNodeJsSetup.destination
+            .resolve("node_modules")
+            .resolve("npm")
+            .resolve("bin")
+        } else {
+          kotlinNodeJsSetup.destination
+            .resolve("lib")
+            .resolve("node_modules")
+            .resolve("npm")
+            .resolve("bin")
+        }.resolve("npx-cli.js")
+  
         workingDir = wasmBundle.destinationDir
-        executable = "${kotlinNodeJsSetup.destination}/bin/node$exeType"
-        args("${kotlinNodeJsSetup.destination}/lib/node_modules/npm/bin/npx-cli.js", "serve")
+        commandLine(
+          node,
+          npx,
+          "serve"
+        )
         inputs.files(wasmBundle.outputs)
       }
     }

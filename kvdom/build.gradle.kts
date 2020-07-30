@@ -1,7 +1,7 @@
-import Build_gradle.MavenPomFile
-import io.github.httpbuilderng.http.HttpTask
-import org.jetbrains.kotlin.gradle.plugin.getKotlinPluginVersion
-import java.io.ByteArrayOutputStream
+import Build_gradle.*
+import io.github.httpbuilderng.http.*
+import org.jetbrains.kotlin.gradle.plugin.*
+import java.io.*
 
 
 plugins {
@@ -78,7 +78,7 @@ allprojects {
   }
   
   kotlin {
-    js {
+    js(BOTH) {
       browser()
       listOf(compilations["main"], compilations["test"]).forEach {
         with(it.kotlinOptions) {

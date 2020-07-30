@@ -1,18 +1,11 @@
 package lt.petuska.kvdom.dsl
 
-import kotlinx.html.Entities
-import kotlinx.html.Tag
-import kotlinx.html.TagConsumer
-import kotlinx.html.Unsafe
-import lt.petuska.kvdom.core.domain.VBuilder
-import lt.petuska.kvdom.core.domain.VElement
-import lt.petuska.kvdom.core.domain.element
-import lt.petuska.kvdom.core.module.events.on
-import lt.petuska.kvdom.dom.Element
-import lt.petuska.kvdom.dom.Event
-import lt.petuska.kvdom.dom.EventHandler
-import lt.petuska.kvdom.dom.html.HTMLDivElement
-import org.w3c.dom.events.Event as W3CEvent
+import kotlinx.html.*
+import kotlinx.html.Event
+import lt.petuska.kvdom.core.domain.*
+import lt.petuska.kvdom.core.module.events.*
+import lt.petuska.kvdom.dom.*
+import lt.petuska.kvdom.dom.html.*
 
 inline fun <T : Element> KVDOMBuilder(root: VBuilder<T>, crossinline block: KVDOMBuilder<T>.() -> Unit): VElement<T> {
   val builder = KVDOMBuilder(root)
@@ -23,20 +16,6 @@ inline fun <T : Element> KVDOMBuilder(root: VBuilder<T>, crossinline block: KVDO
 
 inline fun KVDOMBuilder(crossinline block: KVDOMBuilder<HTMLDivElement>.() -> Unit) =
   KVDOMBuilder(element("div"), block)
-
-typealias W3CEventHandler = (W3CEvent) -> Unit
-
-fun W3CEventHandler.convert(): EventHandler = {
-  val w = object : W3CEvent {
-    override fun initEvent(eventTypeArg: String, canBubbleArg: Boolean, cancelableArg: Boolean) =
-      it.initEvent(eventTypeArg, canBubbleArg, cancelableArg)
-    
-    override fun preventDefault() = it.preventDefault()
-    
-    override fun stopPropagation() = it.stopPropagation()
-  }
-  this(w)
-}
 
 class KVDOMBuilder<T : Element> @PublishedApi internal constructor(private val root: VBuilder<T>) :
   TagConsumer<VBuilder<T>> {
@@ -72,7 +51,8 @@ class KVDOMBuilder<T : Element> @PublishedApi internal constructor(private val r
       path.isEmpty() -> throw IllegalStateException("No current tag")
       path.last().tag.toLowerCase() != tag.tagName.toLowerCase() -> throw IllegalStateException("Wrong current tag")
       else -> path.last().apply {
-        on(event.removePrefix("on"), value)
+        @Suppress("UNCHECKED_CAST")
+        on(event.removePrefix("on"), value as (lt.petuska.kvdom.dom.Event) -> Unit)
       }
     }
   }
