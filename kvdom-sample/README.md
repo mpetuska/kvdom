@@ -3,9 +3,9 @@
 ## Running
 
 ### JS
-Simply execute `gradle jsBrowserRun` command which will open up a browser for you on port `3000`.
-Alternatively you can run gradle wrapper from repository's root as `./gradlew kvdom-sample:jsBrowserRun`
+Simply execute `gradle jsBrowser[Development|Production]Run` command which will open up a browser for you on port `3000`.
+Alternatively you can run gradle wrapper from the repository's root as `./gradlew kvdom-sample:jsBrowser[Development|Production]Run`
 
 ### WASM
-Build a bundle with `gradle wasmBundle` or from repository's root `./gradlew kvdom-sample:wasmBundle`
-Change to `build/bundle/wasm` directory and start an [http server](https://www.npmjs.com/package/http-server) from there. 
+Simply execute `gradle wasmBrowser[Development|Production]Run` command which will open up a browser for you on port `5000`.
+Alternatively you can run gradle wrapper from the repository's root as `./gradlew kvdom-sample:wasmBrowser[Development|Production]Run`

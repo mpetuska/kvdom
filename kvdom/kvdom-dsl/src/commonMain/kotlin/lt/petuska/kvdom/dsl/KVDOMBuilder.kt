@@ -1,10 +1,12 @@
+@file:Suppress("FunctionName")
+
 package lt.petuska.kvdom.dsl
 
 import kotlinx.html.*
-import kotlinx.html.Event
 import lt.petuska.kvdom.core.domain.*
 import lt.petuska.kvdom.core.module.events.*
 import lt.petuska.kvdom.dom.*
+import lt.petuska.kvdom.dom.Event
 import lt.petuska.kvdom.dom.html.*
 
 inline fun <T : Element> KVDOMBuilder(root: VBuilder<T>, crossinline block: KVDOMBuilder<T>.() -> Unit): VElement<T> {
@@ -18,10 +20,10 @@ inline fun KVDOMBuilder(crossinline block: KVDOMBuilder<HTMLDivElement>.() -> Un
   KVDOMBuilder(element("div"), block)
 
 class KVDOMBuilder<T : Element> @PublishedApi internal constructor(private val root: VBuilder<T>) :
-  TagConsumer<VBuilder<T>> {
+  TagConsumer<VBuilder<T>, Event> {
   private val path = arrayListOf<VBuilder<*>>(root)
   
-  override fun onTagStart(tag: Tag) {
+  override fun onTagStart(tag: Tag<Event>) {
     val vElement: VBuilder<*> = VBuilder<Element>(
       tag = tag.tagName,
       ns = tag.namespace,
@@ -32,7 +34,7 @@ class KVDOMBuilder<T : Element> @PublishedApi internal constructor(private val r
     path.add(vElement)
   }
   
-  override fun onTagAttributeChange(tag: Tag, attribute: String, value: String?) {
+  override fun onTagAttributeChange(tag: Tag<Event>, attribute: String, value: String?) {
     when {
       path.isEmpty() -> throw IllegalStateException("No current tag")
       path.last().tag.toLowerCase() != tag.tagName.toLowerCase() -> throw IllegalStateException("Wrong current tag")
@@ -46,18 +48,17 @@ class KVDOMBuilder<T : Element> @PublishedApi internal constructor(private val r
     }
   }
   
-  override fun onTagEvent(tag: Tag, event: String, value: (Event) -> Unit) {
+  override fun onTagEvent(tag: Tag<Event>, event: String, value: (Event) -> Unit) {
     when {
       path.isEmpty() -> throw IllegalStateException("No current tag")
       path.last().tag.toLowerCase() != tag.tagName.toLowerCase() -> throw IllegalStateException("Wrong current tag")
       else -> path.last().apply {
-        @Suppress("UNCHECKED_CAST")
-        on(event.removePrefix("on"), value as (lt.petuska.kvdom.dom.Event) -> Unit)
+        on(event.removePrefix("on"), value)
       }
     }
   }
   
-  override fun onTagEnd(tag: Tag) {
+  override fun onTagEnd(tag: Tag<Event>) {
     if (path.isEmpty() || path.last().tag.toLowerCase() != tag.tagName.toLowerCase()) {
       throw IllegalStateException("We haven't entered tag ${tag.tagName} but trying to leave")
     }
@@ -114,4 +115,6 @@ class KVDOMBuilder<T : Element> @PublishedApi internal constructor(private val r
       root
     }
   }
+  
+  override fun onTagError(tag: Tag<Event>, exception: Throwable) = throw exception
 }
