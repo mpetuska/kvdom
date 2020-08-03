@@ -23,11 +23,6 @@ kotlin {
         implementation(project(":kvdom"))
       }
     }
-    val wasm32Main by getting {
-      dependencies {
-        implementation(project(":kvdom"))
-      }
-    }
     all {
       languageSettings.useExperimentalAnnotation("kotlin.RequiresOptIn")
     }
