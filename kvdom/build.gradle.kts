@@ -148,19 +148,22 @@ allprojects {
   }
   
   tasks {
-    dokkaHtml {
-      dokkaSourceSets {
-        create("commonMain")
-        create("jsMain")
-        create("wasm32Main")
-        configureEach {
-          val projectPath = "${sourceSetID.moduleName.replace(":", "/")}/src/${sourceSetID.sourceSetName}/kotlin"
+    listOf(dokkaGfm, dokkaHtml, dokkaJekyll, dokkaJavadoc).forEach {
+      it {
+        dokkaSourceSets {
+          create("commonMain")
+          create("jsMain")
+          create("wasm32Main")
+          configureEach {
+            val projectPath = "${sourceSetID.moduleName.replace(":", "/")}/src/${sourceSetID.sourceSetName}/kotlin"
           
-          reportUndocumented = true
-          sourceLink {
-            path = "${rootProject.rootDir}$projectPath"
-            url = "https://gitlab.com/${rootProject.group}/${rootProject.name}/tree/v$version$projectPath"
-            lineSuffix = "#L"
+            reportUndocumented = true
+            sourceLink {
+              path = "${rootProject.rootDir}$projectPath"
+              url =
+                "https://gitlab.com/${rootProject.group}/${rootProject.name.removeSuffix("-root")}/-/tree/v$version$projectPath"
+              lineSuffix = "#L"
+            }
           }
         }
       }

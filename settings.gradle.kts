@@ -2,7 +2,9 @@ pluginManagement {
   repositories {
     mavenCentral()
     gradlePluginPortal()
-    maven("https://dl.bintray.com/kotlin/kotlin-dev")
+    if (System.getProperty("enableKotlinDevChannel") === "true") {
+      maven("https://dl.bintray.com/kotlin/kotlin-dev")
+    }
   }
 }
 rootProject.name = "kvdom-root"

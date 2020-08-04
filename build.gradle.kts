@@ -1,6 +1,6 @@
 plugins {
   kotlin("multiplatform") version "1.4.0-rc" apply false
-  id("org.jetbrains.dokka") version "1.4.0-rc-10" apply false
+  id("org.jetbrains.dokka") version "1.4.0-rc" apply false
   id("maven-publish")
   id("io.github.http-builder-ng.http-plugin") version "0.1.1" apply false
   idea
@@ -23,7 +23,9 @@ allprojects {
     jcenter()
     mavenCentral()
     maven("https://dl.bintray.com/mpetuska/lt.petuska")
-    maven("https://dl.bintray.com/kotlin/kotlin-dev")
+    if (System.getProperty("enableKotlinDevChannel") === "true") {
+      maven("https://dl.bintray.com/kotlin/kotlin-dev")
+    }
   }
   
   tasks {

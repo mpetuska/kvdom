@@ -6,8 +6,9 @@ import kotlinx.html.*
 import lt.petuska.kvdom.core.domain.*
 import lt.petuska.kvdom.core.module.events.*
 import lt.petuska.kvdom.dom.*
-import lt.petuska.kvdom.dom.Event
 import lt.petuska.kvdom.dom.html.*
+
+typealias KBuilder = KVDOMBuilder<*>
 
 inline fun <T : Element> KVDOMBuilder(root: VBuilder<T>, crossinline block: KVDOMBuilder<T>.() -> Unit): VElement<T> {
   val builder = KVDOMBuilder(root)
