@@ -1,22 +1,19 @@
 package lt.petuska.kvdom.dom
 
-import kotlinx.wasm.jsinterop.Arena
-import kotlinx.wasm.jsinterop.Object
-import kotlinx.wasm.jsinterop.Pointer
-import kotlinx.wasm.jsinterop.wrapFunction
+import kotlinx.wasm.jsinterop.*
 import lt.petuska.kvdom.dom.WindowOrWorkerGlobalScope.Companion.setIntervalFunctions
 import lt.petuska.kvdom.dom.WindowOrWorkerGlobalScope.Companion.setTimeoutFunctions
-import kotlin.properties.Delegates
+import kotlin.properties.*
 
 actual interface WindowOrWorkerGlobalScope {
   companion object {
     // <IntervalId, Pointer>
     internal val setIntervalFunctions = mutableMapOf<Int, Pointer>()
-  
+
     // <TimeoutId, Pointer>
     internal val setTimeoutFunctions = mutableMapOf<Int, Pointer>()
   }
-  
+
   val arena: Arena
   val index: Object
 }

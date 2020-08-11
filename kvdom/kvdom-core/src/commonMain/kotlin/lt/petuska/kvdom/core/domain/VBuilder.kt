@@ -1,9 +1,9 @@
 package lt.petuska.kvdom.core.domain
 
-import lt.petuska.kvdom.core.KvdomDSL
-import lt.petuska.kvdom.core.module.ModuleData
-import lt.petuska.kvdom.dom.Element
-import lt.petuska.kvdom.dom.html.HTMLDivElement
+import lt.petuska.kvdom.core.*
+import lt.petuska.kvdom.core.module.*
+import lt.petuska.kvdom.dom.*
+import lt.petuska.kvdom.dom.html.*
 
 inline fun <T : Element> VBuilder(
   tag: String,
@@ -32,11 +32,11 @@ open class VBuilder<T : Element> constructor(
     data[moduleId] as? T ?: default?.also {
       data[moduleId] = it
     }
-  
+
   operator fun String?.unaryPlus() {
     textContent = this
   }
-  
+
   fun build(): VElement<T> = VElement(
     tag,
     attrs,
@@ -48,7 +48,7 @@ open class VBuilder<T : Element> constructor(
     textContent,
     null
   )
-  
+
   data class VElementHooksBuilder<T : Element>(
     override var init: (VElement<T>.() -> Unit)? = null,
     override var create: (VElement<T>.(ref: T) -> Unit)? = null,

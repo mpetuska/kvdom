@@ -1,5 +1,6 @@
 package lt.petuska.kvdom.sample
 
+import kotlinx.css.*
 import kotlinx.html.*
 import kotlinx.html.js.*
 import lt.petuska.kvdom.core.*
@@ -12,7 +13,6 @@ import lt.petuska.kvdom.dsl.*
 import kotlin.math.*
 import kotlin.random.*
 
-
 fun renderKotlinx() = KVDOMBuilder {
   var clickDisabled by useState(false)
   var clickCount by useState(0)
@@ -24,6 +24,10 @@ fun renderKotlinx() = KVDOMBuilder {
     +"Rendered with: kotlinx-html"
   }
   button {
+    css {
+      backgroundColor = if (!clickDisabled) Color.blue else Color.gray
+      color = Color.white
+    }
     disabled = clickDisabled
     onContextMenuFunction = {
       it.preventDefault()
@@ -47,6 +51,10 @@ fun renderKotlinx() = KVDOMBuilder {
     +"Clicked $clickCount times"
   }
   button {
+    css {
+      backgroundColor = if (clickDisabled) Color.green else Color.gray
+      color = Color.white
+    }
     disabled = !clickDisabled
     if (clickDisabled) {
       onClickFunction = {
@@ -56,6 +64,10 @@ fun renderKotlinx() = KVDOMBuilder {
     +"EnableCounter"
   }
   button {
+    css {
+      backgroundColor = if (!clickDisabled) Color.red else Color.gray
+      color = Color.white
+    }
     disabled = clickDisabled
     if (!clickDisabled) {
       onClickFunction = {

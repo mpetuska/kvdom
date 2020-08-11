@@ -3,7 +3,6 @@ import io.github.httpbuilderng.http.*
 import org.jetbrains.kotlin.gradle.plugin.*
 import java.io.*
 
-
 plugins {
   kotlin("multiplatform")
   id("maven-publish")
@@ -21,8 +20,7 @@ allprojects {
   apply(plugin = "maven-publish")
   apply(plugin = "io.github.http-builder-ng.http-plugin")
   apply(plugin = "org.jetbrains.dokka")
-  
-  
+
   fun MavenPublication.config(config: MavenPomFile.() -> Unit = {}) {
     pom {
       name by project.name
@@ -50,14 +48,14 @@ allprojects {
       config()
     }
   }
-  
+
   fun MavenPublication.jar(taskName: String, config: Action<Jar>) = artifact(tasks.create(taskName, Jar::class, config))
-  
+
   fun MavenPublication.javadocJar(taskName: String, config: Jar.() -> Unit = {}) = jar(taskName) {
     archiveClassifier by "javadoc"
     config()
   }
-  
+
   publishing {
     publications {
       repositories {
@@ -65,8 +63,8 @@ allprojects {
           name = "bintray"
           url = uri(
             "https://api.bintray.com/maven/${System.getenv("BINTRAY_USER")}/${project.group}/${project.name}/" +
-                ";publish=${if ("true".equals(project.properties["publish"] as? String?, true)) 1 else 0}" +
-                ";override=${if ("true".equals(project.properties["override"] as? String?, true)) 1 else 0}"
+              ";publish=${if ("true".equals(project.properties["publish"] as? String?, true)) 1 else 0}" +
+              ";override=${if ("true".equals(project.properties["override"] as? String?, true)) 1 else 0}"
           )
           credentials {
             username = System.getenv("BINTRAY_USER")
@@ -76,7 +74,7 @@ allprojects {
       }
     }
   }
-  
+
   kotlin {
     js(BOTH) {
       browser()
@@ -92,7 +90,7 @@ allprojects {
         groupId = group as String
         artifactId = "${project.name}-js"
         config { name by "${project.name}-js" }
-        
+
         javadocJar("jsJavadocJar")
         jar("jsTestSourcesJar") {
           archiveClassifier by "test-sources"
@@ -107,7 +105,7 @@ allprojects {
         groupId = group as String
         artifactId = "${project.name}-wasm32"
         config { name by "${project.name}-wasm32" }
-        
+
         javadocJar("wasm32JavadocJar")
         jar("wasm32TestSourcesJar") {
           archiveClassifier by "test-sources"
@@ -122,7 +120,7 @@ allprojects {
         groupId = group as String
         artifactId = "${project.name}-metadata"
         config { name by "${project.name}-metadata" }
-        
+
         javadocJar("metadataJavadocJar")
         jar("metadataTestSourcesJar") {
           archiveClassifier by "test-sources"
@@ -132,7 +130,7 @@ allprojects {
         }
       }
     }
-    
+
     sourceSets {
       val wasm32Main by getting {
         wasm32().compilations["main"].apply {
@@ -146,7 +144,7 @@ allprojects {
       }
     }
   }
-  
+
   tasks {
     listOf(dokkaGfm, dokkaHtml, dokkaJekyll, dokkaJavadoc).forEach {
       it {
@@ -156,7 +154,7 @@ allprojects {
           create("wasm32Main")
           configureEach {
             val projectPath = "${sourceSetID.moduleName.replace(":", "/")}/src/${sourceSetID.sourceSetName}/kotlin"
-          
+
             reportUndocumented = true
             sourceLink {
               path = "${rootProject.rootDir}$projectPath"
@@ -185,7 +183,7 @@ tasks.create("gitLabRelease", HttpTask::class) {
     dependsOn(publish)
     group = publish.group!!
   }
-  
+
   config {
     it.request.setUri("https://gitlab.com")
   }
@@ -193,11 +191,13 @@ tasks.create("gitLabRelease", HttpTask::class) {
     it.request.uri.setPath("/api/v4/projects/${System.getenv("CI_PROJECT_ID")}/releases")
     it.request.headers["Authorization"] = "Bearer ${System.getenv("PRIVATE_TOKEN")}"
     it.request.setContentType("application/json")
-    fun buildPackageLink(project: Project) = """{
+    fun buildPackageLink(project: Project) =
+      """{
                           "name": "${project.name}",
                           "url": "https://bintray.com/${System.getenv("BINTRAY_USER")}/${project.group}/${project.name}/${project.version}",
                           "link_type": "package"
-                        }""".trimIndent()
+                        }
+      """.trimIndent()
     it.request.setBody(
       """
         {

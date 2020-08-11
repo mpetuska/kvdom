@@ -1,6 +1,6 @@
 package lt.petuska.kvdom.core.domain
 
-import lt.petuska.kvdom.dom.Element
+import lt.petuska.kvdom.dom.*
 
 interface VElementHooks<T : Element> {
   /**
@@ -11,12 +11,12 @@ interface VElementHooks<T : Element> {
    * i.e., before it has created a DOM node based on the vnode.
    */
   val init: (VElement<T>.() -> Unit)?; get() = null
-  
+
   /**
    * DOM element has been created based on a VNode
    */
   val create: (VElement<T>.(ref: T) -> Unit)?; get() = null
-  
+
   /**
    * Element has been inserted into the DOM
    *
@@ -26,22 +26,22 @@ interface VElementHooks<T : Element> {
    * afterwards that could affect the position of the inserted elements.
    */
   val insert: (VElement<T>.(ref: T) -> Unit)?; get() = null
-  
+
   /**
    * Element is about to be patched
    */
   val prePatch: (VElement<T>.(oldVNode: VElement<T>) -> Unit)?; get() = null
-  
+
   /**
    * Element is being updated
    */
   val update: (VElement<T>.(oldVNode: VElement<T>) -> Unit)?; get() = null
-  
+
   /**
    * Element has been patched
    */
   val postPatch: (VElement<T>.(oldVNode: VElement<T>) -> Unit)?; get() = null
-  
+
   /**
    * Element is directly or indirectly being removed
    *
@@ -60,7 +60,7 @@ interface VElementHooks<T : Element> {
    * to additionally animate the disappearance of the removed element's children.
    */
   val destroy: (VElement<T>.() -> Unit)?; get() = null
-  
+
   /**
    * Element is directly being removed from the DOM
    *

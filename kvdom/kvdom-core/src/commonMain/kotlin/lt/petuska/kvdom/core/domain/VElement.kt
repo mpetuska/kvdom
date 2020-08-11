@@ -1,10 +1,7 @@
 package lt.petuska.kvdom.core.domain
 
-import lt.petuska.kvdom.core.module.ModuleData
-import lt.petuska.kvdom.dom.Element
-import lt.petuska.kvdom.dom.createElement
-import lt.petuska.kvdom.dom.createElementNS
-import lt.petuska.kvdom.dom.document
+import lt.petuska.kvdom.core.module.*
+import lt.petuska.kvdom.dom.*
 
 typealias GenericVElement = VElement<*>
 
@@ -21,7 +18,7 @@ data class VElement<T : Element> internal constructor(
 ) {
   val data: Map<String, ModuleData>
     get() = _data
-  
+
   fun copy(): VElement<T> =
     VElement(
       tag,
@@ -34,7 +31,7 @@ data class VElement<T : Element> internal constructor(
       textContent,
       ref
     )
-  
+
   fun toHtml(): String = buildString {
     attrs.entries
       .joinToString(" ", "<$tag", ">") { " ${it.key}=\"${it.value}\"" }
@@ -45,13 +42,15 @@ data class VElement<T : Element> internal constructor(
     textContent?.let { append(it) }
     append("</$tag>")
   }
-  
+
   @Suppress("UNCHECKED_CAST")
-  fun render(): T = (if (ns == null) {
-    document.createElement(tag)
-  } else {
-    document.createElementNS(tag, ns)
-  } as T).also {
+  fun render(): T = (
+    if (ns == null) {
+      document.createElement(tag)
+    } else {
+      document.createElementNS(tag, ns)
+    } as T
+    ).also {
     attrs.forEach { a ->
       val (key, value) = a
       if (value == "false") {
@@ -64,7 +63,7 @@ data class VElement<T : Element> internal constructor(
       it.textContent = textContent
     }
   }
-  
+
   @Suppress("UNCHECKED_CAST")
   fun <T : ModuleData> getModuleData(moduleId: String, default: T? = null): T? =
     _data[moduleId] as? T ?: default?.also {

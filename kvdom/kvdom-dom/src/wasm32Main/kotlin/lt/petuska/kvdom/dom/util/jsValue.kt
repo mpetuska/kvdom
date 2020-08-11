@@ -2,7 +2,6 @@ package lt.petuska.kvdom.dom.util
 
 import kotlinx.wasm.jsinterop.*
 
-
 fun JsValue.getObjProperty(name: String): JsValue? {
   val ptr = js_getObjProperty(arena, index, stringPointer(name), stringLengthBytes(name))
   return if (ptr < 0) null else JsValue(arena, ptr)

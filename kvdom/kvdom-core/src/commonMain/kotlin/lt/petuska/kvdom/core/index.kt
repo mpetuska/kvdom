@@ -1,12 +1,9 @@
 package lt.petuska.kvdom.core
 
-import lt.petuska.kvdom.core.domain.VElement
-import lt.petuska.kvdom.core.module.Module
-import lt.petuska.kvdom.core.module.ModuleData
-import lt.petuska.kvdom.dom.Element
-import lt.petuska.kvdom.dom.clear
-import lt.petuska.kvdom.dom.html.HTMLDivElement
-
+import lt.petuska.kvdom.core.domain.*
+import lt.petuska.kvdom.core.module.*
+import lt.petuska.kvdom.dom.*
+import lt.petuska.kvdom.dom.html.*
 
 typealias Patch<T> = T?.(newVElement: T?) -> T?
 
@@ -56,7 +53,7 @@ fun <T : Element> kvdom(container: Element, vararg modules: Module<*>): Patch<VE
     tmp.reverse()
     tmp.distinctBy { it.id }.toTypedArray()
   }
-  
+
   fun <T : Element> VElement<T>.createElement(insertedVElementQueue: MutableList<Pair<VElement<*>, *>>): T {
     this.hooks.init?.invoke(this)
     val children = this.children
@@ -72,10 +69,10 @@ fun <T : Element> kvdom(container: Element, vararg modules: Module<*>): Patch<VE
         insertedVElementQueue.add(this to dElm)
       }
     }
-    
+
     return dElm
   }
-  
+
   fun <T : Element> VElement<T>.invokeDestroyHook() {
     hooks.destroy?.invoke(this)
     mods.destroy(this)
@@ -83,7 +80,7 @@ fun <T : Element> kvdom(container: Element, vararg modules: Module<*>): Patch<VE
       it.invokeDestroyHook()
     }
   }
-  
+
   fun <T : Element> VElement<T>.remove(cbChain: MutableList<() -> Unit>) {
     invokeDestroyHook()
     mods.forEach { module: Module<*> ->
@@ -100,17 +97,17 @@ fun <T : Element> kvdom(container: Element, vararg modules: Module<*>): Patch<VE
       }
     }
   }
-  
+
   fun <T : Element> VElement<T>.remove() {
     val chain = mutableListOf<() -> Unit>({
       val ref = ref
       ref?.parentNode?.removeChild(ref)
     })
     remove(chain)
-    
+
     chain.last()()
   }
-  
+
   fun <T : Element> VElement<T>.patchAttrs(newVElement: VElement<T>) {
     val elm = newVElement.ref!!
     fun Element.setAttr(key: String, value: String) {
@@ -120,7 +117,7 @@ fun <T : Element> kvdom(container: Element, vararg modules: Module<*>): Patch<VE
         else -> setAttribute(key, value)
       }
     }
-    
+
     val oldAttrs = HashMap(attrs)
     newVElement.attrs.forEach { (attr, value) ->
       if (oldAttrs[attr] != value) {
@@ -132,7 +129,7 @@ fun <T : Element> kvdom(container: Element, vararg modules: Module<*>): Patch<VE
       elm.removeAttribute(attr)
     }
   }
-  
+
   fun <T : Element> VElement<T>.patch(
     newVElement: VElement<T>,
     insertedVElementQueue: MutableList<Pair<VElement<*>, *>>,
@@ -176,14 +173,14 @@ fun <T : Element> kvdom(container: Element, vararg modules: Module<*>): Patch<VE
         elm.textContent = newVElement.textContent
       }
     }
-    
+
     hooks.postPatch?.invoke(newVElement, this)
   }
-  
+
   return { newVElement ->
     val insertedVElementQueue = mutableListOf<Pair<VElement<Element>, Element>>()
     mods.pre()
-    
+
     when {
       newVElement == null -> {
         // Unmount
@@ -201,7 +198,7 @@ fun <T : Element> kvdom(container: Element, vararg modules: Module<*>): Patch<VE
         patch(newVElement, insertedVElementQueue as MutableList<Pair<VElement<*>, *>>)
       }
     }
-  
+
     insertedVElementQueue.forEach { it.first.hooks.insert?.invoke(it.first, it.second) }
     mods.post()
     newVElement

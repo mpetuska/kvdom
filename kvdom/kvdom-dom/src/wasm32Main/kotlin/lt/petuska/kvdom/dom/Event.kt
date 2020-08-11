@@ -6,7 +6,7 @@ actual open class Event(arena: Arena, index: Object) : JsValue(arena, index) {
   actual fun preventDefault() {
     js_preventDefault(arena, index)
   }
-  
+
   actual fun initEvent(type: String, bubbles: Boolean, cancelable: Boolean) {
     js_initEvent(
       arena, index,
@@ -14,7 +14,7 @@ actual open class Event(arena: Arena, index: Object) : JsValue(arena, index) {
       bubbles.compareTo(true), cancelable.compareTo(true)
     )
   }
-  
+
   actual fun stopPropagation() {
     js_stopPropagation(arena, index)
   }
@@ -41,4 +41,3 @@ private external fun js_initEvent(
   bubbles: Int,
   cancelable: Int,
 )
-

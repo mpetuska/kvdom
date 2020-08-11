@@ -50,7 +50,7 @@ afterEvaluate {
       create("wasm${type}Run", Exec::class) {
         dependsOn(wasmBundle, kotlinNodeJsSetup)
         group = "run"
-  
+
         val node = if (org.gradle.internal.os.OperatingSystem.current().isWindows) {
           kotlinNodeJsSetup.destination
             .resolve("node.exe")
@@ -59,7 +59,7 @@ afterEvaluate {
             .resolve("bin")
             .resolve("node")
         }
-  
+
         val npx = if (org.gradle.internal.os.OperatingSystem.current().isWindows) {
           kotlinNodeJsSetup.destination
             .resolve("node_modules")
@@ -72,7 +72,7 @@ afterEvaluate {
             .resolve("npm")
             .resolve("bin")
         }.resolve("npx-cli.js")
-  
+
         workingDir = wasmBundle.destinationDir
         commandLine(
           node,

@@ -9,7 +9,7 @@ actual abstract class Element(arena: Arena, index: Object) : Node(arena, index) 
       stringPointer(qualifiedName), stringLengthBytes(qualifiedName),
     )
   }
-  
+
   actual fun setAttribute(qualifiedName: String, value: String) {
     js_setAttribute(
       arena, index,

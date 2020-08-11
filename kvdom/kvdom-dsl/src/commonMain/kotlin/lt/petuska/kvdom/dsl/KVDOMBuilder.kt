@@ -6,6 +6,7 @@ import kotlinx.html.*
 import lt.petuska.kvdom.core.domain.*
 import lt.petuska.kvdom.core.module.events.*
 import lt.petuska.kvdom.dom.*
+import lt.petuska.kvdom.dom.Event
 import lt.petuska.kvdom.dom.html.*
 
 typealias KBuilder = KVDOMBuilder<*>
@@ -23,18 +24,18 @@ inline fun KVDOMBuilder(crossinline block: KVDOMBuilder<HTMLDivElement>.() -> Un
 class KVDOMBuilder<T : Element> @PublishedApi internal constructor(private val root: VBuilder<T>) :
   TagConsumer<VBuilder<T>, Event> {
   private val path = arrayListOf<VBuilder<*>>(root)
-  
+
   override fun onTagStart(tag: Tag<Event>) {
     val vElement: VBuilder<*> = VBuilder<Element>(
       tag = tag.tagName,
       ns = tag.namespace,
       attrs = tag.attributes,
     )
-    
+
     path.lastOrNull()?.children?.add(vElement)
     path.add(vElement)
   }
-  
+
   override fun onTagAttributeChange(tag: Tag<Event>, attribute: String, value: String?) {
     when {
       path.isEmpty() -> throw IllegalStateException("No current tag")
@@ -48,7 +49,7 @@ class KVDOMBuilder<T : Element> @PublishedApi internal constructor(private val r
       }
     }
   }
-  
+
   override fun onTagEvent(tag: Tag<Event>, event: String, value: (Event) -> Unit) {
     when {
       path.isEmpty() -> throw IllegalStateException("No current tag")
@@ -58,23 +59,23 @@ class KVDOMBuilder<T : Element> @PublishedApi internal constructor(private val r
       }
     }
   }
-  
+
   override fun onTagEnd(tag: Tag<Event>) {
     if (path.isEmpty() || path.last().tag.toLowerCase() != tag.tagName.toLowerCase()) {
       throw IllegalStateException("We haven't entered tag ${tag.tagName} but trying to leave")
     }
-    
+
     path.removeAt(path.lastIndex)
   }
-  
+
   override fun onTagContent(content: CharSequence) {
     if (path.isEmpty()) {
       throw IllegalStateException("No current DOM node")
     }
-    
+
     path.last().textContent = content.toString()
   }
-  
+
   override fun onTagContentEntity(entity: Entities) {
     throw UnsupportedOperationException("innerHTML manipulation not supported")
 //    if (path.isEmpty()) {
@@ -85,11 +86,11 @@ class KVDOMBuilder<T : Element> @PublishedApi internal constructor(private val r
 //    val s = document.createElement("span") as HTMLElement
 //    s.innerHTML = entity.text
 //    path.last().appendChild(s.childNodes.asList().filter { it.nodeType == Node.TEXT_NODE }.first())
-    
+
     // other solution would be
 //        pathLast().innerHTML += entity.text
   }
-  
+
   override fun onTagContentUnsafe(block: Unsafe.() -> Unit) {
     throw UnsupportedOperationException("innerHTML manipulation not supported")
 //    with(DefaultUnsafe()) {
@@ -98,8 +99,7 @@ class KVDOMBuilder<T : Element> @PublishedApi internal constructor(private val r
 //      path.last().innerHTML += toString()
 //    }
   }
-  
-  
+
   override fun onTagComment(content: CharSequence) {
     throw UnsupportedOperationException("comments not supported")
 //    if (path.isEmpty()) {
@@ -108,7 +108,7 @@ class KVDOMBuilder<T : Element> @PublishedApi internal constructor(private val r
 //
 //    path.last().appendChild(document.createComment(content.toString()))
   }
-  
+
   override fun finalize(): VBuilder<T> {
     return if (path.size != 1 || path.last() != root) {
       throw IllegalStateException("Unclosed tags detected!")
@@ -116,6 +116,6 @@ class KVDOMBuilder<T : Element> @PublishedApi internal constructor(private val r
       root
     }
   }
-  
+
   override fun onTagError(tag: Tag<Event>, exception: Throwable) = throw exception
 }

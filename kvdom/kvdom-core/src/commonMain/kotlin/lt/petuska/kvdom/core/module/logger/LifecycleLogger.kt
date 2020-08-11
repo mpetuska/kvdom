@@ -1,9 +1,8 @@
 package lt.petuska.kvdom.core.module.logger
 
-import lt.petuska.kvdom.core.domain.VElement
-import lt.petuska.kvdom.core.module.Module
-import lt.petuska.kvdom.core.module.ModuleData
-import lt.petuska.kvdom.dom.Element
+import lt.petuska.kvdom.core.domain.*
+import lt.petuska.kvdom.core.module.*
+import lt.petuska.kvdom.dom.*
 
 object LifecycleLogger :
   Module<ModuleData> {
@@ -26,6 +25,6 @@ object LifecycleLogger :
   override val post: () -> Unit = {
     println("Post")
   }
-  
+
   override fun toString(): String = id
 }

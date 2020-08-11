@@ -1,10 +1,8 @@
 package lt.petuska.kvdom.core.module
 
-import lt.petuska.kvdom.core.VBuilderDSL
-import lt.petuska.kvdom.core.domain.VBuilder
-import lt.petuska.kvdom.core.domain.VElement
-import lt.petuska.kvdom.dom.Element
-
+import lt.petuska.kvdom.core.*
+import lt.petuska.kvdom.core.domain.*
+import lt.petuska.kvdom.dom.*
 
 interface ModuleData {
   fun copy(): ModuleData
@@ -14,22 +12,22 @@ interface Module<T : ModuleData> {
   val id: String; get() = this::class.simpleName!!
   val defaultModuleData: () -> T?; get() = { null }
   val dependencies: List<Module<*>>; get() = listOf()
-  
+
   /**
    * Patch process begins
    */
   val pre: () -> Unit; get() = {}
-  
+
   /**
    * DOM element has been created based on a VElement
    */
   val create: VElement<*>.(ref: Element) -> Unit; get() = { _ -> }
-  
+
   /**
    * Element is being updated
    */
   val update: VElement<*>.(oldVNode: VElement<*>, moduleData: T?) -> Unit; get() = { _, _ -> }
-  
+
   /**
    * Element is directly or indirectly being removed
    *
@@ -48,7 +46,7 @@ interface Module<T : ModuleData> {
    * to additionally animate the disappearance of the removed element's children.
    */
   val destroy: VElement<*>.(moduleData: T?) -> Unit; get() = {}
-  
+
   /**
    * Element is directly being removed from the DOM
    *
@@ -61,7 +59,7 @@ interface Module<T : ModuleData> {
    * element that is removed. For that, see the destroy hook.
    */
   val remove: VElement<*>.(removeCallback: () -> Unit, moduleData: T?) -> Unit; get() = { cb, _ -> cb() }
-  
+
   /**
    * Patch process is done
    */
