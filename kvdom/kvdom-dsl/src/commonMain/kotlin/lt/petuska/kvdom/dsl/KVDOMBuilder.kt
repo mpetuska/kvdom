@@ -9,19 +9,19 @@ import lt.petuska.kvdom.dom.*
 import lt.petuska.kvdom.dom.Event
 import lt.petuska.kvdom.dom.html.*
 
-typealias KBuilder = KVDOMBuilder<*>
+public typealias KBuilder = KVDOMBuilder<*>
 
-inline fun <T : Element> KVDOMBuilder(root: VBuilder<T>, crossinline block: KVDOMBuilder<T>.() -> Unit): VElement<T> {
+public inline fun <T : Element> KVDOMBuilder(root: VBuilder<T>, crossinline block: KVDOMBuilder<T>.() -> Unit): VElement<T> {
   val builder = KVDOMBuilder(root)
   builder.apply(block)
   val vBuilder = builder.finalize()
   return vBuilder.build()
 }
 
-inline fun KVDOMBuilder(crossinline block: KVDOMBuilder<HTMLDivElement>.() -> Unit) =
+public inline fun KVDOMBuilder(crossinline block: KVDOMBuilder<HTMLDivElement>.() -> Unit): VElement<HTMLDivElement> =
   KVDOMBuilder(element("div"), block)
 
-class KVDOMBuilder<T : Element> @PublishedApi internal constructor(private val root: VBuilder<T>) :
+public class KVDOMBuilder<T : Element> @PublishedApi internal constructor(private val root: VBuilder<T>) :
   TagConsumer<VBuilder<T>, Event> {
   private val path = arrayListOf<VBuilder<*>>(root)
 
@@ -117,5 +117,5 @@ class KVDOMBuilder<T : Element> @PublishedApi internal constructor(private val r
     }
   }
 
-  override fun onTagError(tag: Tag<Event>, exception: Throwable) = throw exception
+  override fun onTagError(tag: Tag<Event>, exception: Throwable): Unit = throw exception
 }

@@ -5,8 +5,8 @@ import lt.petuska.kvdom.dom.WindowOrWorkerGlobalScope.Companion.setIntervalFunct
 import lt.petuska.kvdom.dom.WindowOrWorkerGlobalScope.Companion.setTimeoutFunctions
 import kotlin.properties.*
 
-actual interface WindowOrWorkerGlobalScope {
-  companion object {
+public actual interface WindowOrWorkerGlobalScope {
+  public companion object {
     // <IntervalId, Pointer>
     internal val setIntervalFunctions = mutableMapOf<Int, Pointer>()
 
@@ -14,11 +14,11 @@ actual interface WindowOrWorkerGlobalScope {
     internal val setTimeoutFunctions = mutableMapOf<Int, Pointer>()
   }
 
-  val arena: Arena
-  val index: Object
+  public val arena: Arena
+  public val index: Object
 }
 
-actual fun WindowOrWorkerGlobalScope.setTimeout(timeout: Int, handler: () -> Unit): Int {
+public actual fun WindowOrWorkerGlobalScope.setTimeout(timeout: Int, handler: () -> Unit): Int {
   val funcPtr = wrapFunction {
     handler()
   }
@@ -27,12 +27,12 @@ actual fun WindowOrWorkerGlobalScope.setTimeout(timeout: Int, handler: () -> Uni
   }
 }
 
-actual fun WindowOrWorkerGlobalScope.clearTimeout(handle: Int) {
+public actual fun WindowOrWorkerGlobalScope.clearTimeout(handle: Int) {
   js_clearTimeout(arena, index, handle)
   setTimeoutFunctions.remove(handle)
 }
 
-actual fun WindowOrWorkerGlobalScope.setInterval(timeout: Int, handler: () -> Unit): Int {
+public actual fun WindowOrWorkerGlobalScope.setInterval(timeout: Int, handler: () -> Unit): Int {
   var id by Delegates.notNull<Int>()
   val funcPtr = wrapFunction {
     handler()
@@ -44,7 +44,7 @@ actual fun WindowOrWorkerGlobalScope.setInterval(timeout: Int, handler: () -> Un
   }
 }
 
-actual fun WindowOrWorkerGlobalScope.clearInterval(handle: Int) {
+public actual fun WindowOrWorkerGlobalScope.clearInterval(handle: Int) {
   js_clearInterval(arena, index, handle)
   setIntervalFunctions.remove(handle)
 }

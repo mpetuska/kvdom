@@ -1,13 +1,15 @@
 plugins {
   kotlin("multiplatform") version "1.4.0-rc" apply false
   id("org.jlleitschuh.gradle.ktlint") version "9.3.0"
+  id("org.jetbrains.dokka") version "1.4.0-rc" apply false
+  id("io.github.http-builder-ng.http-plugin") version "0.1.1" apply false
   `maven-publish`
   idea
 }
 
 allprojects {
   group = "lt.petuska"
-  version = "0.1.0"
+  version = "0.1.0-M3"
   apply(plugin = "idea")
   apply(plugin = "org.jlleitschuh.gradle.ktlint")
 
@@ -23,9 +25,9 @@ allprojects {
     jcenter()
     mavenCentral()
     maven("https://dl.bintray.com/mpetuska/lt.petuska")
-    if (System.getProperty("enableKotlinDevChannel") === "true") {
-      maven("https://dl.bintray.com/kotlin/kotlin-dev")
-    }
+    maven("https://dl.bintray.com/kotlin/kotlin-eap")
+    maven("https://dl.bintray.com/kotlin/kotlin-dev")
+    maven("https://maven.pkg.jetbrains.space/kotlin/p/dokka/dev")
   }
 
   tasks {

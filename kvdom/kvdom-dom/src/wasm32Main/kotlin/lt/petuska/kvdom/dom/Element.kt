@@ -7,14 +7,14 @@ import kotlinx.wasm.jsinterop.stringLengthBytes
 import kotlinx.wasm.jsinterop.stringPointer
 
 public actual abstract class Element(arena: Arena, index: Object) : Node(arena, index) {
-  actual fun removeAttribute(qualifiedName: String) {
+  public actual fun removeAttribute(qualifiedName: String) {
     js_removeAttribute(
       arena, index,
       stringPointer(qualifiedName), stringLengthBytes(qualifiedName),
     )
   }
 
-  actual fun setAttribute(qualifiedName: String, value: String) {
+  public actual fun setAttribute(qualifiedName: String, value: String) {
     js_setAttribute(
       arena, index,
       stringPointer(qualifiedName), stringLengthBytes(qualifiedName),

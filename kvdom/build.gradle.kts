@@ -4,8 +4,7 @@ import java.io.ByteArrayOutputStream
 plugins {
   kotlin("multiplatform")
   id("maven-publish")
-  id("org.jetbrains.dokka") version "1.4.0-rc"
-  id("io.github.http-builder-ng.http-plugin") version "0.1.1"
+  id("org.jetbrains.dokka")
 }
 
 val repoHost = "gitlab.com"
@@ -39,7 +38,7 @@ allprojects {
   }
 
   kotlin {
-    explicitApi()
+    explicitApiWarning()
     js(BOTH) {
       browser()
       nodejs()
@@ -71,24 +70,24 @@ allprojects {
 
   tasks {
     listOf(dokkaGfm, dokkaHtml, dokkaJekyll, dokkaJavadoc).forEach {
-      it {
-        dokkaSourceSets {
-          create("commonMain")
-          create("jsMain")
-          create("wasm32Main")
-          configureEach {
-            val projectPath = "${sourceSetID.moduleName.replace(":", "/")}/src/${sourceSetID.sourceSetName}/kotlin"
-
-            reportUndocumented = true
-            sourceLink {
-              path = "${rootProject.rootDir}$projectPath"
-              url =
-                "https://gitlab.com/${rootProject.group}/${rootProject.name.removeSuffix("-root")}/-/tree/v$version$projectPath"
-              lineSuffix = "#L"
-            }
-          }
-        }
-      }
+      // it {
+      //   dokkaSourceSets {
+      //     create("commonMain")
+      //     create("jsMain")
+      //     create("wasm32Main")
+      //     configureEach {
+      //       val projectPath = "${sourceSetID.moduleName.replace(":", "/")}/src/${sourceSetID.sourceSetName}/kotlin"
+      //
+      //       reportUndocumented = true
+      //       sourceLink {
+      //         path = "${rootProject.rootDir}$projectPath"
+      //         url =
+      //           "https://gitlab.com/${rootProject.group}/${rootProject.name.removeSuffix("-root")}/-/tree/v$version$projectPath"
+      //         lineSuffix = "#L"
+      //       }
+      //     }
+      //   }
+      // }
     }
   }
 }

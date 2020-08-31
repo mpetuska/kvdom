@@ -8,7 +8,7 @@ import kotlinx.wasm.jsinterop.stringLengthBytes
 import kotlinx.wasm.jsinterop.stringPointer
 
 public actual open class Document(arena: Arena, index: Object) : Node(arena, index) {
-  actual fun getElementById(elementId: String): Element? {
+  public actual fun getElementById(elementId: String): Element? {
     val resArena = allocateArena()
     val resPtr = js_getElementById(
       arena, index,

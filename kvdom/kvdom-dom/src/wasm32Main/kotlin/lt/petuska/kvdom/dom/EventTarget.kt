@@ -7,8 +7,8 @@ import kotlinx.wasm.jsinterop.*
 import lt.petuska.kvdom.dom.EventTarget.Companion.eventListeners
 import kotlin.collections.set
 
-actual abstract class EventTarget(arena: Arena, index: Object) : JsValue(arena, index) {
-  companion object {
+public actual abstract class EventTarget(arena: Arena, index: Object) : JsValue(arena, index) {
+  public companion object {
     // <EventListenerBody, Pointer>
     internal val eventListeners = mutableMapOf<String, Pointer>()
   }
@@ -17,7 +17,7 @@ actual abstract class EventTarget(arena: Arena, index: Object) : JsValue(arena, 
 
 private fun EventHandler.body() = toString().substringAfter("{")
 
-actual fun EventTarget.deleteEventListener(type: String, oldHandler: EventHandler) {
+public actual fun EventTarget.deleteEventListener(type: String, oldHandler: EventHandler) {
   val listenerHash = oldHandler.body()
   eventListeners[listenerHash]?.let {
     it.toLong().toCPointer<CPointed>()?.asStableRef<KtFunction<*>>()?.let { ref ->
@@ -32,7 +32,7 @@ actual fun EventTarget.deleteEventListener(type: String, oldHandler: EventHandle
   } ?: println("No event listener found to be removed")
 }
 
-actual fun EventTarget.setEventListener(type: String, handler: EventHandler) {
+public actual fun EventTarget.setEventListener(type: String, handler: EventHandler) {
   val listenerBody = handler.body()
   val wListenerPtr = wrapFunction {
     val event = Event(it[0].arena, it[0].index)

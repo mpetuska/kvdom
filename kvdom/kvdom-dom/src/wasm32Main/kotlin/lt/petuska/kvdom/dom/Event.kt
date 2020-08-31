@@ -2,12 +2,12 @@ package lt.petuska.kvdom.dom
 
 import kotlinx.wasm.jsinterop.*
 
-actual open class Event(arena: Arena, index: Object) : JsValue(arena, index) {
-  actual fun preventDefault() {
+public actual open class Event(arena: Arena, index: Object) : JsValue(arena, index) {
+  public actual fun preventDefault() {
     js_preventDefault(arena, index)
   }
 
-  actual fun initEvent(type: String, bubbles: Boolean, cancelable: Boolean) {
+  public actual fun initEvent(type: String, bubbles: Boolean, cancelable: Boolean) {
     js_initEvent(
       arena, index,
       stringPointer(type), stringLengthBytes(type),
@@ -15,7 +15,7 @@ actual open class Event(arena: Arena, index: Object) : JsValue(arena, index) {
     )
   }
 
-  actual fun stopPropagation() {
+  public actual fun stopPropagation() {
     js_stopPropagation(arena, index)
   }
 }

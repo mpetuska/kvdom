@@ -2,12 +2,12 @@ package lt.petuska.kvdom.dom.util
 
 import kotlinx.wasm.jsinterop.*
 
-fun JsValue.getObjProperty(name: String): JsValue? {
+public fun JsValue.getObjProperty(name: String): JsValue? {
   val ptr = js_getObjProperty(arena, index, stringPointer(name), stringLengthBytes(name))
   return if (ptr < 0) null else JsValue(arena, ptr)
 }
 
-fun JsValue.setObjProperty(name: String, value: JsValue?) {
+public fun JsValue.setObjProperty(name: String, value: JsValue?) {
   js_setObjProperty(
     arena, index,
     stringPointer(name), stringLengthBytes(name),
@@ -15,12 +15,12 @@ fun JsValue.setObjProperty(name: String, value: JsValue?) {
   )
 }
 
-fun JsValue.getIntProperty(name: String): Int {
+public fun JsValue.getIntProperty(name: String): Int {
   ArenaManager.currentArena = arena
   return getInt(name)
 }
 
-fun JsValue.getBooleanProperty(name: String): Boolean? {
+public fun JsValue.getBooleanProperty(name: String): Boolean? {
   val res = js_getBooleanProperty(arena, index, stringPointer(name), stringLengthBytes(name))
   return when (res) {
     1 -> true
@@ -29,7 +29,7 @@ fun JsValue.getBooleanProperty(name: String): Boolean? {
   }
 }
 
-fun JsValue.getStringProperty(name: String): String? {
+public fun JsValue.getStringProperty(name: String): String? {
   val namePtr = stringPointer(name)
   val nameLen = stringLengthBytes(name)
   val propLength = js_getStringPropertyLength(arena, index, namePtr, nameLen)
@@ -42,7 +42,7 @@ fun JsValue.getStringProperty(name: String): String? {
   }
 }
 
-fun JsValue.setStringProperty(name: String, value: String?) {
+public fun JsValue.setStringProperty(name: String, value: String?) {
   js_setStringProperty(
     arena, index,
     stringPointer(name), stringLengthBytes(name),
