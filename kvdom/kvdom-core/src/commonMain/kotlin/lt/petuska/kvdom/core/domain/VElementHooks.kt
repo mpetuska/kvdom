@@ -1,8 +1,8 @@
 package lt.petuska.kvdom.core.domain
 
-import lt.petuska.kvdom.dom.*
+import lt.petuska.kvdom.dom.Element
 
-interface VElementHooks<T : Element> {
+public interface VElementHooks<T : Element> {
   /**
    * VNode has been added
    *
@@ -10,12 +10,12 @@ interface VElementHooks<T : Element> {
    * The hook is called before KVDOM has processed the node in any way.
    * i.e., before it has created a DOM node based on the vnode.
    */
-  val init: (VElement<T>.() -> Unit)?; get() = null
+  public val init: (VElement<T>.() -> Unit)?; get() = null
 
   /**
    * DOM element has been created based on a VNode
    */
-  val create: (VElement<T>.(ref: T) -> Unit)?; get() = null
+  public val create: (VElement<T>.(ref: T) -> Unit)?; get() = null
 
   /**
    * Element has been inserted into the DOM
@@ -25,22 +25,22 @@ interface VElementHooks<T : Element> {
    * (like using getBoundingClientRect in this hook safely, knowing that no elements will be changed
    * afterwards that could affect the position of the inserted elements.
    */
-  val insert: (VElement<T>.(ref: T) -> Unit)?; get() = null
+  public val insert: (VElement<T>.(ref: T) -> Unit)?; get() = null
 
   /**
    * Element is about to be patched
    */
-  val prePatch: (VElement<T>.(oldVNode: VElement<T>) -> Unit)?; get() = null
+  public val prePatch: (VElement<T>.(oldVNode: VElement<T>) -> Unit)?; get() = null
 
   /**
    * Element is being updated
    */
-  val update: (VElement<T>.(oldVNode: VElement<T>) -> Unit)?; get() = null
+  public val update: (VElement<T>.(oldVNode: VElement<T>) -> Unit)?; get() = null
 
   /**
    * Element has been patched
    */
-  val postPatch: (VElement<T>.(oldVNode: VElement<T>) -> Unit)?; get() = null
+  public val postPatch: (VElement<T>.(oldVNode: VElement<T>) -> Unit)?; get() = null
 
   /**
    * Element is directly or indirectly being removed
@@ -59,7 +59,7 @@ interface VElementHooks<T : Element> {
    * You can, for instance, use remove to trigger an animation when an element is being removed and use the destroy hook
    * to additionally animate the disappearance of the removed element's children.
    */
-  val destroy: (VElement<T>.() -> Unit)?; get() = null
+  public val destroy: (VElement<T>.() -> Unit)?; get() = null
 
   /**
    * Element is directly being removed from the DOM
@@ -72,5 +72,5 @@ interface VElementHooks<T : Element> {
    * The hook is only triggered when an element is to be removed from its parent – not if it is the child of an
    * element that is removed. For that, see the destroy hook.
    */
-  val remove: (VElement<T>.(removeCallback: () -> Unit) -> Unit)?; get() = null
+  public val remove: (VElement<T>.(removeCallback: () -> Unit) -> Unit)?; get() = null
 }

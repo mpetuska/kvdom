@@ -1,10 +1,11 @@
 package lt.petuska.kvdom.core.module.logger
 
-import lt.petuska.kvdom.core.domain.*
-import lt.petuska.kvdom.core.module.*
-import lt.petuska.kvdom.dom.*
+import lt.petuska.kvdom.core.domain.VElement
+import lt.petuska.kvdom.core.module.Module
+import lt.petuska.kvdom.core.module.ModuleData
+import lt.petuska.kvdom.dom.Element
 
-object LifecycleLogger :
+public object LifecycleLogger :
   Module<ModuleData> {
   override val destroy: VElement<*>.(moduleData: ModuleData?) -> Unit = {
     print("Destroying "); println(ref)

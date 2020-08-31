@@ -1,17 +1,17 @@
 package lt.petuska.kvdom.dom
 
-expect abstract class Node : EventTarget {
-  val firstChild: Node?
-  open var textContent: String?
+public expect abstract class Node : EventTarget {
+  public val firstChild: Node?
+  public open var textContent: String?
 
-  fun removeChild(child: Node): Node
-  fun appendChild(node: Node): Node
-  fun hasChildNodes(): Boolean
+  public fun removeChild(child: Node): Node
+  public fun appendChild(node: Node): Node
+  public fun hasChildNodes(): Boolean
 
-  val parentNode: Node?
+  public val parentNode: Node?
 }
 
-fun Node.clear() {
+public fun Node.clear() {
   while (hasChildNodes()) {
     removeChild(firstChild!!)
   }

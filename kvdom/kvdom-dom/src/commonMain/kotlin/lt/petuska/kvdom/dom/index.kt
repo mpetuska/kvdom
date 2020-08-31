@@ -1,4 +1,4 @@
 package lt.petuska.kvdom.dom
 
-expect val document: Document
-expect val window: Window
+public expect val document: Document
+public expect val window: Window

@@ -1,11 +1,11 @@
 package lt.petuska.kvdom.core.domain
 
-import lt.petuska.kvdom.core.*
-import lt.petuska.kvdom.core.module.*
-import lt.petuska.kvdom.dom.*
-import lt.petuska.kvdom.dom.html.*
+import lt.petuska.kvdom.core.KvdomDSL
+import lt.petuska.kvdom.core.module.ModuleData
+import lt.petuska.kvdom.dom.Element
+import lt.petuska.kvdom.dom.html.HTMLDivElement
 
-inline fun <T : Element> VBuilder(
+public inline fun <T : Element> VBuilder(
   tag: String,
   attrs: MutableMap<String, String> = mutableMapOf(),
   data: MutableMap<String, ModuleData> = mutableMapOf(),
@@ -15,29 +15,29 @@ inline fun <T : Element> VBuilder(
   children: MutableList<VBuilder<*>> = mutableListOf(),
   textContent: String? = null,
   block: VBuilder<T>.() -> Unit,
-) = VBuilder(tag, attrs, data, hooks, key, ns, children, textContent).apply(block)
+): VBuilder<T> = VBuilder(tag, attrs, data, hooks, key, ns, children, textContent).apply(block)
 
-open class VBuilder<T : Element> constructor(
-  val tag: String,
-  val attrs: MutableMap<String, String> = mutableMapOf(),
-  val data: MutableMap<String, ModuleData> = mutableMapOf(),
-  val hooks: VElementHooksBuilder<T> = VElementHooksBuilder(),
-  var key: String? = null,
-  var ns: String? = null,
-  val children: MutableList<VBuilder<*>> = mutableListOf(),
-  var textContent: String? = null,
+public open class VBuilder<T : Element> constructor(
+  public val tag: String,
+  public val attrs: MutableMap<String, String> = mutableMapOf(),
+  public val data: MutableMap<String, ModuleData> = mutableMapOf(),
+  public val hooks: VElementHooksBuilder<T> = VElementHooksBuilder(),
+  public var key: String? = null,
+  public var ns: String? = null,
+  public val children: MutableList<VBuilder<*>> = mutableListOf(),
+  public var textContent: String? = null,
 ) {
   @Suppress("UNCHECKED_CAST")
-  fun <T : ModuleData> getModuleData(moduleId: String, default: T? = null): T? =
+  public fun <T : ModuleData> getModuleData(moduleId: String, default: T? = null): T? =
     data[moduleId] as? T ?: default?.also {
       data[moduleId] = it
     }
 
-  operator fun String?.unaryPlus() {
+  public operator fun String?.unaryPlus() {
     textContent = this
   }
 
-  fun build(): VElement<T> = VElement(
+  public fun build(): VElement<T> = VElement(
     tag,
     attrs,
     data,
@@ -49,7 +49,7 @@ open class VBuilder<T : Element> constructor(
     null
   )
 
-  data class VElementHooksBuilder<T : Element>(
+  public data class VElementHooksBuilder<T : Element>(
     override var init: (VElement<T>.() -> Unit)? = null,
     override var create: (VElement<T>.(ref: T) -> Unit)? = null,
     override var insert: (VElement<T>.(ref: T) -> Unit)? = null,
@@ -59,7 +59,7 @@ open class VBuilder<T : Element> constructor(
     override var destroy: (VElement<T>.() -> Unit)? = null,
     override var remove: (VElement<T>.(removeCallback: () -> Unit) -> Unit)? = null,
   ) : VElementHooks<T> {
-    fun build() = object : VElementHooks<T> {
+    public fun build(): VElementHooks<T> = object : VElementHooks<T> {
       override val init: (VElement<T>.() -> Unit)? = this@VElementHooksBuilder.init
       override val create: (VElement<T>.(ref: T) -> Unit)? = this@VElementHooksBuilder.create
       override val insert: (VElement<T>.(ref: T) -> Unit)? = this@VElementHooksBuilder.insert
@@ -73,21 +73,21 @@ open class VBuilder<T : Element> constructor(
 }
 
 @KvdomDSL
-inline fun vBuilder(attrs: Map<String, String> = mapOf(), block: VBuilder<HTMLDivElement>.() -> Unit = {}) =
+public inline fun vBuilder(attrs: Map<String, String> = mapOf(), block: VBuilder<HTMLDivElement>.() -> Unit = {}): VElement<HTMLDivElement> =
   element("div", attrs, block = block).let(VBuilder<HTMLDivElement>::build)
 
 @KvdomDSL
-inline fun <T : Element> element(
+public inline fun <T : Element> element(
   tag: String,
   attrs: Map<String, String> = mapOf(),
   block: VBuilder<T>.() -> Unit = {},
-) = VBuilder(tag, attrs.toMutableMap(), block = block)
+): VBuilder<T> = VBuilder(tag, attrs.toMutableMap(), block = block)
 
 @KvdomDSL
-inline fun <T : Element> VBuilder<*>.element(
+public inline fun <T : Element> VBuilder<*>.element(
   tag: String,
   attrs: Map<String, String> = mapOf(),
   block: VBuilder<T>.() -> Unit = {},
-) = VBuilder(tag, attrs.toMutableMap(), block = block).also {
+): VBuilder<T> = VBuilder(tag, attrs.toMutableMap(), block = block).also {
   children.add(it)
 }

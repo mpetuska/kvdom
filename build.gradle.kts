@@ -1,16 +1,13 @@
 plugins {
   kotlin("multiplatform") version "1.4.0-rc" apply false
-  id("org.jetbrains.dokka") version "1.4.0-rc" apply false
-  id("maven-publish")
-  id("io.github.http-builder-ng.http-plugin") version "0.1.1" apply false
-  val ktLintVersion = "9.3.0"
-  id("org.jlleitschuh.gradle.ktlint") version ktLintVersion
+  id("org.jlleitschuh.gradle.ktlint") version "9.3.0"
+  `maven-publish`
   idea
 }
 
 allprojects {
   group = "lt.petuska"
-  version = "0.1.0-M3"
+  version = "0.1.0"
   apply(plugin = "idea")
   apply(plugin = "org.jlleitschuh.gradle.ktlint")
 
@@ -47,6 +44,7 @@ allprojects {
 
 tasks {
   val wrapper by getting(Wrapper::class) {
-    gradleVersion = "6.5"
+    gradleVersion = "6.6.1"
+    distributionType = Wrapper.DistributionType.ALL
   }
 }

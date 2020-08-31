@@ -1,14 +1,15 @@
 package lt.petuska.kvdom.core.module.hooks
 
-import lt.petuska.kvdom.core.module.*
+import lt.petuska.kvdom.core.module.Module
+import lt.petuska.kvdom.core.module.ModuleData
 
 @DslMarker
-annotation class HooksDSL
+public annotation class HooksDSL
 
-interface StateStore {
-  val index: Int
-  operator fun get(index: Int): Any?
-  operator fun set(index: Int, value: Any?)
+public interface StateStore {
+  public val index: Int
+  public operator fun get(index: Int): Any?
+  public operator fun set(index: Int, value: Any?)
 }
 
 internal class StateStoreImpl : StateStore {
@@ -21,7 +22,7 @@ internal class StateStoreImpl : StateStore {
   }
 }
 
-object Hooks : Module<ModuleData> {
+public object Hooks : Module<ModuleData> {
   private val storesStore = mutableMapOf<String, StateStore>()
 
   internal fun store(name: String): StateStore {

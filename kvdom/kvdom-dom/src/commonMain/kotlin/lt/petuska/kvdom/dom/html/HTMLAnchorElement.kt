@@ -1,3 +1,3 @@
 package lt.petuska.kvdom.dom.html
 
-expect abstract class HTMLAnchorElement : HTMLElement
+public expect abstract class HTMLAnchorElement : HTMLElement

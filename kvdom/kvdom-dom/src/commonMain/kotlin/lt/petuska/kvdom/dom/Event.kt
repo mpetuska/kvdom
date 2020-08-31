@@ -1,7 +1,7 @@
 package lt.petuska.kvdom.dom
 
-expect open class Event {
-  fun preventDefault()
-  fun initEvent(type: String, bubbles: Boolean, cancelable: Boolean)
-  fun stopPropagation()
+public expect open class Event {
+  public fun preventDefault()
+  public fun initEvent(type: String, bubbles: Boolean, cancelable: Boolean)
+  public fun stopPropagation()
 }

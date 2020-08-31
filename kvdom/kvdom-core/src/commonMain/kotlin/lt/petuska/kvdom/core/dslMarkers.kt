@@ -1,7 +1,7 @@
 package lt.petuska.kvdom.core
 
 @DslMarker
-annotation class KvdomDSL
+public annotation class KvdomDSL
 
 @DslMarker
-annotation class VBuilderDSL
+public annotation class VBuilderDSL

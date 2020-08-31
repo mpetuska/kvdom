@@ -1,12 +1,12 @@
 package lt.petuska.kvdom.dom
 
-expect interface WindowOrWorkerGlobalScope
+public expect interface WindowOrWorkerGlobalScope
 
-expect fun WindowOrWorkerGlobalScope.setTimeout(timeout: Int, handler: () -> Unit): Int
-
-@Suppress("EXTENSION_SHADOWED_BY_MEMBER")
-expect fun WindowOrWorkerGlobalScope.clearTimeout(handle: Int)
-expect fun WindowOrWorkerGlobalScope.setInterval(timeout: Int, handler: () -> Unit): Int
+public expect fun WindowOrWorkerGlobalScope.setTimeout(timeout: Int, handler: () -> Unit): Int
 
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER")
-expect fun WindowOrWorkerGlobalScope.clearInterval(handle: Int)
+public expect fun WindowOrWorkerGlobalScope.clearTimeout(handle: Int)
+public expect fun WindowOrWorkerGlobalScope.setInterval(timeout: Int, handler: () -> Unit): Int
+
+@Suppress("EXTENSION_SHADOWED_BY_MEMBER")
+public expect fun WindowOrWorkerGlobalScope.clearInterval(handle: Int)

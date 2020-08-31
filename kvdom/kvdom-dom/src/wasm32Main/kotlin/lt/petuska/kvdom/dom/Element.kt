@@ -1,8 +1,12 @@
 package lt.petuska.kvdom.dom
 
-import kotlinx.wasm.jsinterop.*
+import kotlinx.wasm.jsinterop.Arena
+import kotlinx.wasm.jsinterop.Object
+import kotlinx.wasm.jsinterop.Pointer
+import kotlinx.wasm.jsinterop.stringLengthBytes
+import kotlinx.wasm.jsinterop.stringPointer
 
-actual abstract class Element(arena: Arena, index: Object) : Node(arena, index) {
+public actual abstract class Element(arena: Arena, index: Object) : Node(arena, index) {
   actual fun removeAttribute(qualifiedName: String) {
     js_removeAttribute(
       arena, index,

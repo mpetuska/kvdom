@@ -1,32 +1,33 @@
 package lt.petuska.kvdom.core.module
 
-import lt.petuska.kvdom.core.*
-import lt.petuska.kvdom.core.domain.*
-import lt.petuska.kvdom.dom.*
+import lt.petuska.kvdom.core.VBuilderDSL
+import lt.petuska.kvdom.core.domain.VBuilder
+import lt.petuska.kvdom.core.domain.VElement
+import lt.petuska.kvdom.dom.Element
 
-interface ModuleData {
-  fun copy(): ModuleData
+public interface ModuleData {
+  public fun copy(): ModuleData
 }
 
-interface Module<T : ModuleData> {
-  val id: String; get() = this::class.simpleName!!
-  val defaultModuleData: () -> T?; get() = { null }
-  val dependencies: List<Module<*>>; get() = listOf()
+public interface Module<T : ModuleData> {
+  public val id: String; get() = this::class.simpleName!!
+  public val defaultModuleData: () -> T?; get() = { null }
+  public val dependencies: List<Module<*>>; get() = listOf()
 
   /**
    * Patch process begins
    */
-  val pre: () -> Unit; get() = {}
+  public val pre: () -> Unit; get() = {}
 
   /**
    * DOM element has been created based on a VElement
    */
-  val create: VElement<*>.(ref: Element) -> Unit; get() = { _ -> }
+  public val create: VElement<*>.(ref: Element) -> Unit; get() = { _ -> }
 
   /**
    * Element is being updated
    */
-  val update: VElement<*>.(oldVNode: VElement<*>, moduleData: T?) -> Unit; get() = { _, _ -> }
+  public val update: VElement<*>.(oldVNode: VElement<*>, moduleData: T?) -> Unit; get() = { _, _ -> }
 
   /**
    * Element is directly or indirectly being removed
@@ -45,7 +46,7 @@ interface Module<T : ModuleData> {
    * You can, for instance, use remove to trigger an animation when an element is being removed and use the destroy hook
    * to additionally animate the disappearance of the removed element's children.
    */
-  val destroy: VElement<*>.(moduleData: T?) -> Unit; get() = {}
+  public val destroy: VElement<*>.(moduleData: T?) -> Unit; get() = {}
 
   /**
    * Element is directly being removed from the DOM
@@ -58,13 +59,13 @@ interface Module<T : ModuleData> {
    * The hook is only triggered when an element is to be removed from its parent – not if it is the child of an
    * element that is removed. For that, see the destroy hook.
    */
-  val remove: VElement<*>.(removeCallback: () -> Unit, moduleData: T?) -> Unit; get() = { cb, _ -> cb() }
+  public val remove: VElement<*>.(removeCallback: () -> Unit, moduleData: T?) -> Unit; get() = { cb, _ -> cb() }
 
   /**
    * Patch process is done
    */
-  val post: () -> Unit; get() = {}
+  public val post: () -> Unit; get() = {}
 }
 
 @VBuilderDSL
-inline fun <T : Element> VBuilder<T>.moduleHooks(block: VBuilder.VElementHooksBuilder<T>.() -> Unit) = hooks.block()
+public inline fun <T : Element> VBuilder<T>.moduleHooks(block: VBuilder.VElementHooksBuilder<T>.() -> Unit): Unit = hooks.block()

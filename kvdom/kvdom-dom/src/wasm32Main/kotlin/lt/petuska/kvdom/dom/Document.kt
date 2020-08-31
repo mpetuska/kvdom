@@ -1,8 +1,13 @@
 package lt.petuska.kvdom.dom
 
-import kotlinx.wasm.jsinterop.*
+import kotlinx.wasm.jsinterop.Arena
+import kotlinx.wasm.jsinterop.Object
+import kotlinx.wasm.jsinterop.Pointer
+import kotlinx.wasm.jsinterop.allocateArena
+import kotlinx.wasm.jsinterop.stringLengthBytes
+import kotlinx.wasm.jsinterop.stringPointer
 
-actual open class Document(arena: Arena, index: Object) : Node(arena, index) {
+public actual open class Document(arena: Arena, index: Object) : Node(arena, index) {
   actual fun getElementById(elementId: String): Element? {
     val resArena = allocateArena()
     val resPtr = js_getElementById(
@@ -14,7 +19,7 @@ actual open class Document(arena: Arena, index: Object) : Node(arena, index) {
   }
 }
 
-actual fun Document.createElement(qualifiedName: String): Element {
+public actual fun Document.createElement(qualifiedName: String): Element {
   val resArena = allocateArena()
   val resPtr = js_createElement(
     arena, index,
@@ -24,7 +29,7 @@ actual fun Document.createElement(qualifiedName: String): Element {
   return object : Element(resArena, resPtr) {}
 }
 
-actual fun Document.createElementNS(qualifiedName: String, namespace: String): Element {
+public actual fun Document.createElementNS(qualifiedName: String, namespace: String): Element {
   val resArena = allocateArena()
   val resPtr = js_createElementNS(
     arena, index,

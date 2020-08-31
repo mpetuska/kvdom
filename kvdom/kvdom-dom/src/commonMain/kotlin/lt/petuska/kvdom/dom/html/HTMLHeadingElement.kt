@@ -1,3 +1,3 @@
 package lt.petuska.kvdom.dom.html
 
-expect abstract class HTMLHeadingElement : HTMLElement
+public expect abstract class HTMLHeadingElement : HTMLElement

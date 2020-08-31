@@ -1,11 +1,14 @@
 package lt.petuska.kvdom.core.domain
 
-import lt.petuska.kvdom.core.module.*
-import lt.petuska.kvdom.dom.*
+import lt.petuska.kvdom.core.module.ModuleData
+import lt.petuska.kvdom.dom.Element
+import lt.petuska.kvdom.dom.createElement
+import lt.petuska.kvdom.dom.createElementNS
+import lt.petuska.kvdom.dom.document
 
-typealias GenericVElement = VElement<*>
+public typealias GenericVElement = VElement<*>
 
-data class VElement<T : Element> internal constructor(
+public data class VElement<T : Element> internal constructor(
   val tag: String,
   val attrs: Map<String, String>,
   internal val _data: MutableMap<String, ModuleData>,
@@ -19,7 +22,7 @@ data class VElement<T : Element> internal constructor(
   val data: Map<String, ModuleData>
     get() = _data
 
-  fun copy(): VElement<T> =
+  public fun copy(): VElement<T> =
     VElement(
       tag,
       HashMap(attrs),
@@ -32,7 +35,7 @@ data class VElement<T : Element> internal constructor(
       ref
     )
 
-  fun toHtml(): String = buildString {
+  public fun toHtml(): String = buildString {
     attrs.entries
       .joinToString(" ", "<$tag", ">") { " ${it.key}=\"${it.value}\"" }
       .let { append(it) }
@@ -44,7 +47,7 @@ data class VElement<T : Element> internal constructor(
   }
 
   @Suppress("UNCHECKED_CAST")
-  fun render(): T = (
+  public fun render(): T = (
     if (ns == null) {
       document.createElement(tag)
     } else {
@@ -65,7 +68,7 @@ data class VElement<T : Element> internal constructor(
   }
 
   @Suppress("UNCHECKED_CAST")
-  fun <T : ModuleData> getModuleData(moduleId: String, default: T? = null): T? =
+  public fun <T : ModuleData> getModuleData(moduleId: String, default: T? = null): T? =
     _data[moduleId] as? T ?: default?.also {
       _data[moduleId] = it
     }

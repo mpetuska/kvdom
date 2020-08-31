@@ -1,13 +1,11 @@
-import Build_gradle.*
-import io.github.httpbuilderng.http.*
-import org.jetbrains.kotlin.gradle.plugin.*
-import java.io.*
+import io.github.httpbuilderng.http.HttpTask
+import java.io.ByteArrayOutputStream
 
 plugins {
   kotlin("multiplatform")
   id("maven-publish")
-  id("org.jetbrains.dokka")
-  id("io.github.http-builder-ng.http-plugin")
+  id("org.jetbrains.dokka") version "1.4.0-rc"
+  id("io.github.http-builder-ng.http-plugin") version "0.1.1"
 }
 
 val repoHost = "gitlab.com"
@@ -20,41 +18,6 @@ allprojects {
   apply(plugin = "maven-publish")
   apply(plugin = "io.github.http-builder-ng.http-plugin")
   apply(plugin = "org.jetbrains.dokka")
-
-  fun MavenPublication.config(config: MavenPomFile.() -> Unit = {}) {
-    pom {
-      name by project.name
-      description by "Kotlin MPP Virtual DOM available for common, js and wasm targets. Compatible with Kotlin v${getKotlinPluginVersion()}"
-      url by repoUrl
-      licenses {
-        license {
-          name by "The Apache License, Version 2.0"
-          url by "http://www.apache.org/licenses/LICENSE-2.0.txt"
-          distribution by "repo"
-        }
-      }
-      developers {
-        developer {
-          id by "mpetuska"
-          name by "Martynas Petuška"
-          email by "martynas.petuska@outlook.com"
-        }
-      }
-      scm {
-        url by "https://$repo"
-        connection by "scm:git:https://$repo.git"
-        developerConnection by "scm:git:git@$repoHost:$repoPath.git"
-      }
-      config()
-    }
-  }
-
-  fun MavenPublication.jar(taskName: String, config: Action<Jar>) = artifact(tasks.create(taskName, Jar::class, config))
-
-  fun MavenPublication.javadocJar(taskName: String, config: Jar.() -> Unit = {}) = jar(taskName) {
-    archiveClassifier by "javadoc"
-    config()
-  }
 
   publishing {
     publications {
@@ -76,8 +39,10 @@ allprojects {
   }
 
   kotlin {
+    explicitApi()
     js(BOTH) {
       browser()
+      nodejs()
       listOf(compilations["main"], compilations["test"]).forEach {
         with(it.kotlinOptions) {
           moduleKind = "umd"
@@ -86,50 +51,9 @@ allprojects {
           metaInfo = true
         }
       }
-      mavenPublication {
-        groupId = group as String
-        artifactId = "${project.name}-js"
-        config { name by "${project.name}-js" }
-
-        javadocJar("jsJavadocJar")
-        jar("jsTestSourcesJar") {
-          archiveClassifier by "test-sources"
-          with(sourceSets["jsTest"]) {
-            from(kotlin, resources)
-          }
-        }
-      }
     }
-    wasm32 {
-      mavenPublication {
-        groupId = group as String
-        artifactId = "${project.name}-wasm32"
-        config { name by "${project.name}-wasm32" }
-
-        javadocJar("wasm32JavadocJar")
-        jar("wasm32TestSourcesJar") {
-          archiveClassifier by "test-sources"
-          with(sourceSets["wasm32Test"]) {
-            from(kotlin, resources)
-          }
-        }
-      }
-    }
-    metadata {
-      mavenPublication {
-        groupId = group as String
-        artifactId = "${project.name}-metadata"
-        config { name by "${project.name}-metadata" }
-
-        javadocJar("metadataJavadocJar")
-        jar("metadataTestSourcesJar") {
-          archiveClassifier by "test-sources"
-          with(sourceSets["commonTest"]) {
-            from(kotlin, resources)
-          }
-        }
-      }
-    }
+    wasm32 {}
+    metadata {}
 
     sourceSets {
       val wasm32Main by getting {
@@ -220,17 +144,17 @@ kotlin {
   sourceSets {
     val commonMain by getting {
       dependencies {
+        api(kotlin("stdlib-common"))
         subprojects.forEach {
           println("Adding [${it.path}] to root project")
-          api(project(it.path))
+          api(it)
         }
       }
     }
+    val jsMain by getting {
+      dependencies {
+        api(kotlin("stdlib-js"))
+      }
+    }
   }
-}
-
-typealias MavenPomFile = org.gradle.api.publish.maven.MavenPom
-
-infix fun <T> Property<T>.by(value: T) {
-  set(value)
 }

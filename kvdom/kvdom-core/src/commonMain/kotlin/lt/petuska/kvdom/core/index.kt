@@ -1,11 +1,13 @@
 package lt.petuska.kvdom.core
 
-import lt.petuska.kvdom.core.domain.*
-import lt.petuska.kvdom.core.module.*
-import lt.petuska.kvdom.dom.*
-import lt.petuska.kvdom.dom.html.*
+import lt.petuska.kvdom.core.domain.VElement
+import lt.petuska.kvdom.core.module.Module
+import lt.petuska.kvdom.core.module.ModuleData
+import lt.petuska.kvdom.dom.Element
+import lt.petuska.kvdom.dom.clear
+import lt.petuska.kvdom.dom.html.HTMLDivElement
 
-typealias Patch<T> = T?.(newVElement: T?) -> T?
+public typealias Patch<T> = T?.(newVElement: T?) -> T?
 
 private fun Array<out Module<*>>.pre() = forEach { it.pre() }
 private fun Array<out Module<*>>.create(vElement: VElement<*>, ref: Element) =
@@ -33,9 +35,9 @@ private fun Array<out Module<*>>.destroy(vElement: VElement<*>) =
 
 private fun Array<out Module<*>>.post() = forEach { it.post() }
 
-fun kvdom(container: Element, vararg modules: Module<*>) = kvdom<HTMLDivElement>(container, *modules)
+public fun kvdom(container: Element, vararg modules: Module<*>): Patch<VElement<HTMLDivElement>> = kvdom<HTMLDivElement>(container, *modules)
 
-fun <T : Element> kvdom(container: Element, vararg modules: Module<*>): Patch<VElement<T>> {
+public fun <T : Element> kvdom(container: Element, vararg modules: Module<*>): Patch<VElement<T>> {
   val mods = run {
     val tmp = mutableListOf(*modules)
     tmp.reverse()

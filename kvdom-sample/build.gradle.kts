@@ -23,9 +23,6 @@ kotlin {
         implementation(project(":kvdom"))
       }
     }
-    all {
-      languageSettings.useExperimentalAnnotation("kotlin.RequiresOptIn")
-    }
   }
 }
 
